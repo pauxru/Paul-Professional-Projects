@@ -51,13 +51,13 @@ byte-identical across runs. Wall-clock timings live in the full report only.
 **P10 -- CONTRADICTED.** Both structs are 56 bytes. Transposing two fields produces status `Ok` and a price of 5.179541 against a true value of 4.759422: no error, no crash, a perfectly ordinary number that is wrong. Nothing in the type system, the compiler or the runtime can catch this, because at the ABI both are 56 bytes of the right alignment. The only defence is to assert **every field offset** on both sides -- `static_assert` in `abi.cpp` and `AbiContract.Verify` in the host -- which is why those checks exist and why checking the total size alone would have missed it entirely.
 
 - 4,000 positions priced through both DLLs.
-- **3,134** (78.35%) are bit-identical.
-- **866** differ. Worst: 576 ULP, relative difference 6.40E-014.
+- **1,182** (29.55%) are bit-identical.
+- **2,818** differ. Worst: 602 ULP, relative difference 6.68E-014.
 - On a 2,000-step American lattice the same option differs by **3 ULP** (5.33E-015 absolute).
 
 **P8 -- expected.** Recompiling the untouched engine with a newer compiler and faster floating-point settings does not change what it computes. The source is identical, so the prices are identical.
 
-**P8 -- CONTRADICTED.** 866 of 4,000 positions (21.65%) come out differently, by up to 576 ULP (6.40E-014 relative). The engine source is byte-identical; only `/fp:fast /arch:AVX2` changed. That flag licenses the compiler to reassociate floating-point arithmetic, contract multiply-add pairs into FMA, and use vectorised transcendentals with different rounding. On the 3-ULP lattice case the error compounds over 2,000 steps rather than cancelling. The magnitudes are far below anything the desk would notice on a single trade -- and that is the problem, not the reassurance: a modernisation programme that recompiles for speed and reconciles against the old system will find a stream of tiny unexplained breaks, decide they are noise, and lose the ability to tell noise from a real regression. Either pin the flags or agree a tolerance in advance. Discovering this during parallel run is the expensive way.
+**P8 -- CONTRADICTED.** 2,818 of 4,000 positions (70.45%) come out differently, by up to 602 ULP (6.68E-014 relative). The engine source is byte-identical; only `/fp:fast /arch:AVX2` changed. That flag licenses the compiler to reassociate floating-point arithmetic, contract multiply-add pairs into FMA, and use vectorised transcendentals with different rounding. On the 3-ULP lattice case the error compounds over 2,000 steps rather than cancelling. The magnitudes are far below anything the desk would notice on a single trade -- and that is the problem, not the reassurance: a modernisation programme that recompiles for speed and reconciles against the old system will find a stream of tiny unexplained breaks, decide they are noise, and lose the ability to tell noise from a real regression. Either pin the flags or agree a tolerance in advance. Discovering this during parallel run is the expensive way.
 
 `pj_price_american` with `steps = -1`. The engine builds a `std::vector` sized
 `steps + 1`, which as a `size_t` is enormous, so the allocation throws.
@@ -77,20 +77,22 @@ the end of the experiment.
 
 | outcome | `pricing_legacy.dll` | `pricing.dll` |
 |---|---:|---:|
-| accepted, returned a usable price | 151 | 0 |
-| refused with a status code | 0 | 600 |
-| **success, and not a price** (NaN, infinite or negative) | 335 | 0 |
-| **wrote past the caller's buffer** | 17 | 0 |
-| **killed the process** | 97 | 0 |
-| **unsafe outcomes** | **449** | **0** |
+| accepted, returned a usable price | 272 | 154 |
+| refused with a status code | 0 | 446 |
+| **success, and not a price** (NaN, infinite or negative) | 263 | 0 |
+| **wrote past the caller's buffer** | 7 | 0 |
+| **killed the process** | 58 | 0 |
+| **unsafe outcomes** | **328** | **0** |
 
-First silently-wrong case against the 2009 boundary: index 0.
-First memory corruption: index 50.
-First process death: index 5.
+First silently-wrong case against the 2009 boundary: index 1.
+First memory corruption: index 4.
+First process death: index 0.
+
+Of those 600 inputs, 150 are a control group: ordinary options with every field in range, sane lattice steps and a batch that fits its buffer. They exist because the first version of this experiment reported a perfect score for the hardened boundary -- and a boundary that rejects everything scores exactly the same. The hardened DLL accepted 150 of 150, so the zeroes above are safety rather than paralysis.
 
 **P7 -- expected.** Making a 2009 C++ library safe to expose means fixing the C++. The dangerous behaviour is in the engine, so the engine has to be audited and changed -- which is exactly the work the business refuses to authorise.
 
-**P7 -- CONTRADICTED.** `engine.cpp` is byte-identical in both DLLs. The 2009 boundary produces 449 unsafe outcomes on this corpus; the hardened boundary produces 0. Not one line of the pricing code was touched -- the entire difference is argument validation, capacity checks and an exception barrier in `abi.cpp`. Note the shape of the failures: 335 silently wrong against 97 crashes. The crashes are the safe failures. A process that dies gets noticed; a negative option price returned with a success code gets booked. This is the answer to "we cannot afford to audit 60,000 lines of C++": you do not have to. You have to own the 300 lines it is reached through.
+**P7 -- CONTRADICTED.** `engine.cpp` is byte-identical in both DLLs. The 2009 boundary produces 328 unsafe outcomes on this corpus; the hardened boundary produces 0. Not one line of the pricing code was touched -- the entire difference is argument validation, capacity checks and an exception barrier in `abi.cpp`. Note the shape of the failures: 263 silently wrong against 58 crashes. The crashes are the safe failures. A process that dies gets noticed; a negative option price returned with a success code gets booked. This is the answer to "we cannot afford to audit 60,000 lines of C++": you do not have to. You have to own the 300 lines it is reached through.
 
 ## Scoreboard
 

@@ -1026,6 +1026,23 @@ public sealed class Experiments
         }
         Both("");
 
+        // Without this paragraph the table above is unreadable. A boundary that refuses
+        // every input scores zero unsafe outcomes, which is the same score as a boundary
+        // that is genuinely safe. The control group is what separates the two, and it is
+        // reported before the conclusion because it is a precondition for the conclusion.
+        Both($"Of those {FuzzCases} inputs, {hardened.ControlTotal} are a control group: " +
+             "ordinary options with every field in range, sane lattice steps and a batch " +
+             "that fits its buffer. They exist because the first version of this experiment " +
+             "reported a perfect score for the hardened boundary -- and a boundary that " +
+             "rejects everything scores exactly the same. The hardened DLL accepted " +
+             $"{hardened.ControlAccepted} of {hardened.ControlTotal}" +
+             (hardened.ControlHeld
+                 ? ", so the zeroes above are safety rather than paralysis."
+                 : $", refusing {hardened.ControlRefusedIndices.Count} legal input(s) " +
+                   $"(first: index {hardened.ControlRefusedIndices[0]}). Until that is " +
+                   "fixed, the unsafe-outcome counts say nothing about safety."));
+        Both("");
+
         var held = hardened.UnsafeCases > 0;
         Settle(p, held,
             $"`engine.cpp` is byte-identical in both DLLs. The 2009 boundary produces " +

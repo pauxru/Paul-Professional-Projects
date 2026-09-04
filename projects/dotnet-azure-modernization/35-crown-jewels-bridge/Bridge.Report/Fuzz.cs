@@ -27,11 +27,19 @@ public enum FuzzOutcome
     ProcessDied,
 }
 
-/// <summary>One generated hostile input.</summary>
+/// <summary>One generated input: hostile, or -- for the control group -- deliberately legal.</summary>
 /// <param name="Index">Position in the deterministic corpus. Reproducible from the seed.</param>
+/// <param name="Shape">
+/// How the case was built. Shapes beginning "valid:" are the control group: they are
+/// legal inputs, and a boundary that refuses them is failing, not defending.
+/// </param>
 public readonly record struct FuzzCase(
     int Index, PricingOption Option, int Steps, int BatchCount, int BatchCapacity,
-    int ErrorBufferCapacity, string Shape);
+    int ErrorBufferCapacity, string Shape)
+{
+    /// <summary>True if this input is legal and must therefore be priced, not refused.</summary>
+    public bool IsControl => Shape.StartsWith("valid:", StringComparison.Ordinal);
+}
 
 /// <summary>
 /// Generates a deterministic corpus of inputs designed to be plausible enough to reach
@@ -44,6 +52,20 @@ public readonly record struct FuzzCase(
 /// values drawn from a list of known-awkward doubles, values that are ordinary except in
 /// one field, and genuinely random bits. The interesting failures come from the second
 /// group, which is exactly the group a purely random fuzzer reaches least often.
+///
+/// A fourth group exists for a different reason. The first run of this corpus against the
+/// hardened boundary produced a perfect score: 600 inputs, 600 clean rejections, nothing
+/// silently wrong. That result is worthless on its own, because a boundary that rejects
+/// *every* input scores exactly the same. The corpus could not tell safety apart from
+/// uselessness, which means it was not measuring safety at all.
+///
+/// So one case in four is now a <b>valid</b> option: every field in range, sane lattice
+/// steps, a batch that fits its buffer. Those cases carry two obligations that the
+/// hostile cases cannot. The hardened boundary must <b>accept</b> them -- a rejection is
+/// a false positive and fails the run -- and the price it returns must match the price
+/// the 2009 boundary returns for the same input, to within a tolerance tighter than any
+/// difference a trader would notice. Hardening the boundary was supposed to change what
+/// gets through, not what the answer is.
 /// </remarks>
 public static class FuzzCorpus
 {
@@ -81,9 +103,11 @@ public static class FuzzCorpus
 
         for (var i = 0; i < count; i++)
         {
-            var mode = i % 3;
+            var mode = i % 4;
             PricingOption o;
             string shape;
+            int steps = PickInt(rng), batchCount = PickInt(rng), batchCap = PickInt(rng);
+            var errCap = (int)(rng.NextUInt64() % 40);
 
             switch (mode)
             {
@@ -101,7 +125,7 @@ public static class FuzzCorpus
                         (OptionKind)(int)(rng.NextUInt64() % 4));
                     shape = "all-awkward";
                     break;
-                default:
+                case 2:
                     // Raw bits. Mostly rejected, occasionally surprising.
                     o = new PricingOption(
                         rng.NextDoubleBits(), rng.NextDoubleBits(), rng.NextDoubleBits(),
@@ -109,19 +133,51 @@ public static class FuzzCorpus
                         (OptionKind)(int)(rng.NextUInt64() % 4));
                     shape = "random-bits";
                     break;
+                default:
+                    // The control group. Everything in range, and -- unlike every other
+                    // shape -- the lattice steps and the batch buffer are legal too,
+                    // because a valid option priced with 2^31 steps is not a valid case.
+                    o = ValidOption(rng);
+                    steps = 8 + (int)(rng.NextUInt64() % 500);
+                    batchCount = 1 + (int)(rng.NextUInt64() % 16);
+                    batchCap = batchCount;
+                    errCap = 256;
+                    shape = "valid:" + (o.Kind == (int)OptionKind.Call ? "call" : "put");
+                    break;
             }
 
             cases.Add(new FuzzCase(
                 Index: i,
                 Option: o,
-                Steps: PickInt(rng),
-                BatchCount: PickInt(rng),
-                BatchCapacity: PickInt(rng),
-                ErrorBufferCapacity: (int)(rng.NextUInt64() % 40),
+                Steps: steps,
+                BatchCount: batchCount,
+                BatchCapacity: batchCap,
+                ErrorBufferCapacity: errCap,
                 Shape: shape));
         }
 
         return cases;
+    }
+
+    /// <summary>
+    /// An option that every reasonable validator should accept: positive spot and strike
+    /// within an order of magnitude of each other, a maturity in days-to-years, a rate in
+    /// single digits and a volatility a desk would recognise. Drawn from the generator
+    /// rather than fixed so the control group covers a range rather than one point.
+    /// </summary>
+    private static PricingOption ValidOption(Xoshiro rng)
+    {
+        double U() => (rng.NextUInt64() >> 11) * (1.0 / 9007199254740992.0);
+        var spot = 5.0 + U() * 495.0;
+        var kind = (rng.NextUInt64() & 1) == 0 ? OptionKind.Call : OptionKind.Put;
+        return new PricingOption(
+            spot,                  // spot
+            spot * (0.5 + U()),    // strike, within half an order of magnitude of spot
+            U() * 0.10,            // rate
+            U() * 0.05,            // dividend
+            0.01 + U() * 0.90,     // volatility
+            0.01 + U() * 3.0,      // years
+            kind);
     }
 
     private static PricingOption MutateOneField(PricingOption b, Xoshiro rng, out string which)

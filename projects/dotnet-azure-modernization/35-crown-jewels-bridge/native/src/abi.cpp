@@ -76,19 +76,79 @@ void set_error(contoso::Engine* e, const char* msg) noexcept {
 }
 
 #if PJ_HARDENED
-// A price is only a price if it is finite. Every input field is checked for its own
-// domain AND for finiteness, because a NaN that reaches the engine comes back out as a
-// NaN that looks like a number all the way to the ledger.
-bool option_is_sane(const pj_option& o) noexcept {
-    if (!std::isfinite(o.spot) || o.spot <= 0.0) return false;
-    if (!std::isfinite(o.strike) || o.strike <= 0.0) return false;
-    if (!std::isfinite(o.rate) || std::fabs(o.rate) > 10.0) return false;
-    if (!std::isfinite(o.dividend) || std::fabs(o.dividend) > 10.0) return false;
-    if (!std::isfinite(o.volatility) || o.volatility <= 0.0 || o.volatility > 100.0) return false;
-    if (!std::isfinite(o.years) || o.years <= 0.0 || o.years > 200.0) return false;
-    if (o.kind != PJ_CALL_OPTION && o.kind != PJ_PUT_OPTION) return false;
-    if (o.reserved != 0) return false;  // reserved means reserved; a non-zero value is
-                                        // a caller who thinks this field means something
+// The largest ratio between spot and strike the boundary will price.
+//
+// Above this the option's value is its intrinsic to far beyond anything a double can
+// represent, so nothing of economic content is lost by refusing. Below it, nothing is
+// refused that anybody could ever want. The only way a pair this far apart arrives is
+// corruption -- a strike read from the wrong column, a spot in minor units scaled once
+// too often -- and the answer such a pair produces is the worst kind: finite,
+// non-negative, and completely detached from the trade.
+constexpr double kMaxMoneyness = 1e12;
+
+// Returns nullptr if the option is fit to price, or a message naming the field that
+// is not.
+//
+// This returns a string rather than a bool because of what the alternative costs
+// downstream. A boundary that rejects cleanly and reports only "bad argument" has not
+// solved the problem, it has moved it: the trade still does not price, and now the
+// desk has to bisect a 56-byte struct by hand to find out why. Every field checked
+// here can say which one it was, so it does.
+//
+// Every field is checked for finiteness as well as for its domain. A NaN that reaches
+// the engine comes back out as a NaN that looks like a number all the way to the
+// ledger.
+const char* option_defect(const pj_option& o) noexcept {
+    if (!std::isfinite(o.spot))       return "spot is not a finite number";
+    if (o.spot <= 0.0)                return "spot must be greater than zero";
+    if (!std::isfinite(o.strike))     return "strike is not a finite number";
+    if (o.strike <= 0.0)              return "strike must be greater than zero";
+    if (!std::isfinite(o.rate))       return "rate is not a finite number";
+    if (std::fabs(o.rate) > 10.0)     return "rate is outside the supported range of +/-1000%";
+    if (!std::isfinite(o.dividend))   return "dividend is not a finite number";
+    if (std::fabs(o.dividend) > 10.0) return "dividend is outside the supported range of +/-1000%";
+    if (!std::isfinite(o.volatility)) return "volatility is not a finite number";
+    if (o.volatility < 0.0)           return "volatility must not be negative";
+    if (o.volatility > 100.0)         return "volatility is outside the supported range of 10000%";
+    if (!std::isfinite(o.years))      return "years is not a finite number";
+    if (o.years < 0.0)                return "years must not be negative";
+    if (o.years > 200.0)              return "years is outside the supported range of 200";
+    if (o.kind != PJ_CALL_OPTION && o.kind != PJ_PUT_OPTION)
+        return "kind must be 0 for a call or 1 for a put";
+    // Reserved means reserved. A non-zero value is a caller who believes this field
+    // carries something, which means their struct and this one have diverged.
+    if (o.reserved != 0)              return "reserved must be zero";
+    if (o.strike > o.spot * kMaxMoneyness)
+        return "strike is implausibly large relative to spot";
+    if (o.spot > o.strike * kMaxMoneyness)
+        return "spot is implausibly large relative to strike";
+    return nullptr;
+}
+
+// Handles the two legal inputs the 2009 core cannot evaluate.
+//
+// At zero volatility, or at expiry, d1 is a division by zero and the core -- which is
+// compiled byte for byte identically into both DLLs and has to stay that way, because
+// that identity is the entire claim of this project -- propagates the resulting NaN
+// without comment. When spot equals strike at expiry it is 0/0 in the numerator too.
+//
+// The first version of this boundary handled that by refusing both. That was wrong,
+// and wrong in the most expensive direction: every option expiring today has years
+// equal to zero, on every expiry date, for every strike on the book. A boundary whose
+// safety comes from rejecting the most routine input in the business is not safe, it
+// is unusable, and it will be switched off by the first person who has to close the
+// books on a Friday.
+//
+// Both cases have a deterministic payoff, so the boundary evaluates the limit itself
+// rather than asking the core a question the core was never written to answer. This is
+// what an anti-corruption layer is for: the legacy is not modified, and the seam
+// absorbs the difference.
+bool degenerate_price(const pj_option& o, double* out) noexcept {
+    if (o.years > 0.0 && o.volatility > 0.0) return false;
+    const double forward = o.spot * std::exp((o.rate - o.dividend) * o.years);
+    const double intrinsic =
+        (o.kind == PJ_CALL_OPTION) ? forward - o.strike : o.strike - forward;
+    *out = std::exp(-o.rate * o.years) * (intrinsic > 0.0 ? intrinsic : 0.0);
     return true;
 }
 #endif
@@ -190,9 +250,12 @@ PJ_API pj_status PJ_CALL pj_price_european(pj_engine* engine,
 #if PJ_HARDENED
     if (e == nullptr || opt == nullptr || out_price == nullptr) return PJ_ERR_NULL_ARG;
     *out_price = 0.0;
-    if (!option_is_sane(*opt)) {
-        set_error(e, "option failed domain validation at the ABI boundary");
+    if (const char* defect = option_defect(*opt)) {
+        set_error(e, defect);
         return PJ_ERR_BAD_ARG;
+    }
+    if (degenerate_price(*opt, out_price)) {
+        return PJ_OK;
     }
 #endif
     PJ_TRY
@@ -218,8 +281,17 @@ PJ_API pj_status PJ_CALL pj_greeks_european(pj_engine* engine,
 #if PJ_HARDENED
     if (e == nullptr || opt == nullptr || out == nullptr) return PJ_ERR_NULL_ARG;
     std::memset(out, 0, sizeof(*out));
-    if (!option_is_sane(*opt)) {
-        set_error(e, "option failed domain validation at the ABI boundary");
+    if (const char* defect = option_defect(*opt)) {
+        set_error(e, defect);
+        return PJ_ERR_BAD_ARG;
+    }
+    // Unlike the price, the greeks have no limit to take here: gamma and vega are a
+    // delta function and zero respectively at zero volatility, and theta is unbounded
+    // at expiry. Returning a number for any of those would be inventing one. The
+    // boundary says so instead of letting the NaN check below report it as an internal
+    // failure, because this is a property of the mathematics, not a defect.
+    if (opt->years <= 0.0 || opt->volatility <= 0.0) {
+        set_error(e, "greeks are undefined at zero volatility or at expiry");
         return PJ_ERR_BAD_ARG;
     }
 #endif
@@ -248,8 +320,8 @@ PJ_API pj_status PJ_CALL pj_price_american(pj_engine* engine,
 #if PJ_HARDENED
     if (e == nullptr || opt == nullptr || out_price == nullptr) return PJ_ERR_NULL_ARG;
     *out_price = 0.0;
-    if (!option_is_sane(*opt)) {
-        set_error(e, "option failed domain validation at the ABI boundary");
+    if (const char* defect = option_defect(*opt)) {
+        set_error(e, defect);
         return PJ_ERR_BAD_ARG;
     }
     if (steps < 1) {
@@ -300,13 +372,13 @@ PJ_API pj_status PJ_CALL pj_price_batch(pj_engine* engine,
         return PJ_ERR_CAPACITY;
     }
     for (int32_t i = 0; i < count; ++i) {
-        if (!option_is_sane(opts[i])) {
+        if (const char* defect = option_defect(opts[i])) {
             // Fail the whole batch rather than write a NaN into one slot. A partial
             // result the caller cannot distinguish from a complete one is worse than
             // no result: the caller has no way to know which prices to trust.
-            char msg[96];
-            std::snprintf(msg, sizeof(msg),
-                          "option %d of %d failed domain validation", i, count);
+            char msg[160];
+            std::snprintf(msg, sizeof(msg), "option %d of %d rejected: %s",
+                          i, count, defect);
             set_error(e, msg);
             return PJ_ERR_BAD_ARG;
         }
@@ -314,6 +386,9 @@ PJ_API pj_status PJ_CALL pj_price_batch(pj_engine* engine,
 #endif
     PJ_TRY
         for (int32_t i = 0; i < count; ++i) {
+#if PJ_HARDENED
+            if (degenerate_price(opts[i], &out_prices[i])) continue;
+#endif
             out_prices[i] = contoso::bs_price(opts[i]);
         }
         return PJ_OK;
@@ -332,8 +407,8 @@ PJ_API pj_status PJ_CALL pj_price_monte_carlo(pj_engine* engine,
 #if PJ_HARDENED
     if (e == nullptr || opt == nullptr || out_price == nullptr) return PJ_ERR_NULL_ARG;
     *out_price = 0.0;
-    if (!option_is_sane(*opt)) {
-        set_error(e, "option failed domain validation at the ABI boundary");
+    if (const char* defect = option_defect(*opt)) {
+        set_error(e, defect);
         return PJ_ERR_BAD_ARG;
     }
     if (paths < 1 || paths > kMaxPaths) {

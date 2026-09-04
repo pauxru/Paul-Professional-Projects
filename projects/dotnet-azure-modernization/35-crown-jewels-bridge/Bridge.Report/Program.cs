@@ -1,11 +1,12 @@
 using Bridge.Report;
 
-// Three modes. The two child modes exist because the experiments they serve cannot be
-// run in the parent: one of them is expected to kill the process it runs in.
+// Four modes. The three child modes exist because the experiments they serve cannot be
+// run in the parent: two of them are expected to kill the process they run in.
 return args.Length == 0 ? Parent() : args[0] switch
 {
     "fuzz-child" => FuzzDriver.ChildMain(args),
     "abi-exception" => Experiments.AbiExceptionChild(args[1]),
+    "legacy-probe" => LegacyProbe.Run(args[1]),
     _ => Parent(),
 };
 

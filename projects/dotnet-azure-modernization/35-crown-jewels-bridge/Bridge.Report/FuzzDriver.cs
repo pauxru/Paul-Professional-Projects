@@ -10,8 +10,20 @@ public sealed record FuzzSummary(
     IReadOnlyDictionary<FuzzOutcome, int> Counts,
     IReadOnlyList<int> CrashIndices,
     IReadOnlyList<int> CorruptionIndices,
-    IReadOnlyList<int> SilentlyWrongIndices)
+    IReadOnlyList<int> SilentlyWrongIndices,
+    int ControlTotal,
+    int ControlAccepted,
+    IReadOnlyList<int> ControlRefusedIndices)
 {
+    /// <summary>
+    /// Whether the run says anything at all about safety. A boundary that refuses every
+    /// input scores a perfect zero on every hostile shape, so the hostile counts are only
+    /// meaningful alongside evidence that legal inputs still get through. If the control
+    /// group was refused, the correct reading of a clean sheet is "this boundary is
+    /// broken", not "this boundary is safe".
+    /// </summary>
+    public bool ControlHeld => ControlTotal > 0 && ControlAccepted == ControlTotal;
+
     public int Count(FuzzOutcome o) => Counts.GetValueOrDefault(o);
 
     /// <summary>Cases where the boundary neither refused nor produced a usable answer.</summary>
@@ -54,7 +66,7 @@ public static class FuzzDriver
         {
             outcomes[i] = runner.RunOne(cases[i]);
         }
-        return Summarise(variantName, outcomes);
+        return Summarise(variantName, outcomes, seed);
     }
 
     /// <summary>
@@ -98,7 +110,7 @@ public static class FuzzDriver
             // failures, so it is recorded as accepted -- the conservative direction.
             final[i] = outcomes[i] ?? FuzzOutcome.Accepted;
         }
-        return Summarise(variantName, final);
+        return Summarise(variantName, final, seed);
     }
 
     private static (int NextIndex, bool Died) RunChild(
@@ -176,7 +188,8 @@ public static class FuzzDriver
         return 0;
     }
 
-    private static FuzzSummary Summarise(string variant, FuzzOutcome[] outcomes)
+    private static FuzzSummary Summarise(string variant, FuzzOutcome[] outcomes,
+                                         ulong seed)
     {
         var counts = new Dictionary<FuzzOutcome, int>();
         var crashes = new List<int>();
@@ -194,6 +207,22 @@ public static class FuzzDriver
             }
         }
 
-        return new FuzzSummary(variant, outcomes.Length, counts, crashes, corruptions, silent);
+        // The corpus is a pure function of the seed and the count, so the control cases
+        // can be identified by regenerating it rather than by threading the case list
+        // through the isolated runner and its child processes.
+        var cases = FuzzCorpus.Generate(seed, outcomes.Length);
+        var controlTotal = 0;
+        var controlAccepted = 0;
+        var controlRefused = new List<int>();
+        for (var i = 0; i < outcomes.Length; i++)
+        {
+            if (!cases[i].IsControl) continue;
+            controlTotal++;
+            if (outcomes[i] == FuzzOutcome.Accepted) controlAccepted++;
+            else controlRefused.Add(i);
+        }
+
+        return new FuzzSummary(variant, outcomes.Length, counts, crashes, corruptions,
+                               silent, controlTotal, controlAccepted, controlRefused);
     }
 }
