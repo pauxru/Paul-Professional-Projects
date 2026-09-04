@@ -1,0 +1,58 @@
+=== verify.ps1: build.ps1 ===
+== 50-silent-failure-observability :: build ==
+Python 3.12.10
+v24.18.0
+
+-- byte-compiling
+-- running the panel
+panel: 8 detectors x 6 scenarios
+false-alarm days on healthy: 0
+alerts on the non-regression: 3
+cheapest covering set: Answer self-similarity, Sliced PSI (worst topic)
+  cost: 0 model calls/day
+uncovered regressions: none
+wrote docs\results.md, docs\results-stable.md, docs\dashboard-data.json in 32.2s
+-- building the dashboard
+dashboard: 6 scenarios, 54 charts -> C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\ai-application-engineering\50-silent-failure-observability\docs\dashboard.html
+
+build ok
+=== verify.ps1: test.ps1 ===
+== 50-silent-failure-observability :: test ==
+
+-- stage 1 : unit and property tests
+  151 tests passed
+
+-- stage 2 : report determinism
+  stable report sha256 F2652E1F91BF4930...
+
+-- stage 3 : report content checks
+  6 sections, 9 contradicted predictions
+
+-- stage 4 : dashboard build and determinism
+  54 inline charts, no scripts, no network
+
+-- stage 5 : mutation testing
+mutation testing: 12 mutants
+
+  killed   persistence-disabled
+  killed   alerts-inside-reference-window
+  killed   cusum-two-sided
+  killed   calibrate-on-the-whole-series
+  killed   no-probability-floor
+  killed   bootstrap-ignores-estimation-error
+  killed   self-similarity-one-sided
+  killed   unsigned-hash-columns
+  killed   empty-text-embeds-to-a-real-vector
+  killed   false-positives-are-free
+  killed   material-day-without-persistence
+  killed   psi-reference-positional-misalignment
+
+12/12 mutants killed
+
+-- stage 6 : dependency surface
+  python: numpy + pytest only; typescript: node: builtins only
+
+-- stage 7 : secrets scan
+  clean across 37 files (10 held to the production standard)
+
+all 7 stages passed -- 151 tests, 349s
