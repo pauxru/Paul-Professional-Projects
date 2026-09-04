@@ -1,0 +1,10 @@
+go vet ./...
+go test -count=1 ./...  (run 1 of 1)
+?   	router/cmd/router	[no test files]
+ok  	router/internal/budget	0.793s
+ok  	router/internal/calibration	3.866s
+ok  	router/internal/frontier	0.709s
+ok  	router/internal/models	3.550s
+ok  	router/internal/router	1.485s
+ok  	router/internal/workload	0.825s
+PASS

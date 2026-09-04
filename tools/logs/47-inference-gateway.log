@@ -1,0 +1,23 @@
+
+[1/6] Lint (clippy, warnings denied)
+      OK
+
+[2/6] Tests
+      167 tests
+      OK
+
+[3/6] Report freshness (docs/results.md matches the code that built it)
+      OK
+
+[4/6] Determinism (three separate processes must agree byte for byte)
+      sha 280734e7dcfc70dd x3
+      OK
+
+[5/6] Mutation check (the suite must notice an invariant being removed)
+      6/6 mutations killed
+      OK
+
+[6/6] No dependencies, no secrets, no network
+      OK
+
+All six stages passed.

@@ -1,0 +1,75 @@
+# Build output and caches for every toolchain used in this repository.
+#
+# Each project also carries its own .gitignore. This one exists so that a project
+# built from a fresh clone cannot accidentally commit its own artefacts, whichever
+# directory the build happens to be run from.
+
+# ---------------------------------------------------------------- .NET
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.trx
+*.coverage
+BenchmarkDotNet.Artifacts/
+
+# ---------------------------------------------------------------- Rust
+target/
+**/*.rs.bk
+
+# ---------------------------------------------------------------- Go
+# Go builds into a cache, not the tree; these are stray local binaries.
+*.exe~
+*.test
+
+# ---------------------------------------------------------------- Java
+.mvn/wrapper/maven-wrapper.jar
+**/target/
+*.class
+
+# ---------------------------------------------------------------- C / C++
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+*.obj
+*.pdb
+*.ilk
+*.lib
+*.exp
+*.o
+*.a
+
+# ---------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+
+# ---------------------------------------------------------------- Node
+node_modules/
+dist/
+.next/
+*.tsbuildinfo
+
+# ---------------------------------------------------------------- Data that a run produces
+# Local databases and their write-ahead logs are outputs, not sources. Committing a
+# WAL file is how a repository quietly acquires several megabytes that no reader
+# will ever need and no reviewer will ever look at.
+*.db-shm
+*.db-wal
+*.sqlite-shm
+*.sqlite-wal
+
+# ---------------------------------------------------------------- Editors / OS
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store

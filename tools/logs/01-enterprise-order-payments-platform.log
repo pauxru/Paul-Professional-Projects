@@ -1,0 +1,8 @@
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\01-enterprise-order-payments-platform\tests\Contoso.Payments.UnitTests\bin\Release\net10.0\Contoso.Payments.UnitTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    53, Skipped:     0, Total:    53, Duration: 452 ms - Contoso.Payments.UnitTests.dll (net10.0)
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\01-enterprise-order-payments-platform\tests\Contoso.Payments.IntegrationTests\bin\Release\net10.0\Contoso.Payments.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    31, Skipped:     0, Total:    31, Duration: 4 s - Contoso.Payments.IntegrationTests.dll (net10.0)

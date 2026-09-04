@@ -1,0 +1,8 @@
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\07-zero-trust-api-platform\tests\ZeroTrust.UnitTests\bin\Release\net10.0\ZeroTrust.UnitTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\07-zero-trust-api-platform\tests\ZeroTrust.IntegrationTests\bin\Release\net10.0\ZeroTrust.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 1 s - ZeroTrust.UnitTests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    38, Skipped:     0, Total:    38, Duration: 948 ms - ZeroTrust.IntegrationTests.dll (net10.0)

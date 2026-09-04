@@ -1,0 +1,44 @@
+
+==============================================================================
+  stage 1 -- build
+==============================================================================
+  clean, no warnings
+
+==============================================================================
+  stage 2 -- tests
+==============================================================================
+  206 tests
+
+==============================================================================
+  stage 3 -- results.md is current
+==============================================================================
+  19051 bytes, byte-identical after regeneration
+
+==============================================================================
+  stage 4 -- determinism
+==============================================================================
+  run 1  sha 82f5cb19435e5ba5  (19050 chars)
+  run 2  sha 82f5cb19435e5ba5  (19050 chars)
+  run 3  sha 82f5cb19435e5ba5  (19050 chars)
+  identical across 3 runs
+
+==============================================================================
+  stage 5 -- mutation: can the suite still detect a broken analysis?
+==============================================================================
+  killed    cut cost stops counting call sites, so "what would this cost" loses its unit
+  killed    member precision collapses to type precision -- the argument against reference counting
+  killed    Tarjan merges components across a cross-edge and invents entanglement that is not there
+  killed    the exact solver stops refusing and starts taking longer than the migration
+  killed    the soundness lattice inverts and the strictest analysis deletes the most code
+  killed    extraction advice ignores edges into the new assembly, so "move one type" is a guess
+  killed    a prediction that came out badly can be quietly dropped from the report
+  7/7 killed
+
+==============================================================================
+  stage 6 -- secrets
+==============================================================================
+  42 files scanned, nothing found
+
+==============================================================================
+  all 6 stages passed -- 206 tests, 7/7 mutations killed, 150.0s
+==============================================================================

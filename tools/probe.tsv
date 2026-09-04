@@ -1,0 +1,6 @@
+﻿project	status	passed	failed	skipped	seconds	runner	parser
+32-strangler-router	PASS	67	0	0	5.8	test.ps1	gotest -v
+33-migration-verifier	FAIL	0	0	0	33.0	test.ps1	
+37-deterministic-sim-harness	PASS	37	0	0	11.4	test.ps1	cargo
+40-cobol-batch-decommissioning	NO_TESTS_DETECTED	0	0	0	4.6	test.ps1	
+TOTAL	2/4	104	0				

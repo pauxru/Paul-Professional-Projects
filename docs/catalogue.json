@@ -1,0 +1,1217 @@
+[
+  {
+    "number": 1,
+    "title": "Enterprise Order & Payments Platform",
+    "problem": "merchants double-charge customers and lose money to unreconciled settlements when payment flows are not idempotent and asynchronous callbacks are mishandled.",
+    "tech": "ASP.NET Core, EF Core/SQLite (Postgres adapter), transactional outbox, in-process bus (RabbitMQ/Service Bus adapters), OpenTelemetry.",
+    "skills": "idempotency keys, transactional outbox, provider-timeout recovery, HMAC webhooks, refund lifecycle, settlement reconciliation, distributed tracing.",
+    "track": "foundation",
+    "built": true,
+    "slug": "01-enterprise-order-payments-platform",
+    "scan": {
+      "files": 133,
+      "total_lines": 6003,
+      "lines_by_language": {
+        "C#": 5892,
+        "PowerShell": 111
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 18
+    }
+  },
+  {
+    "number": 2,
+    "title": "Legacy .NET Modernization Lab",
+    "problem": "an insurance claims system built on 2010-era patterns is unsafe to change and impossible to test.",
+    "tech": "deliberately legacy-style ASP.NET Core MVC + raw ADO.NET vs a modern modular .NET 10 target; anti-corruption layer; legacy data importer.",
+    "skills": "modernization assessment, characterization testing, strangler-fig planning, compatibility matrix, cutover runbook, data migration validation.",
+    "track": "foundation",
+    "built": true,
+    "slug": "02-legacy-dotnet-modernization",
+    "scan": {
+      "files": 118,
+      "total_lines": 3320,
+      "lines_by_language": {
+        "C#": 3311,
+        "PowerShell": 9
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 4,
+      "doc_count": 23
+    }
+  },
+  {
+    "number": 3,
+    "title": "Enterprise RAG Knowledge Assistant",
+    "problem": "enterprises cannot let staff query internal documents with an LLM without permission leakage, hallucination and unverifiable answers.",
+    "tech": "ASP.NET Core, deterministic local embedding + extractive answer providers (optional Azure OpenAI adapter), BM25 + dense hybrid retrieval with RRF, SQLite vector store.",
+    "skills": "chunking strategies, hybrid retrieval, permission-aware retrieval, citation spans, grounding checks, refusal thresholds, prompt versioning, retrieval evaluation (Recall@k, MRR, nDCG).",
+    "track": "foundation",
+    "built": true,
+    "slug": "03-enterprise-rag-knowledge-assistant",
+    "scan": {
+      "files": 133,
+      "total_lines": 6767,
+      "lines_by_language": {
+        "C#": 6669,
+        "PowerShell": 98
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 17
+    }
+  },
+  {
+    "number": 4,
+    "title": "Multi-Tenant B2B SaaS Platform",
+    "problem": "B2B SaaS fails commercially and legally when tenant isolation, entitlements and billing state are not enforced structurally.",
+    "tech": "ASP.NET Core, EF Core global query filters + save-changes interceptor, policy authorization, billing simulator with signed webhooks.",
+    "skills": "provable tenant isolation, RBAC, entitlements and quotas, feature flags with percentage rollout, dunning state machine, tenant-scoped caching.",
+    "track": "foundation",
+    "built": true,
+    "slug": "04-multitenant-b2b-saas",
+    "scan": {
+      "files": 74,
+      "total_lines": 5427,
+      "lines_by_language": {
+        "C#": 5372,
+        "PowerShell": 55
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 18
+    }
+  },
+  {
+    "number": 5,
+    "title": "Financial Reconciliation & Settlement Engine",
+    "problem": "finance teams cannot explain why internal transaction records disagree with a provider's settlement file.",
+    "tech": "ASP.NET Core, streaming CSV/fixed-width ingestion, data-driven matching ruleset, EF Core/SQLite.",
+    "skills": "configurable matching rules, many-to-one matching, fee-adjusted matching, exception queue with four-eyes resolution, idempotent re-runnable runs, large-batch performance work.",
+    "track": "foundation",
+    "built": true,
+    "slug": "05-financial-reconciliation-engine",
+    "scan": {
+      "files": 136,
+      "total_lines": 7900,
+      "lines_by_language": {
+        "C#": 7766,
+        "PowerShell": 134
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 19
+    }
+  },
+  {
+    "number": 6,
+    "title": "Production Incident Diagnostics Lab",
+    "problem": "most teams cannot diagnose the ten failure modes that cause the majority of production incidents.",
+    "tech": "a sample .NET app with toggleable pathological code paths, a measurement harness, EF command interceptors, GC/ThreadPool sampling.",
+    "skills": "N+1, missing indexes, pool exhaustion, memory leaks, sync-over-async, thread starvation, downstream timeouts, retry storms, poison messages, cache stampede \u2014 each reproduced, measured and fixed.",
+    "track": "foundation",
+    "built": true,
+    "slug": "06-production-incident-diagnostics",
+    "scan": {
+      "files": 139,
+      "total_lines": 3452,
+      "lines_by_language": {
+        "C#": 3418,
+        "PowerShell": 34
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 4,
+      "doc_count": 50
+    }
+  },
+  {
+    "number": 7,
+    "title": "Secure Zero-Trust API Platform",
+    "problem": "enterprises expose partner, customer and admin APIs from one codebase without differentiated trust, and get breached through the weakest surface.",
+    "tech": "ASP.NET Core, RS256 + JWKS with key rotation, policy authorization, rate limiting, HMAC webhooks, hash-chained audit.",
+    "skills": "OAuth2-style flows, refresh-token rotation with reuse detection, scope design, explainable authorization decisions, API-key-to-JWT migration, threat modelling.",
+    "track": "foundation",
+    "built": true,
+    "slug": "07-zero-trust-api-platform",
+    "scan": {
+      "files": 95,
+      "total_lines": 4377,
+      "lines_by_language": {
+        "C#": 4227,
+        "PowerShell": 150
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 8,
+    "title": "Event-Driven Logistics & Fleet Platform",
+    "problem": "fleet telemetry arrives late, duplicated and out of order, and naive pipelines produce wrong ETAs and alert storms.",
+    "tech": "ASP.NET Core, partitioned in-process channel pipeline, hand-written geospatial maths (haversine, point-in-polygon, spatial bucketing), EF Core/SQLite.",
+    "skills": "event-time vs processing-time, watermarks and late-arrival handling, per-key ordering, deduplication, geofencing with hysteresis, ETA modelling, telemetry replay.",
+    "track": "foundation",
+    "built": true,
+    "slug": "08-event-driven-logistics-platform",
+    "scan": {
+      "files": 68,
+      "total_lines": 7326,
+      "lines_by_language": {
+        "C#": 7251,
+        "PowerShell": 75
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 9,
+    "title": "Intelligent Document Processing Platform",
+    "problem": "accounts-payable automation fails when extraction confidence is not routed and validated, silently posting wrong invoices.",
+    "tech": "ASP.NET Core, explainable rules/feature classifier, spatial table extraction, deterministic validation rules, human review queue.",
+    "skills": "pipeline state machines, confidence routing, three-way match, fuzzy supplier matching, correction feedback loops, straight-through-processing rate as a measured KPI.",
+    "track": "foundation",
+    "built": true,
+    "slug": "09-intelligent-document-processing",
+    "scan": {
+      "files": 142,
+      "total_lines": 8082,
+      "lines_by_language": {
+        "C#": 7983,
+        "PowerShell": 99
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 19
+    }
+  },
+  {
+    "number": 10,
+    "title": "Industrial IoT Monitoring Platform",
+    "problem": "industrial sites lose telemetry during connectivity outages and cannot trust alerts from noisy sensors.",
+    "tech": "a hand-written MQTT 3.1.1 codec + broker in C#, an edge gateway with durable store-and-forward, device twins, ESP32 reference sketch.",
+    "skills": "binary protocol implementation, offline buffering and ordered replay, time-series rollups, explainable anomaly detection, safe remote commands, OTA with rollback.",
+    "track": "foundation",
+    "built": true,
+    "slug": "10-industrial-iot-monitoring",
+    "scan": {
+      "files": 84,
+      "total_lines": 7189,
+      "lines_by_language": {
+        "C#": 7124,
+        "PowerShell": 65
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 21
+    }
+  },
+  {
+    "number": 11,
+    "title": "High-Scale Notification Delivery Platform",
+    "problem": "notification systems double-send, spam users during quiet hours, and collapse when one provider degrades.",
+    "tech": "ASP.NET Core, DB-backed outbox queue with fair per-tenant scheduling, provider simulators with circuit breaking.",
+    "skills": "templating with safe escaping, locale fallback, quiet hours and priority lanes, provider failover, dead-letter and replay, suppression/unsubscribe, delivery receipts.",
+    "track": "foundation",
+    "built": true,
+    "slug": "11-notification-delivery-platform",
+    "scan": {
+      "files": 113,
+      "total_lines": 6170,
+      "lines_by_language": {
+        "C#": 6123,
+        "PowerShell": 47
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 19
+    }
+  },
+  {
+    "number": 12,
+    "title": "API Integration Hub (iPaaS Lite)",
+    "problem": "enterprise systems do not talk to each other, and bespoke point-to-point integrations rot.",
+    "tech": "ASP.NET Core, config-driven REST connectors, a safe (non-eval) mapping expression evaluator, encrypted secret store, in-repo misbehaving target simulators.",
+    "skills": "connector abstraction, pagination strategies, OAuth2 token caching, checkpointed resumable runs, contract-drift detection, DLQ replay, SSRF guards, secret redaction.",
+    "track": "foundation",
+    "built": true,
+    "slug": "12-api-integration-hub",
+    "scan": {
+      "files": 83,
+      "total_lines": 6980,
+      "lines_by_language": {
+        "C#": 6893,
+        "PowerShell": 87
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 6,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 13,
+    "title": "Digital Banking Ledger",
+    "problem": "balance-column accounting silently loses money; only double-entry with enforced invariants is auditable.",
+    "tech": "ASP.NET Core, EF Core/SQLite, minor-unit `long` money, ordered locking + optimistic concurrency, hash-chained entries.",
+    "skills": "double-entry invariants, holds and partial capture, reversals, FX with gain/loss accounts, interest accrual day-count conventions, statement tie-out, concurrency proofs.",
+    "track": "foundation",
+    "built": true,
+    "slug": "13-digital-banking-ledger",
+    "scan": {
+      "files": 112,
+      "total_lines": 6557,
+      "lines_by_language": {
+        "C#": 6372,
+        "PowerShell": 185
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 19
+    }
+  },
+  {
+    "number": 14,
+    "title": "Loan Origination & Credit Workflow",
+    "problem": "lenders need credit decisions that are reproducible and explainable years later, not opaque scores.",
+    "tech": "ASP.NET Core, versioned declarative rulesets, transparent weighted scorecard, KYC/bureau/disbursement simulators.",
+    "skills": "decision traces, ruleset what-if simulation, amortisation and APR/IRR maths, affordability stress testing, underwriting queues with four-eyes and delegated authority.",
+    "track": "foundation",
+    "built": true,
+    "slug": "14-loan-origination-platform",
+    "scan": {
+      "files": 71,
+      "total_lines": 6131,
+      "lines_by_language": {
+        "C#": 6022,
+        "PowerShell": 109
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 19
+    }
+  },
+  {
+    "number": 15,
+    "title": "Fraud Detection Event Pipeline",
+    "problem": "risk decisions must be made in milliseconds using stateful history, and must be explainable to analysts and regulators.",
+    "tech": "ASP.NET Core, partitioned channel pipeline, in-memory windowed feature store with O(1) updates, versioned rule engine.",
+    "skills": "sliding-window aggregates, velocity/impossible-travel/device rules, latency budgets with graceful degradation, case management, analyst feedback loop, champion-challenger shadow mode.",
+    "track": "foundation",
+    "built": true,
+    "slug": "15-fraud-detection-event-pipeline",
+    "scan": {
+      "files": 108,
+      "total_lines": 6349,
+      "lines_by_language": {
+        "C#": 6170,
+        "PowerShell": 179
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 16,
+    "title": "Subscription Billing & Usage Metering Engine",
+    "problem": "billing bugs are revenue bugs; proration, month-end anchoring and dunning are where SaaS companies lose money and trust.",
+    "tech": "ASP.NET Core, EF Core/SQLite, minor-unit money, plan versioning, payment simulator with signed webhooks.",
+    "skills": "tiered/volume/graduated pricing, second-accurate proration, idempotent invoice runs, usage metering with late arrivals, dunning and suspension, MRR movement reporting.",
+    "track": "foundation",
+    "built": true,
+    "slug": "16-subscription-billing-engine",
+    "scan": {
+      "files": 70,
+      "total_lines": 12207,
+      "lines_by_language": {
+        "C#": 12074,
+        "PowerShell": 133
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 6,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 17,
+    "title": "Distributed Job Scheduler",
+    "problem": "naive schedulers run the same job twice, or stop running it at all when a node dies silently.",
+    "tech": "ASP.NET Core, lease + fencing-token coordination over a shared store, multiple worker processes, hand-written cron parser.",
+    "skills": "lease-based ownership, fencing against stale workers, leader election, cron and DST correctness, retry/backoff/DLQ, DAG dependencies, priority aging, graceful drain.",
+    "track": "foundation",
+    "built": true,
+    "slug": "17-distributed-job-scheduler",
+    "scan": {
+      "files": 128,
+      "total_lines": 7977,
+      "lines_by_language": {
+        "C#": 7762,
+        "PowerShell": 215
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 18,
+    "title": "Feature Flag & Configuration Service",
+    "problem": "teams cannot ship safely without runtime kill switches and progressive rollout that behaves identically in every service.",
+    "tech": "ASP.NET Core + a real .NET client SDK with local evaluation, SSE streaming updates and offline bootstrap.",
+    "skills": "targeting rule engines, stable percentage bucketing with stickiness, server\u2194SDK evaluation parity, prerequisites and cycle detection, approval workflows, stale-flag debt reporting.",
+    "track": "foundation",
+    "built": true,
+    "slug": "18-feature-flag-service",
+    "scan": {
+      "files": 69,
+      "total_lines": 3764,
+      "lines_by_language": {
+        "C#": 3738,
+        "PowerShell": 26
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 19,
+    "title": "Enterprise Audit & Compliance Event Store",
+    "problem": "an audit log nobody can prove is unaltered has no evidentiary value.",
+    "tech": "ASP.NET Core, append-only store with an EF interceptor blocking mutation, per-tenant hash chain, Merkle checkpoints with inclusion proofs.",
+    "skills": "canonical serialization, tamper evidence, retention vs immutability reconciliation, legal hold, keyset pagination, signed evidence packs, meta-auditing of reads.",
+    "track": "foundation",
+    "built": true,
+    "slug": "19-enterprise-audit-platform",
+    "scan": {
+      "files": 95,
+      "total_lines": 5149,
+      "lines_by_language": {
+        "C#": 5037,
+        "PowerShell": 112
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 19
+    }
+  },
+  {
+    "number": 20,
+    "title": "Secrets Rotation & Credential Management",
+    "problem": "organisations do not rotate credentials because rotation causes outages; the hard part is the choreography, not the cryptography.",
+    "tech": "ASP.NET Core, AES-256-GCM envelope encryption with AAD binding, rotation state machine, consumer acknowledgement tracking, Key Vault adapter interface.",
+    "skills": "dual-write vs cutover rotation, verification-gated promotion, automatic rollback, crash-resumable workflows, scheduling with jitter, break-glass with four-eyes, secret redaction proofs.",
+    "track": "foundation",
+    "built": true,
+    "slug": "20-secrets-rotation-platform",
+    "scan": {
+      "files": 76,
+      "total_lines": 6479,
+      "lines_by_language": {
+        "C#": 6381,
+        "PowerShell": 98
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 21
+    }
+  },
+  {
+    "number": 21,
+    "title": "Real-Time Collaboration Backend",
+    "problem": "concurrent editing silently corrupts documents unless the convergence model is chosen and implemented correctly.",
+    "tech": "ASP.NET Core + SignalR, an implemented OT/CRDT convergence algorithm, snapshot + operation log persistence.",
+    "skills": "operational transformation or CRDT convergence with randomised property tests, causality buffering, reconnect/resync, comment anchor rebasing, presence throttling.",
+    "track": "foundation",
+    "built": true,
+    "slug": "21-realtime-collaboration-platform",
+    "scan": {
+      "files": 116,
+      "total_lines": 6420,
+      "lines_by_language": {
+        "C#": 6317,
+        "PowerShell": 103
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 18
+    }
+  },
+  {
+    "number": 22,
+    "title": "Enterprise Search Platform with Hybrid Retrieval",
+    "problem": "search relevance is the product, and teams cannot tune what they do not understand.",
+    "tech": "a search engine written from scratch in C# \u2014 analyzers, Porter stemmer, positional inverted index, BM25, facets, ANN vector index, RRF hybrid ranking.",
+    "skills": "analysis pipelines, scoring maths verified against hand computation, facet counting semantics, alias-based zero-downtime reindex, security trimming, relevance evaluation (nDCG/MRR).",
+    "track": "foundation",
+    "built": true,
+    "slug": "22-enterprise-search-platform",
+    "scan": {
+      "files": 69,
+      "total_lines": 4033,
+      "lines_by_language": {
+        "C#": 3997,
+        "PowerShell": 36
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 23,
+    "title": "Healthcare Appointment & Workflow Platform",
+    "problem": "clinic scheduling is a hard constraint problem, and clinical data access must be provably restricted and audited.",
+    "tech": "ASP.NET Core, slot-generation engine with timezone/DST correctness, RBAC + ABAC care-relationship authorization, append-only clinical notes.",
+    "skills": "constraint-based availability, concurrent booking prevention, break-glass access with alerting, amendment-only clinical records, referral SLA clocks, access-anomaly reporting.",
+    "track": "foundation",
+    "built": true,
+    "slug": "23-healthcare-workflow-platform",
+    "scan": {
+      "files": 106,
+      "total_lines": 5738,
+      "lines_by_language": {
+        "C#": 5658,
+        "PowerShell": 80
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 6,
+      "doc_count": 21
+    }
+  },
+  {
+    "number": 24,
+    "title": "Identity & Access Management Portal",
+    "problem": "enterprises cannot answer \"who has access to what, and why\" \u2014 the question every auditor asks first.",
+    "tech": "ASP.NET Core, RBAC + ABAC policy engine with deny precedence, role-hierarchy DAG, provisioning connectors with reconciliation.",
+    "skills": "joiner-mover-leaver automation, separation-of-duties detection, JIT privileged elevation with expiry, certification campaigns with auto-revocation, access-derivation-path reporting.",
+    "track": "foundation",
+    "built": true,
+    "slug": "24-identity-access-management",
+    "scan": {
+      "files": 72,
+      "total_lines": 8422,
+      "lines_by_language": {
+        "C#": 8266,
+        "PowerShell": 156
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 20
+    }
+  },
+  {
+    "number": 25,
+    "title": "Data Pipeline & Analytics Lakehouse",
+    "problem": "analytics is untrustworthy without incremental correctness, data-quality gates and lineage.",
+    "tech": "C# medallion pipeline with a hand-built Delta-like table format (atomic commits, snapshot isolation, time travel), SQLite serving, DAG orchestrator.",
+    "skills": "CDC handling, SCD Type 2 with effective-version joins, idempotent incremental runs, declarative data-quality gates with circuit breaking, column-level lineage and impact analysis, safe SQL serving.",
+    "track": "foundation",
+    "built": true,
+    "slug": "25-data-pipeline-lakehouse",
+    "scan": {
+      "files": 127,
+      "total_lines": 6794,
+      "lines_by_language": {
+        "C#": 6612,
+        "PowerShell": 182
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 22
+    }
+  },
+  {
+    "number": 26,
+    "title": "SRE Service Reliability Dashboard",
+    "problem": "most reliability dashboards compute burn rate incorrectly and therefore page at the wrong times.",
+    "tech": "ASP.NET Core, own time-series store, request-based and window-based SLIs, multi-window multi-burn-rate alerting.",
+    "skills": "SLO mathematics derived and unit-tested, error-budget policy with a deploy-gate API, incident MTTA/MTTD/MTTR, blameless postmortems with action tracking, alert-quality analysis.",
+    "track": "foundation",
+    "built": true,
+    "slug": "26-sre-reliability-dashboard",
+    "scan": {
+      "files": 65,
+      "total_lines": 4905,
+      "lines_by_language": {
+        "C#": 4783,
+        "PowerShell": 122
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 21
+    }
+  },
+  {
+    "number": 27,
+    "title": "API Performance & Load Testing Toolkit",
+    "problem": "homegrown load tests produce numbers that are statistically meaningless and hide the worst latency.",
+    "tech": "a C# load runner with open/closed load models, HdrHistogram-style percentiles, coordinated-omission correction, statistical run comparison; sample API with tunable pathologies.",
+    "skills": "load modelling, percentile maths, stress knee detection, soak drift analysis, capacity search, significance testing, CI performance gating.",
+    "track": "foundation",
+    "built": true,
+    "slug": "27-api-performance-toolkit",
+    "scan": {
+      "files": 125,
+      "total_lines": 5149,
+      "lines_by_language": {
+        "C#": 4889,
+        "JavaScript": 200,
+        "PowerShell": 60
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 23
+    }
+  },
+  {
+    "number": 28,
+    "title": "Cloud Deployment Reference Architecture",
+    "problem": "applications are written without the operational affordances that safe deployment requires.",
+    "tech": "a deployment-shaped ASP.NET Core app (migration runner, layered config, three-tier health model, graceful drain) + Bicep and Terraform reference IaC + CI/CD with canary gating.",
+    "skills": "managed identity and Key Vault references, blue/green and canary with automated rollback gates, expand/contract migrations, disaster-recovery planning, Well-Architected self-assessment.",
+    "track": "foundation",
+    "built": true,
+    "slug": "28-cloud-deployment-reference",
+    "scan": {
+      "files": 154,
+      "total_lines": 5361,
+      "lines_by_language": {
+        "C#": 5122,
+        "PowerShell": 239
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 6,
+      "doc_count": 31
+    }
+  },
+  {
+    "number": 29,
+    "title": "AI Agent Workflow Orchestration Platform",
+    "problem": "agent frameworks give model output far too much authority; production needs bounded, auditable, resumable execution.",
+    "tech": "ASP.NET Core, deterministic mock model (optional real providers), typed tool registry with JSON-schema validation, durable workflow engine, replay-based evaluation.",
+    "skills": "closed tool allow-lists, prompt-injection resistance, budgets and loop detection, human approval steps, complete execution traces, deterministic replay regression testing.",
+    "track": "foundation",
+    "built": true,
+    "slug": "29-ai-agent-workflow-platform",
+    "scan": {
+      "files": 129,
+      "total_lines": 9294,
+      "lines_by_language": {
+        "C#": 9189,
+        "PowerShell": 105
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 6,
+      "doc_count": 22
+    }
+  },
+  {
+    "number": 30,
+    "title": "Cloud Cost & Observability Platform",
+    "problem": "organisations cannot attribute cloud spend to teams or distinguish a real cost anomaly from Tuesday.",
+    "tech": "ASP.NET Core, synthetic multi-subscription cost dataset, allocation rule engine, seasonal anomaly detection, backtested forecasting.",
+    "skills": "exact cost allocation invariants, shared-cost splitting, showback/chargeback with audit trails, MAPE-backtested forecasting, quantified savings recommendations with realised-savings verification, unit economics.",
+    "track": "foundation",
+    "built": true,
+    "slug": "30-cloud-cost-observability-platform",
+    "scan": {
+      "files": 68,
+      "total_lines": 4019,
+      "lines_by_language": {
+        "C#": 3978,
+        "PowerShell": 41
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": false,
+      "adr_count": 5,
+      "doc_count": 23
+    }
+  },
+  {
+    "number": 31,
+    "title": "Assembly Archaeologist: IL-level legacy dependency analyser",
+    "story": "A client has 400 DLLs in production. Source is missing for 40 of them. Nobody still employed knows what calls what. Every modernization proposal has been rejected because nobody can answer \"what breaks if we touch this?\"",
+    "what": "Reads compiled IL directly (no source required), builds the complete type-and-method call graph across every assembly, then detects .NET Framework\u2013only API usage \u2014 `AppDomain`, Remoting, WCF server, `System.Web`, GAC binding, `BinaryFormatter` \u2014 and classifies each assembly by migration difficulty. Produces a **dependency-ordered migration plan** via topological sort, with deliberate cycle-breaking where the graph is circular (it always is). Finds genuinely dead code so it can be deleted rather than migrated.",
+    "signal": "Static analysis over compiled artefacts; cycle-breaking heuristics; the output is a *decision*, not a report.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "31-assembly-archaeologist",
+    "scan": {
+      "files": 43,
+      "total_lines": 5251,
+      "lines_by_language": {
+        "C#": 4914,
+        "PowerShell": 337
+      },
+      "languages": [
+        "C#",
+        "PowerShell"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 32,
+    "title": "Strangler Router: shadow traffic with semantic response diffing",
+    "story": "You cannot big-bang a monolith cutover. The only honest way to know the rewrite is correct is to send it real production traffic and compare \u2014 *before* it serves anyone.",
+    "what": "A reverse proxy that mirrors live traffic to both legacy and modern implementations, returns only the legacy response, and diffs the two. The diffing is JSON-structure-aware with configurable ignore rules (timestamps, GUIDs, ordering), so it surfaces *semantic* divergence rather than noise. Tracks per-endpoint equivalence confidence over time and drives a shadow \u2192 canary \u2192 cutover state machine with automatic rollback when divergence spikes.",
+    "signal": "This is the mechanism that makes migration safe. Semantic diffing with ignore-rule algebra is the hard part, and it is what people get wrong.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "32-strangler-router",
+    "scan": {
+      "files": 29,
+      "total_lines": 3694,
+      "lines_by_language": {
+        "Go": 3616,
+        "PowerShell": 78
+      },
+      "languages": [
+        "Go"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 33,
+    "title": "Heterogeneous Database Migration Verifier",
+    "story": "SQL Server \u2192 PostgreSQL. The schema conversion is a weekend. Proving that not one row was silently corrupted is the six-month part \u2014 and silent corruption is the thing that ends careers.",
+    "what": "Orchestrates dual-write, then continuously reconciles row-level checksums across two engines that disagree about almost everything. Implements an explicit taxonomy of silent-corruption classes: collation and case sensitivity, `DECIMAL` precision and rounding mode, `DATETIME2` vs `timestamptz` and DST, `NULL` vs empty string, trailing-whitespace semantics, and Unicode normalisation. Backfills with watermarks, detects drift, and gates cutover on measured equivalence.",
+    "signal": "The taxonomy *is* the expertise. Anyone can compare row counts.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "33-migration-verifier",
+    "scan": {
+      "files": 36,
+      "total_lines": 4183,
+      "lines_by_language": {
+        "Java": 3907,
+        "PowerShell": 276
+      },
+      "languages": [
+        "Java",
+        "PowerShell"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 34,
+    "title": "Saga Extractor: proving distributed transactions still hold",
+    "story": "The monolith wraps twelve operations in one `TransactionScope`. Split it into services and ACID quietly becomes \"hope\". Someone has to decide where the sagas go and prove the compensations are complete.",
+    "what": "Models each extracted transaction as a saga, then **verifies compensation completeness**: every forward step has a reachable inverse, compensations are idempotent and commutative where required, and no interleaving leaves an unrecoverable state. Exhaustively simulates failure at every step boundary \u2014 including failure *during* compensation \u2014 using model-checking-style state exploration rather than sampled tests.",
+    "signal": "Exhaustive state exploration and a correctness argument, not example tests.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "34-saga-extractor",
+    "scan": {
+      "files": 35,
+      "total_lines": 4028,
+      "lines_by_language": {
+        "C#": 3827,
+        "PowerShell": 201
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 35,
+    "title": "Crown Jewels Bridge: a 20-year-old C++ engine, safely in the cloud",
+    "story": "The pricing engine is 60,000 lines of C++, written by someone who left in 2009. It is correct, it is fast, and the business will not authorise a rewrite. It must nonetheless run in Azure and be callable from .NET \u2014 without the memory-safety of the whole platform depending on 1990s pointer discipline.",
+    "what": "A real computational C++ core (option pricing / actuarial reserving) exposed through a deliberately narrow, stable **C ABI**, consumed from .NET via P/Invoke with `SafeHandle` ownership and explicit lifetime rules. Fuzzes the interop boundary for memory safety, and **benchmarks marshalling strategies** \u2014 blittable structs vs marshalled classes vs `Span<T>`/`ref struct` zero-copy \u2014 quantifying the real cost of crossing the boundary.",
+    "signal": "Cross-ABI memory safety and measured marshalling cost. Most engineers never touch this; it is exactly the \"we can't rewrite it\" problem clients actually have.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "35-crown-jewels-bridge",
+    "scan": {
+      "files": 26,
+      "total_lines": 4382,
+      "lines_by_language": {
+        "C#": 3102,
+        "C++": 1280
+      },
+      "languages": [
+        "C#",
+        "C++"
+      ],
+      "has_readme": false,
+      "has_test_script": false,
+      "adr_count": 0,
+      "doc_count": 2
+    }
+  },
+  {
+    "number": 36,
+    "title": "Authentication Migration: Forms/WS-Fed \u2192 OIDC with zero lockout",
+    "story": "Auth migration is the highest-risk modernization there is. Get it wrong and either every user is locked out, or \u2014 far worse \u2014 none of them are.",
+    "what": "Runs legacy Forms cookies, WS-Federation, and modern OIDC **simultaneously**, bridging sessions across all three. Migrates users incrementally with **rehash-on-login** (PBKDF2 \u2192 Argon2id at the moment of successful authentication, so no password reset email is ever sent), transforms legacy claims to modern ones, and keeps a tested rollback path at every stage. Fully threat-modelled, including downgrade attacks between the coexisting stacks.",
+    "signal": "Security-critical, zero-downtime, irreversible-if-wrong. The rehash-on-login trick is the detail that shows you've actually done this.",
+    "track": "dotnet-azure-modernization",
+    "built": false,
+    "slug": null,
+    "scan": null
+  },
+  {
+    "number": 37,
+    "title": "Deterministic Distributed Systems Simulator",
+    "story": "The new microservices pass every test and fail in production every third Tuesday. The bug is a timing interleaving that occurs once in ten million runs. You cannot fix what you cannot reproduce.",
+    "what": "A FoundationDB-style deterministic simulation harness: a seeded scheduler that makes concurrency reproducible, a simulated network with partitions, delays, reordering and duplication, simulated clock skew, and systematic fault injection. **Any failure is replayable from its seed.** A real replication/consensus protocol runs inside it, and the harness finds genuine bugs in that protocol \u2014 then reproduces each one on demand.",
+    "signal": "This is how elite infrastructure teams actually test. Probably the single most senior-signalling project in the entire portfolio.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "37-deterministic-sim-harness",
+    "scan": {
+      "files": 27,
+      "total_lines": 2353,
+      "lines_by_language": {
+        "Rust": 2330,
+        "PowerShell": 23
+      },
+      "languages": [
+        "Rust"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 38,
+    "title": "Migration Wave Planner: cost, risk and blast radius under uncertainty",
+    "story": "\"Move it all to Azure.\" In what order? At what cost? And when wave 4 fails at 2am, what else goes down with it? These are the questions that decide whether the programme is funded.",
+    "what": "Models the estate as a dependency DAG, then **optimises migration wave ordering** under constraints (team capacity, freeze windows, coupling). Computes true cost curves including the parts people forget \u2014 egress, dual-running overlap, licence double-payment \u2014 and runs **Monte Carlo simulation on schedule risk** to produce P50/P90 completion dates instead of a single fictional date. Computes blast radius per wave.",
+    "signal": "Decision-support under uncertainty. Principals are paid for sequencing judgement, and this makes that judgement explicit and defensible.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "38-migration-wave-planner",
+    "scan": {
+      "files": 37,
+      "total_lines": 6409,
+      "lines_by_language": {
+        "Python": 6270,
+        "PowerShell": 139
+      },
+      "languages": [
+        "Python"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 39,
+    "title": "Zero-Downtime Schema Evolution Engine",
+    "story": "Add a `NOT NULL` column to a 900-million-row table on a system with no maintenance window. The naive migration takes an exclusive lock and the business stops.",
+    "what": "Orchestrates expand \u2192 migrate \u2192 contract, backfilling in adaptive batches",
+    "signal": "Operational safety mechanisms at scale; refusing unsafe changes is a stronger stance than executing them carefully.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "39-schema-evolution",
+    "scan": {
+      "files": 34,
+      "total_lines": 7207,
+      "lines_by_language": {
+        "Go": 7050,
+        "PowerShell": 157
+      },
+      "languages": [
+        "Go"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 40,
+    "title": "COBOL Batch Decommissioning with byte-equivalence proof",
+    "story": "A nightly COBOL batch has produced the fixed-width file that drives the business since 1994. Nobody may change the output format. Everybody wants the batch gone.",
+    "what": "A real COBOL data decoder: copybook parsing, EBCDIC translation, **COMP-3 packed decimal**, signed overpunch, `OCCURS DEPENDING ON`, and implied decimal scaling. Then a modern event-driven reimplementation runs in parallel, and a semantic differ **proves byte-equivalence** of the output before the legacy job is switched off.",
+    "signal": "COMP-3 and overpunch decoding is genuinely niche, genuinely hard, and instantly credible to anyone who has worked near a mainframe. Equivalence proof is the safety mechanism.",
+    "track": "dotnet-azure-modernization",
+    "built": true,
+    "slug": "40-cobol-batch-decommissioning",
+    "scan": {
+      "files": 29,
+      "total_lines": 2683,
+      "lines_by_language": {
+        "Python": 2652,
+        "PowerShell": 31
+      },
+      "languages": [
+        "Python"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 41,
+    "title": "LLM Evaluation & Regression Harness",
+    "story": "A team ships a prompt change on Friday. Quality drops 12%. Nobody notices for three weeks because there are no tests \u2014 and you cannot unit-test a probabilistic system.",
+    "what": "Golden datasets with versioning; LLM-as-judge that is **calibrated against human labels** rather than trusted blindly (measures judge\u2013human agreement with Cohen's \u03ba, and reports when the judge is not trustworthy); **statistical significance testing** on eval deltas using bootstrap confidence intervals, so \"3% better\" is only claimed when it survives the CI; CI regression gates; cost and latency tracked alongside quality.",
+    "signal": "Statistical rigour applied to AI. Nearly everyone reports eval deltas without significance testing, which makes most reported improvements noise.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "41-llm-eval-harness",
+    "scan": {
+      "files": 30,
+      "total_lines": 5629,
+      "lines_by_language": {
+        "Python": 5404,
+        "PowerShell": 225
+      },
+      "languages": [
+        "Python"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 42,
+    "title": "Semantic Cache & Request Coalescing Gateway",
+    "story": "60% of the LLM bill is duplicate questions. An exact-match cache gets a 4% hit rate, because humans never phrase things the same way twice.",
+    "what": "Embedding-based semantic caching with a tunable similarity threshold \u2014 and, crucially, it **measures the false-hit rate**, because in a cache a false hit is not a performance issue, it is a *correctness bug* that returns someone else's answer. Publishes the precision/cost Pareto curve so the threshold is an informed business decision. Adds single-flight coalescing so a thundering herd of identical concurrent questions costs one inference, with streaming passthrough preserved.",
+    "signal": "Recognising that cache correctness dominates cache hit rate, and quantifying the tradeoff instead of asserting it.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "42-semantic-cache",
+    "scan": {
+      "files": 33,
+      "total_lines": 6924,
+      "lines_by_language": {
+        "Go": 6843,
+        "PowerShell": 81
+      },
+      "languages": [
+        "Go"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 43,
+    "title": "Retrieval Quality Lab: chunking and embedding ablation",
+    "story": "\"Our RAG isn't working.\" The team has spent six weeks tuning prompts. The problem was never the prompt \u2014 it is that the right document was never retrieved.",
+    "what": "Systematic ablation across the retrieval stack: chunking strategy (fixed, recursive, semantic, proposition-level), embedding model, reranking, and fusion method \u2014 evaluated on a labelled corpus with **nDCG@k, MRR and recall@k**, significance-tested, and plotted as a **cost/latency/quality Pareto frontier**. Output is a decision guide stating which configuration wins for which query class, and where the differences are not statistically real.",
+    "signal": "Disciplined empiricism and the willingness to report null results.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "43-retrieval-lab",
+    "scan": {
+      "files": 40,
+      "total_lines": 6943,
+      "lines_by_language": {
+        "Python": 6811,
+        "PowerShell": 132
+      },
+      "languages": [
+        "Python"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 44,
+    "title": "Prompt Injection Red Team: attack corpus and layered defence",
+    "story": "Your agent summarises customer emails and can call tools. A customer emails it instructions. The agent, being helpful, follows them.",
+    "what": "A structured attack corpus \u2014 direct and **indirect** injection, data exfiltration, tool abuse, encoding and obfuscation, multi-turn manipulation \u2014 run against layered defences: spotlighting, delimiter and provenance tagging, a classifier, a",
+    "signal": "Security-research methodology, and the integrity to publish residual attack success rather than claim the problem is solved.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "44-prompt-injection-redteam",
+    "scan": {
+      "files": 41,
+      "total_lines": 6274,
+      "lines_by_language": {
+        "Python": 6190,
+        "PowerShell": 84
+      },
+      "languages": [
+        "Python"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 13
+    }
+  },
+  {
+    "number": 45,
+    "title": "Durable Agent Runtime: resumable execution with exactly-once side effects",
+    "story": "A 40-step agent run fails at step 37. Re-running from the top costs $4 and \u2014 much worse \u2014 sends the customer a second refund.",
+    "what": "Event-sourced, deterministic **durable execution**: every step is journalled, so a crashed run resumes exactly where it stopped rather than restarting. Tool side effects are",
+    "signal": "Durable execution semantics are a genuinely hard distributed systems problem \u2014 this is Temporal-class work applied to agents.",
+    "track": "ai-application-engineering",
+    "built": false,
+    "slug": null,
+    "scan": null
+  },
+  {
+    "number": 46,
+    "title": "Constrained Decoding: schema-valid output by construction",
+    "story": "\"Just ask it for JSON\" fails about 5% of the time. At a million documents, that is 50,000 failures \u2014 and retries make latency and cost unpredictable.",
+    "what": "Compiles a JSON Schema / grammar into a **finite automaton**, aligns it to the tokenizer vocabulary, and **masks logits so that invalid tokens are literally impossible to emit** \u2014 making malformed output unrepresentable rather than unlikely. Benchmarked against retry-based and function-calling approaches on validity, latency, and cost.",
+    "signal": "Correctness *by construction* instead of by retry. Tokenizer-to-automaton alignment is subtle and is where naive implementations break.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "46-constrained-decoding",
+    "scan": {
+      "files": 47,
+      "total_lines": 4894,
+      "lines_by_language": {
+        "C++": 3102,
+        "Python": 1695,
+        "PowerShell": 97
+      },
+      "languages": [
+        "C++",
+        "Python"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 6,
+      "doc_count": 16
+    }
+  },
+  {
+    "number": 47,
+    "title": "Inference Gateway: continuous batching and SLO-aware admission control",
+    "story": "Serving models at scale is a **queueing theory** problem wearing an API's clothing. Teams add replicas when the real issue is head-of-line blocking.",
+    "what": "Continuous batching, priority queues with **SLO-aware admission control** (shed load deliberately rather than degrade everyone), fair-share scheduling across tenants, backpressure, and token-level streaming. Measures the throughput/latency frontier under load and analyses it with **Little's Law**, showing where queueing \u2014 not compute \u2014 is the bottleneck.",
+    "signal": "Applying queueing theory rather than adding hardware.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "47-inference-gateway",
+    "scan": {
+      "files": 34,
+      "total_lines": 6545,
+      "lines_by_language": {
+        "Rust": 6370,
+        "PowerShell": 175
+      },
+      "languages": [
+        "Rust"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 48,
+    "title": "Graph + Vector Hybrid Reasoning",
+    "story": "\"Which of our suppliers are within two hops of a sanctioned entity?\" Vector search cannot answer this. Embeddings do not do joins, and no amount of chunking will fix that.",
+    "what": "Extracts entities and relations into a property graph, then **fuses graph traversal with vector retrieval** to answer multi-hop questions, returning the **provenance path** \u2014 the actual chain of relationships \u2014 as the justification. Includes an honest comparison showing which query classes graph wins, which vector wins, and which need both.",
+    "signal": "Understanding the *limits* of embeddings is a more senior signal than enthusiasm for them.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "48-graph-vector-hybrid",
+    "scan": {
+      "files": 36,
+      "total_lines": 4047,
+      "lines_by_language": {
+        "Java": 3697,
+        "PowerShell": 350
+      },
+      "languages": [
+        "Java",
+        "PowerShell"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 49,
+    "title": "Model Router and Cascade: multi-objective cost/quality optimisation",
+    "story": "Routing every request to the largest model is the most common and most expensive mistake in production AI. Roughly 70% of traffic is handled fine by something far cheaper.",
+    "what": "Classifies query difficulty, then runs a **cascade** that escalates to larger models only when confidence is low. Learns the routing policy from outcome data, enforces per-tenant budgets, fails over across providers with circuit breakers, and publishes the",
+    "signal": "Multi-objective optimisation with an explicit, defensible operating point.",
+    "track": "ai-application-engineering",
+    "built": true,
+    "slug": "49-model-router-cascade",
+    "scan": {
+      "files": 29,
+      "total_lines": 4342,
+      "lines_by_language": {
+        "Go": 4259,
+        "PowerShell": 83
+      },
+      "languages": [
+        "Go"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 5,
+      "doc_count": 12
+    }
+  },
+  {
+    "number": 50,
+    "title": "AI Observability: detecting failures that don't throw",
+    "story": "AI systems fail **silently**. Quality degrades for eleven days, every request returns `200 OK`, and the dashboards stay green. Traditional APM is blind to this by design.",
+    "what": "Semantic tracing of chains and agent runs over OpenTelemetry, **embedding drift detection** (population stability index, MMD) on both inputs and outputs, continuous quality canaries, and anomaly detection on refusal, hallucination and escalation rates \u2014 alerting on **semantic** regression rather than error rate. Ships a dashboard that makes a silent degradation visible.",
+    "signal": "Instrumenting for failures that produce no exception is a fundamentally different discipline from APM.",
+    "track": "ai-application-engineering",
+    "built": false,
+    "slug": null,
+    "scan": null
+  }
+]

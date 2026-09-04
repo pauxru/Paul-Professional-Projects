@@ -1,0 +1,47 @@
+
+==============================================================================
+  stage 1 -- build with warnings as errors
+==============================================================================
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+Time Elapsed 00:00:02.52
+  clean
+
+==============================================================================
+  stage 2 -- tests
+==============================================================================
+Passed!  - Failed:     0, Passed:    87, Skipped:     0, Total:    87, Duration: 3 s - Sagas.Tests.dll (net10.0)
+  87 tests
+
+==============================================================================
+  stage 3 -- results.md is current
+==============================================================================
+  27524 bytes, byte-identical after regeneration
+
+==============================================================================
+  stage 4 -- determinism
+==============================================================================
+  run 1  sha e60c60667de6ef2f  (27523 chars)
+  run 2  sha e60c60667de6ef2f  (27523 chars)
+  run 3  sha e60c60667de6ef2f  (27523 chars)
+  identical across 3 runs
+
+==============================================================================
+  stage 5 -- mutation: can the suite still detect a broken checker?
+==============================================================================
+  killed    the algebraic reverse-order check never fires
+  killed    shape violations are silently dropped
+  killed    un-undoable work is scheduled before the pivot
+  killed    retries are removed, changing every measured number
+  killed    a report can be rendered with an unresolved prediction
+  5/5 killed
+
+==============================================================================
+  stage 6 -- secrets
+==============================================================================
+  34 files scanned, nothing found
+
+==============================================================================
+  all 6 stages passed -- 87 tests, 5/5 mutations killed, 51.0s
+==============================================================================

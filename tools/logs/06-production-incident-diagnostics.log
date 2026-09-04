@@ -1,0 +1,8 @@
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\06-production-incident-diagnostics\tests\Lab.UnitTests\bin\Release\net10.0\Lab.UnitTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\06-production-incident-diagnostics\tests\Lab.IntegrationTests\bin\Release\net10.0\Lab.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    25, Skipped:     0, Total:    25, Duration: 3 s - Lab.UnitTests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:     9, Skipped:     0, Total:     9, Duration: 803 ms - Lab.IntegrationTests.dll (net10.0)

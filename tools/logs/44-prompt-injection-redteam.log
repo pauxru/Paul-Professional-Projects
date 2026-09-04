@@ -1,0 +1,29 @@
+
+[1/6] Lint (pyflakes: unused imports, undefined names, dead f-strings)
+      OK
+
+[2/6] Tests
+........................................................................ [ 17%]
+........................................................................ [ 35%]
+........................................................................ [ 53%]
+........................................................................ [ 70%]
+........................................................................ [ 88%]
+...............................................                          [100%]
+      OK
+
+[3/6] Report freshness (docs/results.md matches the code that built it)
+..................                                                       [100%]
+      OK
+
+[4/6] Determinism (three separate processes must agree byte for byte)
+      sha 852f3aef4728569a x3
+      OK
+
+[5/6] Mutation check (the suite must notice a defence being disabled)
+      5/5 mutations killed
+      OK
+
+[6/6] No secrets, no network calls, no model API
+      OK
+
+All six stages passed.

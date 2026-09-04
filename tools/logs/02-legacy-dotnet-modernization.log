@@ -1,0 +1,16 @@
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\02-legacy-dotnet-modernization\modern\tests\Northstar.UnitTests\bin\Release\net10.0\Northstar.UnitTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\02-legacy-dotnet-modernization\legacy\Northstar.Legacy.CharacterizationTests\bin\Release\net10.0\Northstar.Legacy.CharacterizationTests.dll (.NETCoreApp,Version=v10.0)
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\02-legacy-dotnet-modernization\tests\Northstar.ModernizationTests\bin\Release\net10.0\Northstar.ModernizationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    29, Skipped:     0, Total:    29, Duration: 249 ms - Northstar.UnitTests.dll (net10.0)
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\02-legacy-dotnet-modernization\modern\tests\Northstar.IntegrationTests\bin\Release\net10.0\Northstar.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     7, Skipped:     0, Total:     7, Duration: 596 ms - Northstar.Legacy.CharacterizationTests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:     8, Skipped:     0, Total:     8, Duration: 2 s - Northstar.ModernizationTests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    11, Skipped:     0, Total:    11, Duration: 1 s - Northstar.IntegrationTests.dll (net10.0)

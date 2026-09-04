@@ -1,0 +1,8 @@
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\05-financial-reconciliation-engine\tests\ReconEngine.UnitTests\bin\Release\net10.0\ReconEngine.UnitTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\05-financial-reconciliation-engine\tests\ReconEngine.IntegrationTests\bin\Release\net10.0\ReconEngine.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   105, Skipped:     0, Total:   105, Duration: 497 ms - ReconEngine.UnitTests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    15, Skipped:     0, Total:    15, Duration: 16 s - ReconEngine.IntegrationTests.dll (net10.0)

@@ -1,0 +1,10 @@
+go vet ./...
+go test -count=1 ./...  (run 1 of 1)
+?   	strangler/cmd/strangler	[no test files]
+?   	strangler/internal/rulesets	[no test files]
+ok  	strangler/internal/confidence	0.236s
+ok  	strangler/internal/corpus	0.878s
+ok  	strangler/internal/jsondiff	0.251s
+ok  	strangler/internal/proxy	0.414s
+ok  	strangler/internal/score	2.172s
+PASS

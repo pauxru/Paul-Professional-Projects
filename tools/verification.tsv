@@ -1,0 +1,49 @@
+project	status	passed	failed	skipped	seconds	runner	parser
+01-enterprise-order-payments-platform	PASS	84	0	0	16.5	dotnet test	vstest
+02-legacy-dotnet-modernization	PASS	55	0	0	15.8	dotnet test	vstest
+03-enterprise-rag-knowledge-assistant	PASS	70	0	0	15.0	dotnet test	vstest
+04-multitenant-b2b-saas	FAIL	75	15	0	13.3	dotnet test	vstest-failed
+05-financial-reconciliation-engine	PASS	120	0	0	26.7	dotnet test	vstest
+06-production-incident-diagnostics	PASS	34	0	0	13.4	dotnet test	vstest
+07-zero-trust-api-platform	PASS	65	0	0	12.8	dotnet test	vstest
+08-event-driven-logistics-platform	PASS	58	0	0	15.7	dotnet test	vstest
+09-intelligent-document-processing	PASS	125	0	0	15.2	dotnet test	vstest
+10-industrial-iot-monitoring	PASS	97	0	0	14.0	dotnet test	vstest
+11-notification-delivery-platform	PASS	69	0	1	15.3	dotnet test	vstest
+12-api-integration-hub	PASS	77	0	0	13.9	dotnet test	vstest
+13-digital-banking-ledger	PASS	99	0	0	16.4	dotnet test	vstest
+14-loan-origination-platform	PASS	73	0	0	13.2	dotnet test	vstest
+15-fraud-detection-event-pipeline	PASS	69	0	0	60.7	dotnet test	vstest
+16-subscription-billing-engine	PASS	112	0	0	15.3	dotnet test	vstest
+17-distributed-job-scheduler	PASS	186	0	0	24.1	dotnet test	vstest
+18-feature-flag-service	PASS	72	0	0	9.9	dotnet test	vstest
+19-enterprise-audit-platform	PASS	62	0	0	82.0	dotnet test	vstest
+20-secrets-rotation-platform	PASS	57	0	0	13.1	dotnet test	vstest
+21-realtime-collaboration-platform	PASS	55	0	0	14.6	dotnet test	vstest
+22-enterprise-search-platform	PASS	57	0	0	12.5	dotnet test	vstest
+23-healthcare-workflow-platform	PASS	62	0	0	13.6	dotnet test	vstest
+24-identity-access-management	FAIL	80	4	0	17.6	dotnet test	vstest-failed
+25-data-pipeline-lakehouse	PASS	99	0	0	38.2	dotnet test	vstest
+26-sre-reliability-dashboard	PASS	52	0	0	13.3	dotnet test	vstest
+27-api-performance-toolkit	PASS	72	0	0	13.6	dotnet test	vstest
+28-cloud-deployment-reference	PASS	66	0	0	16.0	dotnet test	vstest
+29-ai-agent-workflow-platform	PASS	139	0	0	19.3	dotnet test	vstest
+30-cloud-cost-observability-platform	PASS	63	0	0	13.0	dotnet test	vstest
+31-assembly-archaeologist	NO_TESTS_DETECTED	0	0	0	150.5	test.ps1	
+32-strangler-router	PASS	67	0	0	16.4	test.ps1	gotest -v
+33-migration-verifier	NO_TESTS_DETECTED	0	0	0	114.3	test.ps1	
+34-saga-extractor	PASS	87	0	0	51.5	test.ps1	vstest
+35-crown-jewels-bridge	NO_TESTS_DETECTED	0	0	0	2.0	dotnet test	
+37-deterministic-sim-harness	PASS	37	0	0	6.7	test.ps1	cargo
+38-migration-wave-planner	NO_TESTS_DETECTED	0	0	0	59.1	test.ps1	
+39-schema-evolution	PASS	3	0	0	133.8	test.ps1	gotest
+40-cobol-batch-decommissioning	PASS	61	0	0	4.5	test.ps1	unittest
+41-llm-eval-harness	NO_TESTS_DETECTED	0	0	0	588.4	test.ps1	
+42-semantic-cache	FAIL	0	0	0	80.5	test.ps1	
+43-retrieval-lab	NO_TESTS_DETECTED	0	0	0	101.6	test.ps1	
+44-prompt-injection-redteam	NO_TESTS_DETECTED	0	0	0	62.9	test.ps1	
+46-constrained-decoding	FAIL	0	0	0	0.7	test.ps1	
+47-inference-gateway	NO_TESTS_DETECTED	0	0	0	204.0	test.ps1	
+48-graph-vector-hybrid	NO_TESTS_DETECTED	0	0	0	96.8	test.ps1	
+49-model-router-cascade	PASS	120	0	0	8.8	test.ps1	gotest -v
+TOTAL	34/47	2779	19				

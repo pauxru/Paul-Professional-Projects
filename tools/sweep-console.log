@@ -1,0 +1,96 @@
+-> 01-enterprise-order-payments-platform
+   PASS  passed=84 failed=0  17s
+-> 02-legacy-dotnet-modernization
+   PASS  passed=55 failed=0  16s
+-> 03-enterprise-rag-knowledge-assistant
+   PASS  passed=70 failed=0  15s
+-> 04-multitenant-b2b-saas
+   FAIL  passed=75 failed=15  13s
+-> 05-financial-reconciliation-engine
+   PASS  passed=120 failed=0  27s
+-> 06-production-incident-diagnostics
+   PASS  passed=34 failed=0  13s
+-> 07-zero-trust-api-platform
+   PASS  passed=65 failed=0  13s
+-> 08-event-driven-logistics-platform
+   PASS  passed=58 failed=0  16s
+-> 09-intelligent-document-processing
+   PASS  passed=125 failed=0  15s
+-> 10-industrial-iot-monitoring
+   PASS  passed=97 failed=0  14s
+-> 11-notification-delivery-platform
+   PASS  passed=69 failed=0  15s
+-> 12-api-integration-hub
+   PASS  passed=77 failed=0  14s
+-> 13-digital-banking-ledger
+   PASS  passed=99 failed=0  16s
+-> 14-loan-origination-platform
+   PASS  passed=73 failed=0  13s
+-> 15-fraud-detection-event-pipeline
+   PASS  passed=69 failed=0  61s
+-> 16-subscription-billing-engine
+   PASS  passed=112 failed=0  15s
+-> 17-distributed-job-scheduler
+   PASS  passed=186 failed=0  24s
+-> 18-feature-flag-service
+   PASS  passed=72 failed=0  10s
+-> 19-enterprise-audit-platform
+   PASS  passed=62 failed=0  82s
+-> 20-secrets-rotation-platform
+   PASS  passed=57 failed=0  13s
+-> 21-realtime-collaboration-platform
+   PASS  passed=55 failed=0  15s
+-> 22-enterprise-search-platform
+   PASS  passed=57 failed=0  12s
+-> 23-healthcare-workflow-platform
+   PASS  passed=62 failed=0  14s
+-> 24-identity-access-management
+   FAIL  passed=80 failed=4  18s
+-> 25-data-pipeline-lakehouse
+   PASS  passed=99 failed=0  38s
+-> 26-sre-reliability-dashboard
+   PASS  passed=52 failed=0  13s
+-> 27-api-performance-toolkit
+   PASS  passed=72 failed=0  14s
+-> 28-cloud-deployment-reference
+   PASS  passed=66 failed=0  16s
+-> 29-ai-agent-workflow-platform
+   PASS  passed=139 failed=0  19s
+-> 30-cloud-cost-observability-platform
+   PASS  passed=63 failed=0  13s
+-> 31-assembly-archaeologist
+   NO_TESTS_DETECTED  passed=0 failed=0  150s
+-> 32-strangler-router
+   PASS  passed=67 failed=0  16s
+-> 33-migration-verifier
+   NO_TESTS_DETECTED  passed=0 failed=0  114s
+-> 34-saga-extractor
+   PASS  passed=87 failed=0  51s
+-> 35-crown-jewels-bridge
+   NO_TESTS_DETECTED  passed=0 failed=0  2s
+-> 37-deterministic-sim-harness
+   PASS  passed=37 failed=0  7s
+-> 38-migration-wave-planner
+   NO_TESTS_DETECTED  passed=0 failed=0  59s
+-> 39-schema-evolution
+   PASS  passed=3 failed=0  134s
+-> 40-cobol-batch-decommissioning
+   PASS  passed=61 failed=0  5s
+-> 41-llm-eval-harness
+   NO_TESTS_DETECTED  passed=0 failed=0  588s
+-> 42-semantic-cache
+   FAIL  passed=0 failed=0  81s
+-> 43-retrieval-lab
+   NO_TESTS_DETECTED  passed=0 failed=0  102s
+-> 44-prompt-injection-redteam
+   NO_TESTS_DETECTED  passed=0 failed=0  63s
+-> 46-constrained-decoding
+   FAIL  passed=0 failed=0  1s
+-> 47-inference-gateway
+   NO_TESTS_DETECTED  passed=0 failed=0  204s
+-> 48-graph-vector-hybrid
+   NO_TESTS_DETECTED  passed=0 failed=0  97s
+-> 49-model-router-cascade
+   PASS  passed=120 failed=0  9s
+
+SWEEP COMPLETE: 34/47 projects green, 2779 tests passed, 19 failed

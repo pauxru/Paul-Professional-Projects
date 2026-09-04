@@ -1,0 +1,43 @@
+
+==============================================================================
+  stage 1 -- compile
+==============================================================================
+  clean
+
+==============================================================================
+  stage 2 -- tests
+==============================================================================
+  123 tests
+
+==============================================================================
+  stage 3 -- results.md is current
+==============================================================================
+  28600 bytes, byte-identical after regeneration
+
+==============================================================================
+  stage 4 -- determinism
+==============================================================================
+  run 1  sha be1d0516aa506098  (28599 chars)
+  run 2  sha be1d0516aa506098  (28599 chars)
+  run 3  sha be1d0516aa506098  (28599 chars)
+  identical across 3 runs
+
+==============================================================================
+  stage 5 -- mutation: can the suite still detect a broken verifier?
+==============================================================================
+  killed    the injectivity claim stops matching the rules' actual behaviour
+  killed    the account rule stops reconciling String with Integer
+  killed    an unusable verifier is allowed through the gate
+  killed    controls are credited without being attributed -- the ADR 005 bug
+  killed    the source stops being case-insensitive, removing the collation hazard
+  killed    every precision figure in the report inverts
+  6/6 killed
+
+==============================================================================
+  stage 6 -- secrets
+==============================================================================
+  35 files scanned, nothing found
+
+==============================================================================
+  all 6 stages passed -- 123 tests, 6/6 mutations killed, 113.7s
+==============================================================================

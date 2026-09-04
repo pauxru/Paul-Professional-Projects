@@ -1,0 +1,23 @@
+== gofmt ==
+clean
+
+== go vet ==
+clean
+
+== go test ./... ==
+?   	semcache/cmd/semcache	[no test files]
+ok  	semcache/internal/cache	1.221s
+ok  	semcache/internal/corpus	0.758s
+ok  	semcache/internal/embed	0.719s
+ok  	semcache/internal/flight	0.694s
+ok  	semcache/internal/gateway	9.505s
+ok  	semcache/internal/lexicon	0.675s
+ok  	semcache/internal/report	0.864s
+ok  	semcache/internal/workload	0.843s
+
+== concurrency stress (internal/flight, 50 runs, GOMAXPROCS=8) ==
+ok  	semcache/internal/flight	1.182s
+
+== report is reproducible ==
+docs/results.md does not match a fresh run.
+The report claims to be deterministic; regenerate with demo.ps1 -Save.

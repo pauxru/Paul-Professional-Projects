@@ -1,0 +1,43 @@
+
+==============================================================================
+  stage 1 -- compile
+==============================================================================
+  clean
+
+==============================================================================
+  stage 2 -- tests
+==============================================================================
+  133 tests
+
+==============================================================================
+  stage 3 -- results.md is current
+==============================================================================
+  21420 bytes, byte-identical after regeneration
+
+==============================================================================
+  stage 4 -- determinism
+==============================================================================
+  run 1  sha 77ef133a9d3324ff  (21419 chars)
+  run 2  sha 77ef133a9d3324ff  (21419 chars)
+  run 3  sha 77ef133a9d3324ff  (21419 chars)
+  identical across 3 runs
+
+==============================================================================
+  stage 5 -- mutation: can the suite still detect a broken comparison?
+==============================================================================
+  killed    the ranking inverts and the least relevant document is retrieved first
+  killed    traversal stops respecting edge direction -- "who owns X" answers "what X owns"
+  killed    the guard stops filtering, so every supplier looks sanctioned
+  killed    the query entity skips resolution, so section 5 measures a naming accident
+  killed    resolve() becomes stateful again -- the same input gives two answers
+  killed    false alarms stop being counted, and section 5's whole asymmetry disappears
+  6/6 killed
+
+==============================================================================
+  stage 6 -- secrets
+==============================================================================
+  35 files scanned, nothing found
+
+==============================================================================
+  all 6 stages passed -- 133 tests, 6/6 mutations killed, 96.3s
+==============================================================================

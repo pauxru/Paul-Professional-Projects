@@ -1,0 +1,8 @@
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\16-subscription-billing-engine\tests\SubscriptionBilling.UnitTests\bin\Release\net10.0\SubscriptionBilling.UnitTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\16-subscription-billing-engine\tests\SubscriptionBilling.IntegrationTests\bin\Release\net10.0\SubscriptionBilling.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    98, Skipped:     0, Total:    98, Duration: 2 s - SubscriptionBilling.UnitTests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 4 s - SubscriptionBilling.IntegrationTests.dll (net10.0)
