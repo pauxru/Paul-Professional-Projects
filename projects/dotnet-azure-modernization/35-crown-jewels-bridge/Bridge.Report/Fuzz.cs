@@ -245,11 +245,22 @@ public static class FuzzCorpus
 
 /// <summary>Runs a fuzz corpus against one DLL variant, in this process.</summary>
 /// <remarks>
+/// <para>
 /// Running in-process is safe for the hardened build and emphatically not for the legacy
 /// one, which is why <see cref="FuzzDriver"/> exists: it runs this class in a child
 /// process so that a crash is data rather than the end of the experiment.
+/// </para>
+/// <para>
+/// It does <b>not</b> own the variant it is handed. The version that did was disposing a
+/// module its caller was also disposing, which is the ordinary way an unmanaged
+/// double-free happens: not one line freeing twice, but two objects each correctly
+/// releasing what each believed it owned. Borrowing is the right relationship here --
+/// the runner is constructed and destroyed several times against one loaded DLL -- so
+/// the type simply is not <c>IDisposable</c> any more, and the compiler now rejects the
+/// call that caused the bug.
+/// </para>
 /// </remarks>
-public sealed unsafe class FuzzRunner(NativeVariant variant) : IDisposable
+public sealed unsafe class FuzzRunner(NativeVariant variant)
 {
     private const uint GuardPattern = 0xDEADBEEFu;
     private const int GuardBytes = 64;
@@ -429,6 +440,4 @@ public sealed unsafe class FuzzRunner(NativeVariant variant) : IDisposable
     }
 
     private static FuzzOutcome Worse(FuzzOutcome a, FuzzOutcome b) => (FuzzOutcome)Math.Max((int)a, (int)b);
-
-    public void Dispose() => variant.Dispose();
 }

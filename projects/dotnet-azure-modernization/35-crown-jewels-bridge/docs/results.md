@@ -25,14 +25,14 @@ number quoted out of context.
 
 | call | median | boundary overhead as a share of the call |
 |---|---:|---:|
-| managed method (nothing crosses) | 2.6 ns | -- |
-| `pj_noop` (crossing, no work) | 2.6 ns | 100% |
-| `pj_price_european` (~200ns of work) | 63.9 ns | 4% |
+| managed method (nothing crosses) | 2.7 ns | -- |
+| `pj_noop` (crossing, no work) | 2.7 ns | 100% |
+| `pj_price_european` (~200ns of work) | 63.1 ns | 4% |
 | `pj_price_american(512)` (~1ms of work) | 2.76 ms | 0.00% |
 
 **P1 -- expected.** A P/Invoke costs a few tens of nanoseconds. That is a rounding error next to any real computation, so the boundary can be treated as free and the API designed for clarity instead.
 
-**P1 -- CONTRADICTED.** The crossing itself costs 2.6 ns, which is indeed small. But it is not a rounding error, it is a **ratio**. Against `pj_price_european` it is 4% of the call; against `pj_price_american(512)` it is 0.00%. The same boundary is 43193x more expensive for one function than the other, and neither number is a property of the boundary. The design rule that follows is not "P/Invoke is cheap" but **put enough work behind each crossing that the crossing stops mattering** -- which is a statement about API shape, not about performance tuning.
+**P1 -- CONTRADICTED.** The crossing itself costs 2.7 ns, which is indeed small. But it is not a rounding error, it is a **ratio**. Against `pj_price_european` it is 4% of the call; against `pj_price_american(512)` it is 0.00%. The same boundary is 43786x more expensive for one function than the other, and neither number is a property of the boundary. The design rule that follows is not "P/Invoke is cheap" but **put enough work behind each crossing that the crossing stops mattering** -- which is a statement about API shape, not about performance tuning.
 
 ## P2 -- per-call versus batch
 
@@ -40,38 +40,38 @@ Pricing all 4000 positions:
 
 | shape | crossings | median |
 |---|---:|---:|
-| one call per option | 4000 | 287.20 us |
-| one call for the book | 1 | 252.50 us |
+| one call per option | 4000 | 287.40 us |
+| one call for the book | 1 | 248.50 us |
 
 **P2 -- expected.** Batching a portfolio into one call instead of N saves the per-call overhead, so the win is bounded by that overhead: somewhere between 2x and 5x.
 
-**P2 -- HELD.** Batching is 1.14x faster, not 2-5x. The prediction accounted for the transition and forgot everything around it: the per-call shape pays a stub, an argument setup, a return-value check and a status branch for every single option, and the loop that drives it never gets to stay inside native code long enough to warm anything. Batching removes 3999 crossings and, more importantly, moves the loop to the side of the boundary where the data already is.
+**P2 -- HELD.** Batching is 1.16x faster, not 2-5x. The prediction accounted for the transition and forgot everything around it: the per-call shape pays a stub, an argument setup, a return-value check and a status branch for every single option, and the loop that drives it never gets to stay inside native code long enough to warm anything. Batching removes 3999 crossings and, more importantly, moves the loop to the side of the boundary where the data already is.
 
 ## P3 -- what safety costs
 
 | path | median | delta |
 |---|---:|---:|
-| raw pointer, no reference count | 62.6 ns | -- |
-| `PricingEngine.PriceEuropean` (SafeHandle AddRef/Release, try/finally, status check) | 78.9 ns | +16.343 ns (26%) |
+| raw pointer, no reference count | 63.1 ns | -- |
+| `PricingEngine.PriceEuropean` (SafeHandle AddRef/Release, try/finally, status check) | 81.4 ns | +18.311 ns (29%) |
 
 **P3 -- expected.** SafeHandle's reference counting is a pair of interlocked operations. Next to a P/Invoke that is free, so the safe wrapper costs nothing measurable.
 
-**P3 -- CONTRADICTED.** The safe path costs +16.343 ns per call, 26% on top of the raw one. Whether that is free depends entirely on the shape of the API above it: on the per-call path it is a real fraction of every price, and on the batch path it is paid once for 4000 options and disappears. The conclusion is not "SafeHandle is expensive" -- it is that a chatty API makes safety look expensive, and the fix is the API, because the alternative is to buy back a few nanoseconds by making use-after-free representable.
+**P3 -- CONTRADICTED.** The safe path costs +18.311 ns per call, 29% on top of the raw one. Whether that is free depends entirely on the shape of the API above it: on the per-call path it is a real fraction of every price, and on the batch path it is paid once for 4000 options and disappears. The conclusion is not "SafeHandle is expensive" -- it is that a chatty API makes safety look expensive, and the fix is the API, because the alternative is to buy back a few nanoseconds by making use-after-free representable.
 
 ## P4 -- SuppressGCTransition, and what it costs somebody else
 
-On an empty call: 2.6 ns with the transition, 2.1 ns without -- 1.26x faster.
+On an empty call: 2.6 ns with the transition, 2.3 ns without -- 1.13x faster.
 
 So far the prediction looks right. Now the same attribute on a call that is not short:
 
 | native call in flight on another thread | longest `GC.Collect()` observed |
 |---|---:|
-| `pj_burn(60ms)`, normal transition | 1.2 ms |
-| `pj_burn(60ms)`, SuppressGCTransition | 52.3 ms |
+| `pj_burn(60ms)`, normal transition | 1.0 ms |
+| `pj_burn(60ms)`, SuppressGCTransition | 54.5 ms |
 
 **P4 -- expected.** SuppressGCTransition removes work from every call and changes nothing else, so it should be applied to every short native call as a matter of course.
 
-**P4 -- CONTRADICTED.** The speed-up is real -- 1.26x on an empty call, and it comes from removing the switch to preemptive GC mode. That switch is what allows the runtime to suspend the calling thread. Remove it and the thread is uninterruptible for the duration of the call, so a collection anywhere else in the process waits for it: a `GC.Collect()` on another thread ran in 1.2 ms while a normal 60 ms native call was in flight, and 52.3 ms while a suppressed one was -- the collector waited for the native call to finish. The attribute is not an optimisation you apply to short calls; it is a promise that the call is short, made to a component that has no way to check.
+**P4 -- CONTRADICTED.** The speed-up is real -- 1.13x on an empty call, and it comes from removing the switch to preemptive GC mode. That switch is what allows the runtime to suspend the calling thread. Remove it and the thread is uninterruptible for the duration of the call, so a collection anywhere else in the process waits for it: a `GC.Collect()` on another thread ran in 1.0 ms while a normal 60 ms native call was in flight, and 54.5 ms while a suppressed one was -- the collector waited for the native call to finish. The attribute is not an optimisation you apply to short calls; it is a promise that the call is short, made to a component that has no way to check.
 
 ## P5 -- which marshalling actually costs
 
@@ -79,13 +79,13 @@ All 4000 positions, every strategy, same prices out:
 
 | strategy | shape | needs marshaller | median | vs fastest |
 |---|---|---|---:|---:|
-| batch, pinned in place | batch | no | 251.20 us | 1.00x |
-| batch, marshalled array | batch | yes | 261.00 us | 1.04x |
-| per-call, blittable pointer | per-call | no | 284.80 us | 1.13x |
-| per-call, SuppressGCTransition | per-call | no | 288.20 us | 1.15x |
-| batch, hand-copied to unmanaged memory | batch | no | 368.20 us | 1.47x |
-| per-call, marshalled class | per-call | yes | 438.80 us | 1.75x |
-| per-call, raw function pointer | per-call | no | 551.10 us | 2.2x |
+| batch, pinned in place | batch | no | 251.50 us | 1.00x |
+| batch, marshalled array | batch | yes | 262.40 us | 1.04x |
+| per-call, blittable pointer | per-call | no | 284.60 us | 1.13x |
+| per-call, SuppressGCTransition | per-call | no | 289.50 us | 1.15x |
+| batch, hand-copied to unmanaged memory | batch | no | 358.00 us | 1.42x |
+| per-call, marshalled class | per-call | yes | 464.60 us | 1.85x |
+| per-call, raw function pointer | per-call | no | 547.80 us | 2.2x |
 
 - **batch, pinned in place** -- 1 crossing, zero copies. The managed heap IS the native buffer.
 - **batch, marshalled array** -- 1 crossing; the marshaller pins rather than copies because the element type is blittable.
@@ -97,14 +97,14 @@ All 4000 positions, every strategy, same prices out:
 
 **P5 -- expected.** The runtime marshaller is the expensive part of interop. Anything that goes through it will be far slower than a hand-pinned blittable call, which is why DisableRuntimeMarshalling exists.
 
-**P5 -- CONTRADICTED.** The marshaller is not the axis that matters. A **marshalled** array and a hand-pinned span differ by 1.04x -- because the element type is blittable, the marshaller pins the array rather than copying it, and does almost exactly what the hand-written code does. Meanwhile a marshalled **class** costs 1.54x a blittable per-call pointer with the identical crossing count, because a reference type can never be passed in place and must be allocated, copied and freed every time. The rule is not "avoid the marshaller". It is **avoid non-blittable types, and avoid crossing more often than you must** -- and of the two, the crossing count dominates.
+**P5 -- CONTRADICTED.** The marshaller is not the axis that matters. A **marshalled** array and a hand-pinned span differ by 1.04x -- because the element type is blittable, the marshaller pins the array rather than copying it, and does almost exactly what the hand-written code does. Meanwhile a marshalled **class** costs 1.63x a blittable per-call pointer with the identical crossing count, because a reference type can never be passed in place and must be allocated, copied and freed every time. The rule is not "avoid the marshaller". It is **avoid non-blittable types, and avoid crossing more often than you must** -- and of the two, the crossing count dominates.
 
 ## P12 -- the ABI's shape is the performance decision
 
 | method | crossings | median | delta error vs analytic |
 |---|---:|---:|---:|
-| `pj_greeks_european` | 1 | 137.5 ns | exact |
-| bump and reprice | 9 | 621.3 ns | 1.9E-011 |
+| `pj_greeks_european` | 1 | 138.8 ns | exact |
+| bump and reprice | 9 | 619.5 ns | 1.9E-011 |
 
 **P12 -- expected.** The greeks can be obtained by bumping an input and repricing. Adding a dedicated greeks entry point to the ABI is a convenience, not a performance decision.
 
@@ -116,12 +116,12 @@ Monte Carlo over 400,000 paths (200,000 antithetic pairs):
 
 | callbacks | median | implied cost per callback |
 |---:|---:|---:|
-| 0 | 17.02 ms | -- |
-| 200,000 | 18.60 ms | 7.892 ns |
+| 0 | 16.88 ms | -- |
+| 200,000 | 18.61 ms | 8.638 ns |
 
 **P9 -- expected.** A callback from native code into managed code is the same transition in the other direction, so it costs about the same as a P/Invoke.
 
-**P9 -- CONTRADICTED.** A reverse transition costs about 7.892 ns here against roughly a nanosecond for the forward one -- the same boundary, an order of magnitude apart. Going out is a mode switch; coming back is a mode switch plus locating the managed thread state, plus an exception barrier the runtime must install because an exception escaping into a native frame would kill the process. That is why `report_every` is a parameter in the C header rather than a constant in the engine: the caller is the only party that knows how much progress reporting its user interface is worth.
+**P9 -- CONTRADICTED.** A reverse transition costs about 8.638 ns here against roughly a nanosecond for the forward one -- the same boundary, an order of magnitude apart. Going out is a mode switch; coming back is a mode switch plus locating the managed thread state, plus an exception barrier the runtime must install because an exception escaping into a native frame would kill the process. That is why `report_every` is a parameter in the C header rather than a constant in the engine: the caller is the only party that knows how much progress reporting its user interface is worth.
 
 ## P11 -- cancellation is a latency you choose
 

@@ -98,7 +98,7 @@ internal static class MarshalledNativeMethods
 /// </remarks>
 public sealed unsafe class NativeVariant : IDisposable
 {
-    private readonly nint _module;
+    private nint _module;
 
     public string Name { get; }
 
@@ -156,11 +156,30 @@ public sealed unsafe class NativeVariant : IDisposable
         return price;
     }
 
+    /// <summary>
+    /// Frees the module. Idempotent, which it has to be.
+    /// </summary>
+    /// <remarks>
+    /// The guard used to test <c>_module != nint.Zero</c> without ever assigning zero,
+    /// so it caught nothing: the second <c>Dispose</c> called <c>NativeLibrary.Free</c>
+    /// on a handle the loader had already released and got an
+    /// <c>InvalidOperationException</c> from inside a <c>using</c> block, replacing
+    /// whatever the caller was actually doing with a stack trace about interop.
+    ///
+    /// It survived review because the double-dispose it needed was not obviously a
+    /// double-dispose -- one <c>using</c> here and a <c>FuzzRunner</c> that also
+    /// believed it owned the variant -- and because it only threw sometimes, depending
+    /// on how many other loads of the same DLL were outstanding when it ran. The
+    /// project spends a lot of words on the 2009 boundary trusting its callers; this
+    /// is the same mistake in managed code, in a type written to study it.
+    /// </remarks>
     public void Dispose()
     {
-        if (_module != nint.Zero)
+        var module = _module;
+        _module = nint.Zero;
+        if (module != nint.Zero)
         {
-            NativeLibrary.Free(_module);
+            NativeLibrary.Free(module);
         }
     }
 }

@@ -1,4 +1,5 @@
 using Bridge.Core;
+using Bridge.Legacy;
 
 namespace Bridge.Tests;
 
@@ -76,6 +77,76 @@ public class BatchAndStrategyTests
         var ex = Assert.Throws<ArgumentException>(() => engine.PriceBatch(options, tooSmall));
         Assert.Contains("9", ex.Message);
         Assert.Contains("10", ex.Message);
+    }
+
+    /// <summary>
+    /// The same refusal, one layer down, where it actually protects anybody.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The test above is not a test of the boundary. It is a test of the wrapper, and it
+    /// passes just as happily when the native capacity check has been deleted, because
+    /// the <c>ArgumentException</c> is thrown before the P/Invoke ever happens.
+    /// </para>
+    /// <para>
+    /// Mutation testing is what surfaced that. Replacing <c>out_capacity &lt; count</c>
+    /// with <c>out_capacity &lt; 0</c> in <c>abi.cpp</c> -- removing the check entirely
+    /// -- left the whole 177-test suite green, which meant the headline claim about the
+    /// hardened boundary was, for this particular failure, unverified. The wrapper is
+    /// the cheapest place to stop a short buffer; it is not the place that matters. Real
+    /// callers of a C ABI are Python, Excel, another C++ program, and a decade-old VB6
+    /// front end, none of which go through <c>PricingEngine</c>.
+    /// </para>
+    /// <para>
+    /// So this one calls <c>pj_price_batch</c> directly, and asserts both halves of what
+    /// a safe boundary owes the caller: it declines, <b>and</b> it does not write. The
+    /// second half needs a guard pattern rather than a fault, because 512 bytes of
+    /// overrun does not fault -- which is the whole finding.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void The_native_boundary_refuses_a_short_buffer_and_writes_nothing_past_it()
+    {
+        using var hardened = new VariantSession(Variants.Hardened);
+        var options = Book(64);
+
+        var status = hardened.TryPriceBatchWithGuard(
+            options, declaredCapacity: 1, guardSlots: 63, out var overwritten);
+
+        Assert.Equal(PricingStatus.Capacity, status);
+        Assert.Equal(0, overwritten);
+    }
+
+    [Fact]
+    public void The_2009_boundary_writes_all_sixty_three_of_them()
+    {
+        // The contrast that gives the test above its meaning. Same corpus, same call,
+        // same guard: one boundary declines and writes nothing, the other reports
+        // success and overwrites every slot it was never given.
+        using var legacy = new VariantSession(Variants.LegacyBoundary);
+        var options = Book(64);
+
+        var status = legacy.TryPriceBatchWithGuard(
+            options, declaredCapacity: 1, guardSlots: 63, out var overwritten);
+
+        Assert.Equal(PricingStatus.Ok, status);
+        Assert.Equal(63, overwritten);
+    }
+
+    [Fact]
+    public void A_buffer_that_exactly_fits_is_not_treated_as_short()
+    {
+        // The off-by-one that would make the check above a false positive. A capacity
+        // check written with the wrong comparison refuses the exactly-right buffer,
+        // which is the single most common shape of call there is.
+        using var hardened = new VariantSession(Variants.Hardened);
+        var options = Book(16);
+
+        var status = hardened.TryPriceBatchWithGuard(
+            options, declaredCapacity: 16, guardSlots: 8, out var overwritten);
+
+        Assert.Equal(PricingStatus.Ok, status);
+        Assert.Equal(0, overwritten);
     }
 
     [Fact]

@@ -203,9 +203,10 @@ public class LegacyCrashTests
     /// <remarks>
     /// A zero-step lattice runs its loop no times and returns whatever the accumulator
     /// was initialised to. The status is success. The number is zero. The option is a
-    /// put struck at 40 with the spot at 42 and six months to run, which is worth about
-    /// eighty-one cents -- and zero is exactly what an out-of-the-money put is supposed
-    /// to look like, so nobody queries it. No crash, no NaN, no log line, no alert.
+    /// put struck at 40 with the spot at 42 and six months to run, which as an American
+    /// put is worth about ninety-one cents -- and zero is exactly what an out-of-the-money
+    /// put is supposed to look like, so nobody queries it. No crash, no NaN, no log line,
+    /// no alert.
     /// </remarks>
     [Fact]
     public void A_zero_step_lattice_returns_zero_for_an_option_that_is_worth_something()
@@ -216,10 +217,17 @@ public class LegacyCrashTests
         Assert.Equal(LegacyProbe.Survived, result.ExitCode);
         Assert.Equal("0", result.Stdout);
 
-        // What the option is actually worth, from the boundary that checks.
+        // What the option is actually worth, from the boundary that checks. The
+        // American value is strictly above the European 0.8086, because the right to
+        // exercise early cannot be worth less than nothing -- which is itself a cheap
+        // check that the lattice is not silently pricing a European.
         using var engine = new PricingEngine();
-        var real = engine.PriceAmerican(Sane, 2000);
-        Assert.True(real > 0.8, $"expected a materially non-zero price, got {real}");
+        var american = engine.PriceAmerican(Sane, 2000);
+        var european = engine.PriceEuropean(Sane);
+
+        Assert.True(american > european,
+            $"American {american} should exceed European {european}");
+        Assert.True(american > 0.9, $"expected a materially non-zero price, got {american}");
     }
 
     [Fact]

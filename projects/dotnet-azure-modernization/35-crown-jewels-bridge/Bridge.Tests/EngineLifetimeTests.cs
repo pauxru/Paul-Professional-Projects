@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Bridge.Core;
+using Bridge.Legacy;
 
 namespace Bridge.Tests;
 
@@ -209,5 +210,60 @@ public class EngineLifetimeTests
         var first = engine.LastError();
         var second = engine.LastError();
         Assert.Equal(first, second);
+    }
+
+    /// <summary>
+    /// A loaded module must be releasable exactly once, however many owners think they
+    /// hold it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is a regression test for a bug in this project's own code, and it is the
+    /// most instructive one it produced, because the shape is the shape of every real
+    /// double-free: nobody wrote <c>Free(h); Free(h);</c>. There was a
+    /// <c>using var variant</c> in the caller and a <c>FuzzRunner</c> that also
+    /// implemented <c>IDisposable</c> over the same variant. Each was individually
+    /// correct. Together they released the module twice, and
+    /// <c>NativeLibrary.Free</c> threw <c>InvalidOperationException</c> out of a
+    /// <c>using</c> block -- so the reported failure was an interop stack trace inside
+    /// whatever test happened to be running.
+    /// </para>
+    /// <para>
+    /// It was intermittent, which is what kept it alive. The OS loader reference-counts,
+    /// so the second free only fails when no other load of the same DLL is outstanding
+    /// -- meaning the bug appears when a test is run <i>alone</i> and vanishes when it
+    /// is run with the rest of the suite. Filtering down to reproduce it is the natural
+    /// move and it is the move that makes it disappear.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public void Freeing_a_variant_twice_is_not_an_error()
+    {
+        var variant = Variants.Open(Variants.Hardened);
+        variant.Dispose();
+        variant.Dispose();
+        variant.Dispose();
+    }
+
+    [Fact]
+    public void A_variant_can_be_loaded_and_freed_repeatedly()
+    {
+        // The loader reference-counts, so a leak here is invisible until the hundredth
+        // iteration of something. Priced through each one, so the test fails if a
+        // module is freed while still in use rather than merely counting.
+        for (var i = 0; i < 20; i++)
+        {
+            using var variant = Variants.Open(Variants.Hardened);
+            var engine = variant.CreateEngine();
+            Assert.NotEqual(nint.Zero, engine);
+            try
+            {
+                Assert.True(variant.PriceOne(engine, Sane) > 0);
+            }
+            finally
+            {
+                unsafe { variant.Destroy(engine); }
+            }
+        }
     }
 }

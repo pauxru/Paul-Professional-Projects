@@ -150,7 +150,7 @@ $abi = Join-Path $PSScriptRoot 'native\src\abi.cpp'
 $mutations = @(
     @{ From  = 'if (steps < 1) {'
        To    = 'if (steps < 0) {'
-       Kills = 'the zero-step lattice, which returns 0.0 for an option worth 0.81 and reports success' }
+       Kills = 'the zero-step lattice, which returns 0.0 for an option worth 0.91 and reports success' }
 
     @{ From  = 'if (out_capacity < count) {'
        To    = 'if (out_capacity < 0) {'

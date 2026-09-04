@@ -59,7 +59,7 @@ public static class FuzzDriver
     {
         var cases = FuzzCorpus.Generate(seed, count);
         using var variant = Variants.Open(variantName);
-        using var runner = new FuzzRunner(variant);
+        var runner = new FuzzRunner(variant);
 
         var outcomes = new FuzzOutcome[count];
         for (var i = 0; i < count; i++)
@@ -175,7 +175,7 @@ public static class FuzzDriver
 
         var cases = FuzzCorpus.Generate(seed, count);
         using var variant = Variants.Open(variantName);
-        using var runner = new FuzzRunner(variant);
+        var runner = new FuzzRunner(variant);
 
         for (var i = start; i < count; i++)
         {
