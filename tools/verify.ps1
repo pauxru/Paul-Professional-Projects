@@ -27,6 +27,20 @@ if (-not $shell) {
     exit 2
 }
 
+# The Go projects put the toolchain on PATH themselves, inside their own test.ps1, so
+# they run fine without this. The sweep needs its own handle on `go` because it re-runs
+# the suite verbosely to count tests (see below), and that happens outside the child
+# process the project's script ran in.
+$goExe = (Get-Command go -ErrorAction SilentlyContinue).Source
+if (-not $goExe) {
+    $goExe = @(
+        (Join-Path $env:GOROOT 'bin\go.exe'),
+        (Join-Path $env:USERPROFILE 'toolchains\go\bin\go.exe'),
+        'C:\Program Files\Go\bin\go.exe',
+        (Join-Path $env:LOCALAPPDATA 'Programs\Go\bin\go.exe')
+    ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+}
+
 # Test frameworks each report their totals differently. Rather than guess which one a
 # project uses, apply every pattern; a project only ever matches its own.
 $patterns = @(
@@ -150,9 +164,11 @@ foreach ($p in $projects) {
     $okPkgs = ([regex]::Matches(($lines -join "`n"), '^ok\s', 'Multiline')).Count
     $goMod = Get-ChildItem -Path $p.FullName -Filter 'go.mod' -Recurse -Depth 3 -File -EA SilentlyContinue |
              Select-Object -First 1
-    if ($code -eq 0 -and $goMod -and $m.How -ne 'harness' -and ($m.Passed -eq 0 -or $m.Passed -lt $okPkgs)) {
+    if ($code -eq 0 -and $goMod -and $goExe -and $m.How -ne 'harness' -and ($m.Passed -eq 0 -or $m.Passed -lt $okPkgs)) {
         Push-Location $goMod.Directory.FullName
-        $v = & go test -count=1 -v ./... 2>&1 | ForEach-Object { "$_" }
+        $env:GOROOT = Split-Path -Parent (Split-Path -Parent $goExe)
+        $env:GOFLAGS = '-mod=mod'
+        $v = & $goExe test -count=1 -v ./... 2>&1 | ForEach-Object { "$_" }
         Pop-Location
         $gm = Measure-Output -Lines $v
         if ($gm.Passed -gt $m.Passed) {

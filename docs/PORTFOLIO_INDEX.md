@@ -1,7 +1,7 @@
 # Portfolio Index
 
-Thirty **self-directed engineering case studies**. Root:
-`C:\Users\rukwaropaul\Downloads\DEV\Projects`
+Thirty **self-directed engineering case studies**, in
+[`projects/foundation/`](../projects/foundation).
 
 Every project targets **.NET 10 (`net10.0`)** and is designed to build and test on a machine with
 **only the .NET SDK installed** — no Docker, no database server, no paid API keys. See

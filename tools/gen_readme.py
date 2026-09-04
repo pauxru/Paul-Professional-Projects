@@ -253,6 +253,14 @@ def main() -> int:
       'run under [`tools/logs/`](tools/logs). They are in the repository because a test '
       'count in a README is worth exactly as much as the file it can be checked against.')
     A('')
+    A('Running every suite on a machine and a date that none of them were written on '
+      'found four defects that reading the code would not have: two frozen-clock time '
+      'bombs that had been waiting for the wall clock to overtake a hard-coded test '
+      'date, a determinism claim that turned out to hold only at one value of '
+      '`GOMAXPROCS`, and a build step the sweep was skipping. '
+      '[`docs/VERIFICATION.md`](docs/VERIFICATION.md) is the write-up \u2014 including the '
+      'two bugs that were in the test *counter* rather than in any project.')
+    A('')
     A('See [`docs/TOOLCHAINS.md`](docs/TOOLCHAINS.md) for the versions everything was '
       'built and verified against.')
     A('')

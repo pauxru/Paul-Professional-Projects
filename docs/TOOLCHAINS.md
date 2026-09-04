@@ -21,24 +21,30 @@ exists.
 
 ## Python
 
-The bare command `python` is a **broken Microsoft Store stub**. It will appear to work and
-then fail. Always use:
+On a stock Windows install the bare command `python` may resolve to the **Microsoft Store
+stub**, which appears to work and then fails partway through. Invoke the real interpreter by
+its full path instead:
 
 ```
-C:\Users\rukwaropaul\AppData\Local\Programs\Python\Python312\python.exe
+%LOCALAPPDATA%\Programs\Python\Python312\python.exe
 ```
+
+The `test.ps1` scripts in the Python projects hard-code that path for exactly this reason:
+a harness that silently picks up the wrong interpreter produces a failure that looks like a
+bug in the code under test. Change the `$py` line at the top of the script if your
+interpreter lives elsewhere.
 
 Create the venv **inside your project folder**:
 
 ```powershell
-& "C:\Users\rukwaropaul\AppData\Local\Programs\Python\Python312\python.exe" -m venv .venv
+& "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe" -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
 **Never create a venv under `%TEMP%`** — 8.3 short-path redirection (`RUKWAR~1`) breaks
 `ensurepip` and you get a venv with no `pip`.
 
-PyPI is reachable. `pytest` and `numpy` are verified working.
+`pytest` and `numpy` are the only third-party packages any project needs.
 
 ---
 
