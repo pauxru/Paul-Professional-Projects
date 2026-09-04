@@ -27,10 +27,10 @@ It also has an uncomfortable consequence, which is the reason the rule is worth 
 
 | | |
 |---|---|
-| **Projects** | 50 designed, 47 built and verified |
-| **Source** | 273,925 lines of authored code, generated files excluded |
-| **Tests** | 5,346 passing across 46 project suites |
-| **Languages** | C#, C++, Go, Java, Python, Rust |
+| **Projects** | 50 designed, 50 built and verified |
+| **Source** | 292,677 lines of authored code, generated files excluded |
+| **Tests** | 6,233 passing across 50 project suites |
+| **Languages** | C#, C++, Go, Java, Python, Rust, TypeScript |
 | **Dependencies** | None. No Docker, no database server, no cloud account, no API key. |
 
 That last row is a design constraint, not a limitation. A portfolio that only runs on the author's machine is a portfolio nobody runs. Every project here is built to `git clone` and go, which forced some genuinely better engineering: deterministic local embedding providers instead of a hosted API, an in-process bus behind the same interface as the real broker, seeded simulation instead of `Thread.Sleep`.
@@ -114,14 +114,14 @@ Ten projects about **safety under change**. None of them is a greenfield rewrite
 | <img src="assets/projects/32.svg" width="60" alt=""> | **[32 · Strangler Router](projects/dotnet-azure-modernization/32-strangler-router)**<br><sub>`Go` · 67 tests · 3,694 lines</sub> | A reverse proxy that mirrors live traffic to both legacy and rewrite, returns only the legacy response, and diffs the two semantically. This is the mechanism that makes a cutover honest. |
 | <img src="assets/projects/33.svg" width="60" alt=""> | **[33 · Heterogeneous Database Migration Verifier](projects/dotnet-azure-modernization/33-migration-verifier)**<br><sub>`Java` `PowerShell` · 123 tests · 4,183 lines</sub> | SQL Server to PostgreSQL, where the schema conversion is the weekend and proving no row was silently corrupted is the six months. Row-level checksums across engines that disagree about collation, DECIMAL rounding and NULL ordering. |
 | <img src="assets/projects/34.svg" width="60" alt=""> | **[34 · Saga Extractor](projects/dotnet-azure-modernization/34-saga-extractor)**<br><sub>`C#` · 87 tests · 4,028 lines</sub> | Takes a transaction pulled apart by a service split and proves the compensation still holds — by exhaustively searching interleavings for a state no compensation can reach. |
-| <img src="assets/projects/35.svg" width="60" alt=""> | **[35 · Crown Jewels Bridge](projects/dotnet-azure-modernization/35-crown-jewels-bridge)**<br><sub>`C#` `C++` · 4,663 lines</sub> | A 60,000-line C++ pricing engine nobody will authorise rewriting, exposed through a narrow C ABI. The same engine compiled three ways shows the danger lives in the boundary, not the mathematics. |
-| <img src="assets/projects/36.svg" width="60" alt=""> | **36 · Authentication Migration**<br>*in progress* | Forms cookies, WS-Federation and OIDC running simultaneously, with PBKDF2 rehashed to Argon2id at the moment of successful login, so not one user gets a password reset email. |
+| <img src="assets/projects/35.svg" width="60" alt=""> | **[35 · Crown Jewels Bridge](projects/dotnet-azure-modernization/35-crown-jewels-bridge)**<br><sub>`C#` `C++` · 309 tests · 8,017 lines</sub> | A 60,000-line C++ pricing engine nobody will authorise rewriting, exposed through a narrow C ABI. The same engine compiled three ways shows the danger lives in the boundary, not the mathematics. |
+| <img src="assets/projects/36.svg" width="60" alt=""> | **[36 · Authentication Migration](projects/dotnet-azure-modernization/36-authentication-coexistence)**<br><sub>`C#` · 284 tests · 7,960 lines</sub> | Forms cookies, WS-Federation and OIDC running simultaneously, with PBKDF2 rehashed to Argon2id at the moment of successful login, so not one user gets a password reset email. |
 | <img src="assets/projects/37.svg" width="60" alt=""> | **[37 · Deterministic Distributed Systems Simulator](projects/dotnet-azure-modernization/37-deterministic-sim-harness)**<br><sub>`Rust` · 37 tests · 2,353 lines</sub> | A FoundationDB-style deterministic simulator: seeded scheduling, injected partitions, reordering and clock skew — and any failure replays exactly from its seed. |
 | <img src="assets/projects/38.svg" width="60" alt=""> | **[38 · Migration Wave Planner](projects/dotnet-azure-modernization/38-migration-wave-planner)**<br><sub>`Python` · 434 tests · 6,409 lines</sub> | Migration wave ordering optimised under team capacity, freeze windows and coupling, costed with the line items people forget: egress, dual-running overlap, licence double-payment. |
 | <img src="assets/projects/39.svg" width="60" alt=""> | **[39 · Zero-Downtime Schema Evolution Engine](projects/dotnet-azure-modernization/39-schema-evolution)**<br><sub>`Go` · 201 tests · 7,207 lines</sub> | Expand, migrate, contract — backfilled in adaptive batches, with the lock-duration budget that decides whether "zero downtime" is a claim or a measurement. |
 | <img src="assets/projects/40.svg" width="60" alt=""> | **[40 · COBOL Batch Decommissioning with byte-equivalence proof](projects/dotnet-azure-modernization/40-cobol-batch-decommissioning)**<br><sub>`Python` · 61 tests · 2,683 lines</sub> | A real COBOL decoder — copybooks, EBCDIC, COMP-3 packed decimal, signed overpunch, OCCURS DEPENDING ON — and a byte-equivalence proof against the modern reimplementation. |
 
-<sub>10 projects · 40,471 lines</sub>
+<sub>10 projects · 51,785 lines</sub>
 
 ---
 
@@ -141,14 +141,14 @@ Ten projects about the engineering *around* the model. Every one of them runs wi
 | <img src="assets/projects/42.svg" width="60" alt=""> | **[42 · Semantic Cache & Request Coalescing Gateway](projects/ai-application-engineering/42-semantic-cache)**<br><sub>`Go` · 134 tests · 6,937 lines</sub> | Semantic caching that measures its own false-hit rate, because in a cache a false hit is not a performance problem, it is someone else's answer. |
 | <img src="assets/projects/43.svg" width="60" alt=""> | **[43 · Retrieval Quality Lab](projects/ai-application-engineering/43-retrieval-lab)**<br><sub>`Python` · 366 tests · 6,947 lines</sub> | Systematic ablation across chunking, embedding model, reranking and fusion, scored with nDCG, MRR and recall@k, significance-tested rather than eyeballed. |
 | <img src="assets/projects/44.svg" width="60" alt=""> | **[44 · Prompt Injection Red Team](projects/ai-application-engineering/44-prompt-injection-redteam)**<br><sub>`Python` · 407 tests · 6,285 lines</sub> | An attack corpus for direct and indirect prompt injection run against layered defences, reported as a defence-in-depth matrix rather than a pass mark. |
-| <img src="assets/projects/45.svg" width="60" alt=""> | **45 · Durable Agent Runtime**<br>*in progress* | Event-sourced durable execution: a crashed agent run resumes at the step it died on, and every side effect happens exactly once across the resume. |
+| <img src="assets/projects/45.svg" width="60" alt=""> | **[45 · Durable Agent Runtime](projects/ai-application-engineering/45-durable-agent-runtime)**<br><sub>`TypeScript` `PowerShell` · 143 tests · 3,553 lines</sub> | Event-sourced durable execution: a crashed agent run resumes at the step it died on, and every side effect happens exactly once across the resume. |
 | <img src="assets/projects/46.svg" width="60" alt=""> | **[46 · Constrained Decoding](projects/ai-application-engineering/46-constrained-decoding)**<br><sub>`Python` `C++` · 86 tests · 4,894 lines</sub> | Compiles a JSON Schema into a finite automaton aligned to the tokenizer vocabulary, then masks logits so invalid output is impossible to emit rather than merely unlikely. |
 | <img src="assets/projects/47.svg" width="60" alt=""> | **[47 · Inference Gateway](projects/ai-application-engineering/47-inference-gateway)**<br><sub>`Rust` · 167 tests · 6,547 lines</sub> | Continuous batching with SLO-aware admission control: shed load deliberately and visibly, instead of degrading every tenant at once. |
 | <img src="assets/projects/48.svg" width="60" alt=""> | **[48 · Graph + Vector Hybrid Reasoning](projects/ai-application-engineering/48-graph-vector-hybrid)**<br><sub>`Java` `PowerShell` · 133 tests · 4,047 lines</sub> | "Which of our suppliers are within two hops of a sanctioned entity?" is a question embeddings cannot answer. Graph traversal fused with vector retrieval, returning the provenance path as justification. |
 | <img src="assets/projects/49.svg" width="60" alt=""> | **[49 · Model Router and Cascade](projects/ai-application-engineering/49-model-router-cascade)**<br><sub>`Go` · 120 tests · 4,342 lines</sub> | Query-difficulty classification driving a cascade that escalates to larger models only when confidence is low, under enforced per-tenant budgets. |
-| <img src="assets/projects/50.svg" width="60" alt=""> | **50 · AI Observability**<br>*in progress* | Detecting the AI failures that never throw an exception: embedding drift by PSI and MMD, continuous quality canaries, and anomaly detection on refusal and hallucination rates. |
+| <img src="assets/projects/50.svg" width="60" alt=""> | **[50 · AI Observability](projects/ai-application-engineering/50-silent-failure-observability)**<br><sub>`Python` `TypeScript` `PowerShell` · 151 tests · 3,885 lines</sub> | Ninety days of traffic in which every request returns HTTP 200 and the answers quietly get worse. Eight detectors compete; the cheapest set that misses nothing costs zero model calls a day. |
 
-<sub>10 projects · 45,637 lines</sub>
+<sub>10 projects · 53,075 lines</sub>
 
 ---
 

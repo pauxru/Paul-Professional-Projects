@@ -61,6 +61,6 @@ test_rejects_non_digit (tests.test_layout.TestZoned.test_rejects_non_digit) ... 
 test_spaces_decode_as_zero_and_are_remembered (tests.test_layout.TestZoned.test_spaces_decode_as_zero_and_are_remembered) ... ok
 
 ----------------------------------------------------------------------
-Ran 61 tests in 3.849s
+Ran 61 tests in 3.786s
 
 OK

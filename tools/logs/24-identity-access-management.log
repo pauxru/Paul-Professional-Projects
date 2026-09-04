@@ -1,7 +1,7 @@
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\24-identity-access-management\tests\Northstar.Iga.UnitTests\bin\Release\net10.0\Northstar.Iga.UnitTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    48, Skipped:     0, Total:    48, Duration: 260 ms - Northstar.Iga.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    48, Skipped:     0, Total:    48, Duration: 240 ms - Northstar.Iga.UnitTests.dll (net10.0)
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\24-identity-access-management\tests\Northstar.Iga.IntegrationTests\bin\Release\net10.0\Northstar.Iga.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 

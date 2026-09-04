@@ -3,6 +3,6 @@ A total of 1 test files matched the specified pattern.
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\19-enterprise-audit-platform\tests\AuditPlatform.IntegrationTests\bin\Release\net10.0\AuditPlatform.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    35, Skipped:     0, Total:    35, Duration: 351 ms - AuditPlatform.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    35, Skipped:     0, Total:    35, Duration: 276 ms - AuditPlatform.UnitTests.dll (net10.0)
 
-Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 1 m 17 s - AuditPlatform.IntegrationTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 1 m 10 s - AuditPlatform.IntegrationTests.dll (net10.0)

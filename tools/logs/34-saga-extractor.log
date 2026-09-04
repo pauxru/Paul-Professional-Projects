@@ -5,7 +5,7 @@
 Build succeeded.
     0 Warning(s)
     0 Error(s)
-Time Elapsed 00:00:02.23
+Time Elapsed 00:00:02.02
   clean
 
 ==============================================================================
@@ -43,5 +43,5 @@ Passed!  - Failed:     0, Passed:    87, Skipped:     0, Total:    87, Duration:
   34 files scanned, nothing found
 
 ==============================================================================
-  all 6 stages passed -- 87 tests, 5/5 mutations killed, 48.6s
+  all 6 stages passed -- 87 tests, 5/5 mutations killed, 46.9s
 ==============================================================================

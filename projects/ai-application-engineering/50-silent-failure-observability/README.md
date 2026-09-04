@@ -18,7 +18,7 @@ how many days late are they, and what does the cheapest adequate set cost?**
 
 ```powershell
 pwsh ./build.ps1     # run the panel, generate the reports and the dashboard
-pwsh ./test.ps1      # 135 tests, 12/12 mutants killed, 7 stages
+pwsh ./test.ps1      # 151 tests, 12/12 mutants killed, 7 stages
 pwsh ./demo.ps1      # the two-minute version
 ```
 
@@ -130,7 +130,7 @@ table beneath it rather than typed, so the two cannot drift apart.
 
 `test.ps1` runs seven stages and the project's claims are only worth reading if all seven pass.
 
-1. **135 tests** — statistical properties (PSI is zero on identical samples and blind to a
+1. **151 tests** — statistical properties (PSI is zero on identical samples and blind to a
    change that preserves the margins; MMD sees exactly that change; CUSUM ignores downward
    drift), simulator invariants, and the headline conclusions pinned as assertions.
 2. **Report determinism** — `results-stable.md` and `dashboard-data.json` hashed across two
@@ -144,7 +144,10 @@ table beneath it rather than typed, so the two cannot drift apart.
    the whole series, remove the probability floor, remove the sign hash, stop resampling
    the reference window.
 6. **Dependency surface** — asserts that the Python half imports nothing but `numpy` and
-   `pytest` and the TypeScript half imports nothing but `node:` builtins.
+   `pytest` and the TypeScript half imports nothing but `node:` builtins. Imports are
+   extracted by parsing (`tools/imports.py`), not by matching text: the regex version of
+   this check reported that the project depends on a module named `the`, having found
+   *"from the healthy baseline in either direction"* in a docstring.
 7. **Secrets scan** — universal patterns everywhere, stricter credential patterns in `src/`.
 
 Two of those mutants survived the first run, and both were right to. One test asserted a

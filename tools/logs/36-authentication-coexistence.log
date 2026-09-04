@@ -6,7 +6,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:04.05
+Time Elapsed 00:00:04.03
 ==> build complete
 === verify.ps1: test.ps1 ===
 
@@ -50,5 +50,5 @@ Time Elapsed 00:00:04.05
   55 files scanned (42 production), nothing found
 
 ==============================================================================
-  all 6 stages passed -- 284 tests, 6/6 mutations killed, 426.7s
+  all 6 stages passed -- 284 tests, 6/6 mutations killed, 413.3s
 ==============================================================================

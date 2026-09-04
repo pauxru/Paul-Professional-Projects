@@ -21,9 +21,9 @@ mutation detected
 
 === report reproducibility ===
 === RUN   TestResultsAreReproducible
---- PASS: TestResultsAreReproducible (16.62s)
+--- PASS: TestResultsAreReproducible (16.06s)
 PASS
-ok  	evolve/cmd/evolve	16.875s
+ok  	evolve/cmd/evolve	16.723s
 
 === prediction integrity ===
 === RUN   TestEveryPredictionIsAdjudicated

@@ -3,6 +3,6 @@ A total of 1 test files matched the specified pattern.
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\23-healthcare-workflow-platform\tests\Healthcare.IntegrationTests\bin\Release\net10.0\Healthcare.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    29, Skipped:     0, Total:    29, Duration: 189 ms - Healthcare.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    29, Skipped:     0, Total:    29, Duration: 180 ms - Healthcare.UnitTests.dll (net10.0)
 
 Passed!  - Failed:     0, Passed:    33, Skipped:     0, Total:    33, Duration: 1 s - Healthcare.IntegrationTests.dll (net10.0)

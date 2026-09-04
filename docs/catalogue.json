@@ -862,21 +862,21 @@
     "built": true,
     "slug": "35-crown-jewels-bridge",
     "scan": {
-      "files": 28,
-      "total_lines": 4663,
+      "files": 56,
+      "total_lines": 8017,
       "lines_by_language": {
-        "C#": 3336,
-        "C++": 1280,
-        "PowerShell": 47
+        "C#": 6338,
+        "C++": 1355,
+        "PowerShell": 324
       },
       "languages": [
         "C#",
         "C++"
       ],
-      "has_readme": false,
-      "has_test_script": false,
-      "adr_count": 0,
-      "doc_count": 2
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 7,
+      "doc_count": 16
     }
   },
   {
@@ -886,9 +886,23 @@
     "what": "Runs legacy Forms cookies, WS-Federation, and modern OIDC **simultaneously**, bridging sessions across all three. Migrates users incrementally with **rehash-on-login** (PBKDF2 \u2192 Argon2id at the moment of successful authentication, so no password reset email is ever sent), transforms legacy claims to modern ones, and keeps a tested rollback path at every stage. Fully threat-modelled, including downgrade attacks between the coexisting stacks.",
     "signal": "Security-critical, zero-downtime, irreversible-if-wrong. The rehash-on-login trick is the detail that shows you've actually done this.",
     "track": "dotnet-azure-modernization",
-    "built": false,
-    "slug": null,
-    "scan": null
+    "built": true,
+    "slug": "36-authentication-coexistence",
+    "scan": {
+      "files": 55,
+      "total_lines": 7960,
+      "lines_by_language": {
+        "C#": 7579,
+        "PowerShell": 381
+      },
+      "languages": [
+        "C#"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 6,
+      "doc_count": 15
+    }
   },
   {
     "number": 37,
@@ -1097,9 +1111,24 @@
     "what": "Event-sourced, deterministic **durable execution**: every step is journalled, so a crashed run resumes exactly where it stopped rather than restarting. Tool side effects are",
     "signal": "Durable execution semantics are a genuinely hard distributed systems problem \u2014 this is Temporal-class work applied to agents.",
     "track": "ai-application-engineering",
-    "built": false,
-    "slug": null,
-    "scan": null
+    "built": true,
+    "slug": "45-durable-agent-runtime",
+    "scan": {
+      "files": 33,
+      "total_lines": 3553,
+      "lines_by_language": {
+        "TypeScript": 3324,
+        "PowerShell": 229
+      },
+      "languages": [
+        "TypeScript",
+        "PowerShell"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 6,
+      "doc_count": 15
+    }
   },
   {
     "number": 46,
@@ -1211,8 +1240,25 @@
     "what": "Semantic tracing of chains and agent runs over OpenTelemetry, **embedding drift detection** (population stability index, MMD) on both inputs and outputs, continuous quality canaries, and anomaly detection on refusal, hallucination and escalation rates \u2014 alerting on **semantic** regression rather than error rate. Ships a dashboard that makes a silent degradation visible.",
     "signal": "Instrumenting for failures that produce no exception is a fundamentally different discipline from APM.",
     "track": "ai-application-engineering",
-    "built": false,
-    "slug": null,
-    "scan": null
+    "built": true,
+    "slug": "50-silent-failure-observability",
+    "scan": {
+      "files": 37,
+      "total_lines": 3885,
+      "lines_by_language": {
+        "Python": 3377,
+        "PowerShell": 268,
+        "TypeScript": 240
+      },
+      "languages": [
+        "Python",
+        "PowerShell",
+        "TypeScript"
+      ],
+      "has_readme": true,
+      "has_test_script": true,
+      "adr_count": 6,
+      "doc_count": 15
+    }
   }
 ]

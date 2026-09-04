@@ -105,4 +105,4 @@ Written down before the panel was run. The count in this heading is computed fro
 
 ---
 
-Generated in 32.3s. This file is `results-stable.md` plus this line; the stable file is hashed by `test.ps1` to prove the run is reproducible.
+Generated in 32.2s. This file is `results-stable.md` plus this line; the stable file is hashed by `test.ps1` to prove the run is reproducible.

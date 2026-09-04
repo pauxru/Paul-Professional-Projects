@@ -1,31 +1,31 @@
 === verify.ps1: build.ps1 ===
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.14s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.15s
 ==> built
 === verify.ps1: test.ps1 ===
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.07s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.06s
      Running unittests src\lib.rs (target\release\deps\detsim-b5c14aece8f91d5e.exe)
 
 running 32 tests
 test abd::tests::a_duplicate_store_is_idempotent ... ok
-test abd::tests::on_a_perfect_network_every_operation_completes ... ok
-test abd::tests::the_run_is_reproducible ... ok
-test linearizability::tests::concurrent_reads_in_the_other_order_are_fine ... ok
-test linearizability::tests::non_monotonic_concurrent_reads_are_a_violation ... ok
-test linearizability::tests::a_pending_write_may_be_treated_as_never_having_happened ... ok
-test linearizability::tests::a_value_nobody_ever_wrote_is_a_violation ... ok
 test abd::tests::a_replica_ignores_an_older_store ... ok
+test abd::tests::on_a_perfect_network_every_operation_completes ... ok
+test linearizability::tests::explanation_names_the_reader_and_the_value ... ok
+test linearizability::tests::overlapping_writes_permit_either_outcome ... ok
+test abd::tests::the_run_is_reproducible ... ok
+test linearizability::tests::reading_a_stale_value_after_a_completed_write_is_a_violation ... ok
 test linearizability::tests::empty_history_is_linearizable ... ok
 test linearizability::tests::a_pending_write_may_also_be_treated_as_having_happened ... ok
-test rng::tests::chance_zero_and_one_are_absolute ... ok
-test linearizability::tests::overlapping_writes_permit_either_outcome ... ok
+test linearizability::tests::non_monotonic_concurrent_reads_are_a_violation ... ok
+test linearizability::tests::a_pending_write_may_be_treated_as_never_having_happened ... ok
 test linearizability::tests::sequential_write_then_read_is_fine ... ok
-test linearizability::tests::the_witness_order_respects_real_time_precedence ... ok
+test linearizability::tests::a_value_nobody_ever_wrote_is_a_violation ... ok
+test linearizability::tests::concurrent_reads_in_the_other_order_are_fine ... ok
 test rng::tests::below_stays_in_range_and_covers_it ... ok
-test linearizability::tests::explanation_names_the_reader_and_the_value ... ok
-test linearizability::tests::reading_a_stale_value_after_a_completed_write_is_a_violation ... ok
+test rng::tests::chance_zero_and_one_are_absolute ... ok
+test linearizability::tests::the_witness_order_respects_real_time_precedence ... ok
+test rng::tests::shuffle_is_a_permutation ... ok
 test rng::tests::different_seeds_diverge ... ok
 test rng::tests::same_seed_gives_same_stream ... ok
-test rng::tests::shuffle_is_a_permutation ... ok
 test rng::tests::splitmix64_matches_reference_vector ... ok
 test sim::tests::different_seeds_produce_different_runs ... ok
 test sim::tests::identical_seeds_produce_identical_runs ... ok
@@ -33,13 +33,13 @@ test sim::tests::lossy_network_actually_loses_things ... ok
 test sim::tests::partitions_are_drawn_and_healed ... ok
 test sim::tests::perfect_network_delivers_everything_exactly_once ... ok
 test sim::tests::time_never_goes_backwards ... ok
-test runner::tests::removing_read_repair_is_caught ... ok
 test runner::tests::a_correct_protocol_survives_a_hostile_network ... ok
 test runner::tests::a_failure_reproduces_exactly ... ok
+test runner::tests::removing_read_repair_is_caught ... ok
 test runner::tests::a_perfect_network_hides_the_bug ... ok
 test runner::tests::shrinking_produces_a_configuration_that_still_fails ... ok
 
-test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
 
      Running unittests src\main.rs (target\release\deps\detsim-ca139b073571fae8.exe)
 
@@ -51,8 +51,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 5 tests
 test recorded_seeds_are_clean_once_read_repair_is_restored ... ok
-test every_counterexample_names_a_read_that_went_backwards ... ok
 test recorded_seeds_still_expose_the_bug ... ok
+test every_counterexample_names_a_read_that_went_backwards ... ok
 test a_replay_is_byte_identical ... ok
 test the_documented_failure_rate_still_holds ... ok
 

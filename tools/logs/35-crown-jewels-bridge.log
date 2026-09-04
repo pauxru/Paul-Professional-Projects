@@ -2,7 +2,7 @@
 ==> building the native DLLs (hardened, legacy, fast)
 'vswhere.exe' is not recognized as an internal or external command,
 operable program or batch file.
--- Configuring done (0.1s)
+-- Configuring done (0.3s)
 -- Generating done (0.1s)
 -- Build files have been written to: C:/Users/rukwaropaul/Downloads/DEV/_portfolio-repo/Paul-Professional-Projects/projects/dotnet-azure-modernization/35-crown-jewels-bridge/native/build
 ninja: no work to do.
@@ -12,16 +12,16 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:01.89
+Time Elapsed 00:00:03.37
 ==> build complete
 === verify.ps1: test.ps1 ===
 
 ==============================================================================
   stage 1 -- the three DLLs exist and are actually different
 ==============================================================================
-  pricing.dll          882d78ceed230e29  70,144 bytes
-  pricing_legacy.dll   e30be1278fa03912  60,416 bytes
-  pricing_fast.dll     f32936edc509c0c7  69,120 bytes
+  pricing.dll          9abf355b3f7cdcf9  70,144 bytes
+  pricing_legacy.dll   5770193f25da71db  60,416 bytes
+  pricing_fast.dll     1a0aaa07718c60a4  69,120 bytes
   three distinct binaries
 
 ==============================================================================
@@ -90,5 +90,5 @@ Time Elapsed 00:00:01.89
   54 files scanned, nothing found
 
 ==============================================================================
-  all 7 stages passed -- 309 tests, 6/6 mutations killed, 286.3s
+  all 7 stages passed -- 309 tests, 6/6 mutations killed, 283.7s
 ==============================================================================

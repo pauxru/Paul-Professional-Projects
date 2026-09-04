@@ -21,7 +21,7 @@ build ok -- 7 modules loaded, docs regenerated
   ℹ cancelled 0
   ℹ skipped 0
   ℹ todo 0
-  ℹ duration_ms 923.0808
+  ℹ duration_ms 894.1049
 
 -- stage 2 : report determinism
   stable report sha256 11FB2908EBAA8CA7...
