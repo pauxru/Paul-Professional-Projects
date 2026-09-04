@@ -1,0 +1,3 @@
+<Solution>
+  <Project Path="Auth.Passwords/Auth.Passwords.csproj" />   <Project Path="Auth.Legacy/Auth.Legacy.csproj" />   <Project Path="Auth.Modern/Auth.Modern.csproj" />   <Project Path="Auth.Bridge/Auth.Bridge.csproj" />   <Project Path="Auth.Report/Auth.Report.csproj" />   <Project Path="Auth.Tests/Auth.Tests.csproj" />
+</Solution>

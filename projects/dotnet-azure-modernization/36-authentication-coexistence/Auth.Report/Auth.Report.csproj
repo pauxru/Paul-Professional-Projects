@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <InvariantGlobalization>true</InvariantGlobalization>  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Auth.Passwords\Auth.Passwords.csproj" />
+    <ProjectReference Include="..\Auth.Legacy\Auth.Legacy.csproj" />
+    <ProjectReference Include="..\Auth.Modern\Auth.Modern.csproj" />
+    <ProjectReference Include="..\Auth.Bridge\Auth.Bridge.csproj" />
+  </ItemGroup>
+</Project>
