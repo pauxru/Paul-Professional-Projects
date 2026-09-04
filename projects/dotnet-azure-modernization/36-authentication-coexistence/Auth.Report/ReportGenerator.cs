@@ -349,6 +349,40 @@ public static class ReportGenerator
         }
         Line();
 
+        Line(stable ? "## 7. What this does not measure" : "## 8. What this does not measure");
+        Line();
+        Line("Every number above is produced by code in this repository, which bounds what it can");
+        Line("mean. The bounds are worth stating precisely, because each of them is a place where");
+        Line("someone could reasonably reach a different conclusion.");
+        Line();
+        Line("- **The authorization space is the one I modelled.** 4096 decisions is the exhaustive");
+        Line("  product of six roles, two flags and a resource set that I chose. The claim proved is");
+        Line("  that *this* policy is non-monotone and that a role-to-scope union therefore cannot");
+        Line("  reproduce it. The claim not proved is that every legacy policy is like this one. What");
+        Line("  transfers is the method: enumerate the decision space, diff the two implementations,");
+        Line("  and check monotonicity before assuming a mapping table can exist.");
+        Line("- **The password hashing is a managed implementation.** Argon2id here is roughly four to");
+        Line("  five times slower than a SIMD build of libargon2 at the same parameters. Ratios");
+        Line("  between algorithms are meaningful; absolute milliseconds are not, and the timing");
+        Line("  channel is correspondingly easier to observe here than it would be in production.");
+        Line("- **The timing channel was measured on a loaded developer machine**, not an isolated");
+        Line("  host, and over a local function call rather than a network. A remote attacker sees");
+        Line("  strictly less signal than this. The padding result is therefore an upper bound on the");
+        Line("  leak and a lower bound on the cost of closing it.");
+        Line("- **The migration model is a model.** Login arrivals are Poisson with a per-cohort rate;");
+        Line("  real populations have weekly seasonality, leavers, service accounts and a support");
+        Line("  queue. The simulation agrees with the closed form to within a tenth of a percent,");
+        Line("  which demonstrates the arithmetic is right, not that the assumption is.");
+        Line("- **No network, no clock skew, no clustered key store.** Every stack runs in-process");
+        Line("  against a fixed clock. Real coexistence deployments fail in ways this cannot see:");
+        Line("  key rotation races, sticky sessions, and the two minutes of skew that make a");
+        Line("  short-lived token intermittently invalid.");
+        Line("- **The XML profile is restricted.** The WS-Federation implementation parses a");
+        Line("  deliberately narrow subset and rejects everything else, which is the right choice for");
+        Line("  a component that must resist signature wrapping, and the wrong choice for");
+        Line("  interoperating with a real identity provider.");
+        Line();
+
         return text.ToString();
     }
 

@@ -132,3 +132,36 @@ All three stacks produce an identical canonical principal for the same user: **T
 | 13 | Legacy Forms tickets will all have expired within 60 days of the cutoff announcement, given a 30-day sliding timeout. | contradicted | 9,454 sessions still valid after 180 days |
 | 14 | Hardening the ticket protector to encrypt-then-MAC will leave at least one externally distinguishable rejection reason. | contradicted | 1 distinct rejection reason from the hardened protector |
 
+## 7. What this does not measure
+
+Every number above is produced by code in this repository, which bounds what it can
+mean. The bounds are worth stating precisely, because each of them is a place where
+someone could reasonably reach a different conclusion.
+
+- **The authorization space is the one I modelled.** 4096 decisions is the exhaustive
+  product of six roles, two flags and a resource set that I chose. The claim proved is
+  that *this* policy is non-monotone and that a role-to-scope union therefore cannot
+  reproduce it. The claim not proved is that every legacy policy is like this one. What
+  transfers is the method: enumerate the decision space, diff the two implementations,
+  and check monotonicity before assuming a mapping table can exist.
+- **The password hashing is a managed implementation.** Argon2id here is roughly four to
+  five times slower than a SIMD build of libargon2 at the same parameters. Ratios
+  between algorithms are meaningful; absolute milliseconds are not, and the timing
+  channel is correspondingly easier to observe here than it would be in production.
+- **The timing channel was measured on a loaded developer machine**, not an isolated
+  host, and over a local function call rather than a network. A remote attacker sees
+  strictly less signal than this. The padding result is therefore an upper bound on the
+  leak and a lower bound on the cost of closing it.
+- **The migration model is a model.** Login arrivals are Poisson with a per-cohort rate;
+  real populations have weekly seasonality, leavers, service accounts and a support
+  queue. The simulation agrees with the closed form to within a tenth of a percent,
+  which demonstrates the arithmetic is right, not that the assumption is.
+- **No network, no clock skew, no clustered key store.** Every stack runs in-process
+  against a fixed clock. Real coexistence deployments fail in ways this cannot see:
+  key rotation races, sticky sessions, and the two minutes of skew that make a
+  short-lived token intermittently invalid.
+- **The XML profile is restricted.** The WS-Federation implementation parses a
+  deliberately narrow subset and rejects everything else, which is the right choice for
+  a component that must resist signature wrapping, and the wrong choice for
+  interoperating with a real identity provider.
+

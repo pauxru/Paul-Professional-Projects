@@ -22,6 +22,7 @@ public enum JwtFailure
     WrongIssuer,
     WrongAudience,
     NonceMismatch,
+    MissingExpiry,
 }
 
 public sealed record JwtValidation(JsonObject? Claims, JwtFailure Failure)
@@ -136,7 +137,16 @@ public sealed class JwtCodec
             return new JwtValidation(null, JwtFailure.NotYetValid);
         }
 
-        if (claims["exp"] is { } exp && seconds >= exp.GetValue<long>())
+        // A token with no exp is a token that never expires. Written first as
+        // `if (claims["exp"] is { } exp && ...)`, which reads as a null guard and behaves as
+        // an opt-out: the attacker simply omits the claim. Absence has to be a rejection,
+        // not a skipped check.
+        if (claims["exp"] is not { } exp)
+        {
+            return new JwtValidation(null, JwtFailure.MissingExpiry);
+        }
+
+        if (seconds >= exp.GetValue<long>())
         {
             return new JwtValidation(null, JwtFailure.Expired);
         }
