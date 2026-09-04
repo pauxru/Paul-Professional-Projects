@@ -1,0 +1,17 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started.
+services:
+  loan-origination-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5014:5014"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__ConnectionString: Data Source=/data/loan-origination.db
+      ObjectStorage__RootPath: /data/objects
+    volumes:
+      - loan-origination-data:/data
+
+volumes:
+  loan-origination-data:

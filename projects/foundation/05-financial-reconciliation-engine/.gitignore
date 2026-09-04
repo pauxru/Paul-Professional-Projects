@@ -1,0 +1,37 @@
+## .NET
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+TestResults/
+[Dd]ebug/
+[Rr]elease/
+
+## EF / SQLite databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+## Secrets & local config
+.env
+.env.local
+appsettings.Development.local.json
+secrets.json
+*.pfx
+*.key
+
+## Node (not used, defensive)
+node_modules/
+
+## Generated data & artifacts
+data/
+artifacts/
+*.tmp
+
+## OS
+Thumbs.db
+.DS_Store

@@ -1,0 +1,18 @@
+# Build artifacts
+bin/
+obj/
+
+# Local databases (SQLite)
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets / local config
+.env
+appsettings.Development.local.json
+
+# IDE / tooling
+.vs/
+*.user
+node_modules/
+TestResults/

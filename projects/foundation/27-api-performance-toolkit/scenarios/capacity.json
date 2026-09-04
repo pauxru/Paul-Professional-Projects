@@ -1,0 +1,15 @@
+{
+  "name": "capacity",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "CapacitySearch",
+    "capacityMinRate": 20,
+    "capacityMaxRate": 400,
+    "capacityP95TargetMs": 200,
+    "capacityRunDuration": "00:00:10",
+    "maxVUs": 128
+  },
+  "steps": [
+    { "name": "Home", "method": "GET", "url": "/" }
+  ]
+}

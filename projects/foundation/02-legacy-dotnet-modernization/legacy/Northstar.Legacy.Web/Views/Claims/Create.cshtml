@@ -1,0 +1,12 @@
+@model Northstar.Legacy.Web.Models.LegacyClaimIntakeForm
+@{
+    ViewData["Title"] = "Intake legacy claim";
+}
+<h1>Intake claim</h1>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <label>Policy number <input asp-for="PolicyNumber" /></label><br />
+    <label>Claimed amount <input asp-for="ClaimedAmount" /></label><br />
+    <label>Currency <input asp-for="Currency" /></label><br />
+    <button type="submit">Submit</button>
+</form>

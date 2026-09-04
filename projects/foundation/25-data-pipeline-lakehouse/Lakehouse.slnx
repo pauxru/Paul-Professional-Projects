@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Lakehouse.Api/Lakehouse.Api.csproj" />
+    <Project Path="src/Lakehouse.Application/Lakehouse.Application.csproj" />
+    <Project Path="src/Lakehouse.Domain/Lakehouse.Domain.csproj" />
+    <Project Path="src/Lakehouse.Infrastructure/Lakehouse.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Lakehouse.IntegrationTests/Lakehouse.IntegrationTests.csproj" />
+    <Project Path="tests/Lakehouse.UnitTests/Lakehouse.UnitTests.csproj" />
+  </Folder>
+</Solution>

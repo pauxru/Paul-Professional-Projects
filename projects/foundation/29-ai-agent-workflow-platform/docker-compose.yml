@@ -1,0 +1,49 @@
+# -----------------------------------------------------------------------------
+# AI Agent Workflow Orchestration Platform — local compose stack
+#
+# AUTHORED BUT NOT VERIFIED: Docker is unavailable on the build host, so this
+# compose file has NOT been started or verified. SQLite is the default store, so
+# the API needs no external services to run — this stack exists for completeness.
+# A commented Postgres service shows how you would swap the store in a real
+# deployment (the schema also runs on Postgres via Npgsql).
+# -----------------------------------------------------------------------------
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: agent-platform-api:local
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5029
+      ConnectionStrings__AgentDb: Data Source=/data/agentplatform.db
+      # Override this in any real deployment; the app refuses the default key in Production.
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:-please-change-this-signing-key-in-any-real-deploy}
+      Jwt__EnableDevTokenEndpoint: "false"
+      Model__Provider: mock
+    ports:
+      - "5029:5029"
+    volumes:
+      - agent-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5029/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional Postgres backing store (UNVERIFIED). Uncomment and point
+  # ConnectionStrings__AgentDb at it if you wire the Npgsql provider.
+  # db:
+  #   image: postgres:17
+  #   environment:
+  #     POSTGRES_USER: agent
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+  #     POSTGRES_DB: agentplatform
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pg-data:/var/lib/postgresql/data
+
+volumes:
+  agent-data:
+  # pg-data:

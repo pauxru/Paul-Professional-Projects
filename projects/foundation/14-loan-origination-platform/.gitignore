@@ -1,0 +1,15 @@
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+.env
+.vs/
+node_modules/
+TestResults/
+*.user
+appsettings.Development.local.json
+*.pfx
+*.key
+secrets.json
+data/

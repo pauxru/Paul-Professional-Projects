@@ -1,0 +1,44 @@
+# UNVERIFIED — this docker-compose is shipped as a reference artefact for
+# the pgvector production adapter path (ADR 0003). It has NOT been booted
+# in CI. The default supported deployment is `dotnet run` with SQLite.
+#
+# The pgvector service is included so anyone extending the code can wire
+# a PgVectorStore against a running Postgres. The API service itself will
+# still use SQLite until a PgVectorStore is implemented and wired via
+# Ai:Provider / Database:Provider config.
+
+services:
+  rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rag-assistant:local
+    depends_on:
+      - postgres
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5003
+      # Placeholder — replace with a real 32+ char secret from your secret store
+      Jwt__SigningKey: replace-me-32-plus-chars-please-000000
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/rag.db
+      Ai__Provider: Local
+    ports:
+      - "5003:5003"
+    volumes:
+      - rag-data:/data
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag-dev
+      POSTGRES_DB: rag
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  rag-data:
+  pg-data:

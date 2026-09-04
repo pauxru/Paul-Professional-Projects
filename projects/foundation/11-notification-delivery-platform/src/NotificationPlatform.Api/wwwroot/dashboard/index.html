@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notification Delivery Platform — Ops Dashboard</title>
+  <style>
+    :root { --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; --danger: #f87171; --ok: #4ade80; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+    h1 { margin: 0 0 6px; font-size: 24px; }
+    .sub { color: var(--muted); margin: 0 0 24px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .card { background: var(--card); border-radius: 12px; padding: 16px 18px; }
+    .card h2 { margin: 0 0 12px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .metric { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(148,163,184,0.15); }
+    .metric:last-child { border-bottom: none; }
+    .value { font-weight: 600; }
+    .state-Closed { color: var(--ok); }
+    .state-Open { color: var(--danger); }
+    .state-HalfOpen { color: #fbbf24; }
+    button { background: var(--accent); color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    input { background: #0f172a; color: var(--text); border: 1px solid rgba(148,163,184,0.3); border-radius: 6px; padding: 6px 10px; }
+    .footer { color: var(--muted); font-size: 12px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Notification Delivery Platform &mdash; Ops Dashboard</h1>
+  <p class="sub">Self-directed engineering case study. Data below is live from this API instance.</p>
+  <div class="row">
+    <div><label>Bearer token: <input id="token" size="60" placeholder="paste an access_token from /api/v1/auth/token"/></label></div>
+    <button onclick="refresh()">Refresh</button>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>Pipeline Queue</h2>
+      <div id="queue">Loading&hellip;</div>
+    </div>
+    <div class="card">
+      <h2>Provider Health</h2>
+      <div id="providers">Loading&hellip;</div>
+    </div>
+    <div class="card">
+      <h2>Analytics (last 30 days)</h2>
+      <div id="analytics">Loading&hellip;</div>
+    </div>
+  </div>
+  <div class="footer">Auto-refresh every 10 seconds.</div>
+
+  <script>
+    async function jget(url, auth) {
+      const r = await fetch(url, { headers: auth ? { Authorization: 'Bearer ' + auth } : {} });
+      if (!r.ok) throw new Error(url + ' -> ' + r.status);
+      return await r.json();
+    }
+    function fmtQueue(q) {
+      const rows = [
+        ['Queued', q.queued], ['Scheduled', q.scheduled], ['Rendering', q.rendering],
+        ['Dispatched', q.dispatched], ['Sent', q.sent], ['Delivered', q.delivered],
+        ['Bounced', q.bounced], ['Failed', q.failed], ['Suppressed', q.suppressed],
+        ['Dead-lettered', q.deadLettered],
+      ];
+      return rows.map(function(kv){ return '<div class="metric"><span>'+kv[0]+'</span><span class="value">'+kv[1]+'</span></div>'; }).join('');
+    }
+    function fmtProviders(list) {
+      if (!list.items || list.items.length === 0) return '<div class="metric"><span>No provider health recorded yet</span></div>';
+      return list.items.map(function(p){ return '<div class="metric"><span>'+p.providerName+' ('+p.channel+')</span><span class="value state-'+p.state+'">'+p.state+'</span></div>'; }).join('');
+    }
+    function fmtAnalytics(a) {
+      const rows = [
+        ['Total', a.total], ['Delivered', a.delivered], ['Bounced', a.bounced],
+        ['Failed', a.failed], ['Suppressed', a.suppressed], ['Dead-lettered', a.deadLettered],
+        ['Delivery rate', (a.deliveryRate * 100).toFixed(2) + '%'],
+        ['Bounce rate', (a.bounceRate * 100).toFixed(2) + '%'],
+        ['p50 send latency', a.p50LatencyMs + ' ms'],
+        ['p95 send latency', a.p95LatencyMs + ' ms'],
+        ['p99 send latency', a.p99LatencyMs + ' ms'],
+      ];
+      return rows.map(function(kv){ return '<div class="metric"><span>'+kv[0]+'</span><span class="value">'+kv[1]+'</span></div>'; }).join('');
+    }
+    async function refresh() {
+      const auth = document.getElementById('token').value.trim();
+      try {
+        const q = await jget('/api/v1/analytics/queue', auth);
+        document.getElementById('queue').innerHTML = fmtQueue(q);
+      } catch (e) { document.getElementById('queue').innerHTML = 'Error: ' + e.message; }
+      try {
+        const p = await jget('/api/v1/analytics/providers', auth);
+        document.getElementById('providers').innerHTML = fmtProviders(p);
+      } catch (e) { document.getElementById('providers').innerHTML = 'Error: ' + e.message; }
+      try {
+        const a = await jget('/api/v1/analytics/summary', auth);
+        document.getElementById('analytics').innerHTML = fmtAnalytics(a);
+      } catch (e) { document.getElementById('analytics').innerHTML = 'Error: ' + e.message; }
+    }
+    setInterval(refresh, 10000);
+    refresh();
+  </script>
+</body>
+</html>

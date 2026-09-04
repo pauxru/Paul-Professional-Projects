@@ -1,0 +1,34 @@
+# =====================================================================
+# UNVERIFIED. Docker is not available on the build host; this compose
+# file has not been started or verified. It documents the intended
+# deployment shape and can be iterated on in a real CI environment.
+# =====================================================================
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ntsf/zero-trust-api:latest
+    container_name: ntsf-zero-trust-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5007
+      - Database__Provider=Sqlite
+      - Database__ConnectionString=Data Source=/data/zero-trust.db
+      - Jwt__UseRs256=true
+      - Jwt__Issuer=https://zero-trust-demo.localhost
+    ports:
+      - "5007:5007"
+    volumes:
+      - zero-trust-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5007/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  zero-trust-data:

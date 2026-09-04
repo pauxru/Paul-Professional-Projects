@@ -1,0 +1,20 @@
+{
+  "name": "spike",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "Spike",
+    "warmUp": "00:00:02",
+    "spikeBaseVUs": 2,
+    "spikePeakVUs": 40,
+    "spikeHoldDuration": "00:00:10",
+    "duration": "00:00:30"
+  },
+  "steps": [
+    { "name": "Home", "method": "GET", "url": "/" },
+    { "name": "GetProduct", "method": "GET", "url": "/api/v1/catalog/products/SKU-00042" }
+  ],
+  "assertions": [
+    { "metric": "latency.p99", "op": "<", "value": 2000 },
+    { "metric": "error_rate", "op": "<", "value": 0.10 }
+  ]
+}

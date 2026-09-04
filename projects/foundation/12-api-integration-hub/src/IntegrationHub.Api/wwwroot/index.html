@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Integration Hub Admin</title>
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body data-page="home">
+  <header><h1>API Integration Hub</h1><nav>
+    <a href="/flows.html">Flows</a><a href="/runs.html">Runs</a>
+    <a href="/dead-letters.html">Dead letters</a><a href="/connectors.html">Connectors</a>
+    <a href="/mapping.html">Mapping test bench</a>
+  </nav></header>
+  <main>
+    <section class="panel">
+      <h2>Local operator sign-in</h2>
+      <p>This development-only form requests a short-lived JWT. Production is designed for OIDC.</p>
+      <form id="login-form">
+        <label>Client ID <input id="client-id" value="demo-client"></label>
+        <label>Client secret <input id="client-secret" type="password" value="dev-only-client-secret"></label>
+        <button>Get token</button>
+      </form>
+      <p id="login-status"></p>
+    </section>
+    <section class="cards">
+      <a class="card" href="/flows.html"><strong>Flow definitions</strong><span>Version, activate, run and rollback integrations.</span></a>
+      <a class="card" href="/runs.html"><strong>Execution history</strong><span>Inspect statuses, timings and redacted snapshots.</span></a>
+      <a class="card" href="/dead-letters.html"><strong>Recovery</strong><span>Review and replay quarantined records.</span></a>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

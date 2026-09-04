@@ -1,0 +1,26 @@
+﻿{
+  "ScenarioId": "INC-005",
+  "ScenarioName": "Sync-over-async request blocking",
+  "Mode": "Fixed",
+  "RequestedOperations": 20,
+  "StartedAtUtc": "2026-09-02T22:37:27.651657+00:00",
+  "ElapsedMilliseconds": 121.8396,
+  "CompletedWithinBudget": true,
+  "Metrics": {
+    "completedRequests": 20,
+    "requestsPerSecond": 164.15,
+    "p95LatencyMilliseconds": 97.62,
+    "peakBusyWorkerThreads": 2,
+    "minimumAvailableWorkerThreads": 32765,
+    "threadPoolSampleCount": 40,
+    "blockedWorkerMilliseconds": 0,
+    "syncWaitUsed": false
+  },
+  "Evidence": [
+    "ThreadPool.GetAvailableThreads was sampled at request entry and exit.",
+    "Broken mode calls Task.Delay(...).Wait(...) on ThreadPool work items; fixed mode awaits the same delay."
+  ],
+  "Limitations": [
+    "Thread-pool injection is runtime and host dependent. The robust signal is occupied worker threads, not an absolute requests-per-second target."
+  ]
+}

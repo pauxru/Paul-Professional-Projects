@@ -1,0 +1,49 @@
+## Build output
+bin/
+obj/
+out/
+[Rr]elease/
+[Dd]ebug/
+
+## Rider/VS
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Test results
+TestResults/
+*.trx
+*.coverage
+coverage.*
+BenchmarkDotNet.Artifacts/
+
+## Local dev
+*.pdb
+*.log
+*.tmp
+appsettings.Local.json
+appsettings.Local.*.json
+
+## SQLite state
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+## Node — only in case a docs site is added later
+node_modules/
+
+## Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+## OS
+.DS_Store
+Thumbs.db

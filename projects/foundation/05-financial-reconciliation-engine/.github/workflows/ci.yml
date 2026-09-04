@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & Test (Release)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.400'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (Release, no restore)
+        run: dotnet build -c Release --no-restore
+
+      - name: Test (Release, no build)
+        run: dotnet test -c Release --no-build --verbosity normal
+
+  datagen-smoke:
+    name: DataGen smoke (ground-truth manifest)
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.400'
+
+      - name: Generate a small synthetic dataset
+        run: >
+          dotnet run -c Release --project src/ReconEngine.DataGen --
+          --rows 5000 --seed 42
+          --inject duplicates,amount-mismatch,missing,fees,refunds
+          --out ./data --no-fixed
+
+      - name: Upload dataset artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-dataset
+          path: ./data
+          retention-days: 7

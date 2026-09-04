@@ -1,0 +1,65 @@
+name: perf-gate
+
+# Example CI job that runs the smoke scenario against the bundled SampleApi
+# on every PR. The `loadrun` exit code determines whether the build passes:
+# 0 = all assertions passed, 1 = at least one threshold breached.
+#
+# In a real project you'd point this at a deployed staging environment, not
+# the in-workflow SampleApi. See docs/security/security-review.md for the
+# auth/blast-radius discussion.
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  perf:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build (Release)
+        run: dotnet build -c Release --nologo
+
+      - name: Start SampleApi
+        shell: pwsh
+        run: |
+          $env:ASPNETCORE_URLS='http://127.0.0.1:5027'
+          $env:ASPNETCORE_ENVIRONMENT='Production'
+          Start-Process -FilePath 'dotnet' `
+            -ArgumentList "$PWD\src\SampleApi\bin\Release\net10.0\SampleApi.dll" `
+            -WindowStyle Hidden
+          # Wait for readiness (max 30s)
+          for ($i=0; $i -lt 30; $i++) {
+            try {
+              $r = Invoke-WebRequest -Uri http://127.0.0.1:5027/health/ready -UseBasicParsing -TimeoutSec 2
+              if ($r.StatusCode -eq 200) { break }
+            } catch { Start-Sleep -Seconds 1 }
+          }
+
+      - name: Run smoke scenario (assertions gate the build)
+        shell: pwsh
+        run: |
+          dotnet .\src\LoadRunner.Cli\bin\Release\net10.0\loadrun.dll `
+            run .\scenarios\smoke.json --results results --out results
+
+      - name: Run load scenario for report artefact
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          dotnet .\src\LoadRunner.Cli\bin\Release\net10.0\loadrun.dll `
+            run .\scenarios\load.json --results results --out results
+
+      - name: Upload perf artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-reports
+          path: results/**
+          if-no-files-found: warn

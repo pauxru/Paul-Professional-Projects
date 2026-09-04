@@ -1,0 +1,111 @@
+name: Deploy environment
+
+on:
+  workflow_call:
+    inputs:
+      environment_name:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    environment: ${{ inputs.environment_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login using OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Capture stable revision
+        id: stable
+        shell: bash
+        run: |
+          app="ca-contoso-storefront-${{ inputs.environment_name }}-api"
+          rg="rg-contoso-storefront-${{ inputs.environment_name }}"
+          revision=$(az containerapp revision list -g "$rg" -n "$app" \
+            --query "[?properties.trafficWeight > \`0\`][0].name" -o tsv)
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+
+      - name: Run migration job before application deployment
+        shell: bash
+        run: |
+          rg="rg-contoso-storefront-${{ inputs.environment_name }}"
+          job="caj-contoso-storefront-${{ inputs.environment_name }}-migrations"
+          acr=$(az acr list -g "$rg" --query "[0].loginServer" -o tsv)
+          az containerapp job update -g "$rg" -n "$job" \
+            --image "$acr/storefront-migrations:${{ inputs.image_tag }}"
+          execution=$(az containerapp job start -g "$rg" -n "$job" --query name -o tsv)
+          for attempt in {1..60}; do
+            status=$(az containerapp job execution show -g "$rg" -n "$job" \
+              --job-execution-name "$execution" --query properties.status -o tsv)
+            [ "$status" = "Succeeded" ] && exit 0
+            [ "$status" = "Failed" ] && exit 1
+            sleep 10
+          done
+          exit 1
+
+      - name: Update candidate revision with immutable image
+        id: update
+        shell: bash
+        run: |
+          app="ca-contoso-storefront-${{ inputs.environment_name }}-api"
+          rg="rg-contoso-storefront-${{ inputs.environment_name }}"
+          acr=$(az acr list -g "$rg" --query "[0].loginServer" -o tsv)
+          az containerapp update -g "$rg" -n "$app" \
+            --image "$acr/storefront-api:${{ inputs.image_tag }}" \
+            --revision-suffix "${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          candidate=$(az containerapp revision list -g "$rg" -n "$app" \
+            --query "sort_by([], &properties.createdTime)[-1].name" -o tsv)
+          echo "revision=$candidate" >> "$GITHUB_OUTPUT"
+
+      - name: Hold candidate at zero traffic
+        shell: bash
+        run: |
+          app="ca-contoso-storefront-${{ inputs.environment_name }}-api"
+          rg="rg-contoso-storefront-${{ inputs.environment_name }}"
+          az containerapp ingress traffic set -g "$rg" -n "$app" \
+            --revision-weight \
+            "${{ steps.stable.outputs.revision }}=100" \
+            "${{ steps.update.outputs.revision }}=0"
+
+      - name: Canary traffic and smoke gates
+        shell: pwsh
+        run: |
+          ./scripts/deploy-canary.ps1 `
+            -ResourceGroup "rg-contoso-storefront-${{ inputs.environment_name }}" `
+            -ContainerApp "ca-contoso-storefront-${{ inputs.environment_name }}-api" `
+            -StableRevision "${{ steps.stable.outputs.revision }}" `
+            -CandidateRevision "${{ steps.update.outputs.revision }}"
+
+      - name: Post-deployment smoke test
+        shell: pwsh
+        run: |
+          $fqdn = az containerapp show `
+            -g "rg-contoso-storefront-${{ inputs.environment_name }}" `
+            -n "ca-contoso-storefront-${{ inputs.environment_name }}-api" `
+            --query properties.configuration.ingress.fqdn -o tsv
+          ./scripts/smoke.ps1 -BaseUrl "https://$fqdn"
+
+      - name: Automatic rollback on deployment failure
+        if: failure() && steps.stable.outputs.revision != ''
+        shell: bash
+        run: |
+          app="ca-contoso-storefront-${{ inputs.environment_name }}-api"
+          rg="rg-contoso-storefront-${{ inputs.environment_name }}"
+          stable="${{ steps.stable.outputs.revision }}"
+          candidate="${{ steps.update.outputs.revision }}"
+          az containerapp ingress traffic set -g "$rg" -n "$app" \
+            --revision-weight "$stable=100" "$candidate=0"
+          az containerapp revision deactivate -g "$rg" -n "$app" --revision "$candidate" || true

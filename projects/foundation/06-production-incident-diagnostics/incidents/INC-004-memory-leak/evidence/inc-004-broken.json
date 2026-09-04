@@ -1,0 +1,23 @@
+﻿{
+  "ScenarioId": "INC-004",
+  "ScenarioName": "Static memory retention leak",
+  "Mode": "Broken",
+  "RequestedOperations": 20,
+  "StartedAtUtc": "2026-09-02T22:33:55.3656239+00:00",
+  "ElapsedMilliseconds": 2.6301,
+  "CompletedWithinBudget": true,
+  "Metrics": {
+    "retainedPayloads": 20,
+    "heapDeltaBytesAfterForcedGc": 650672,
+    "allocatedBytes": 653208,
+    "payloadBytesPerRequest": 32768,
+    "staticHandlerSubscriptions": 20
+  },
+  "Evidence": [
+    "GC.GetTotalMemory(true) delta: 650672 bytes.",
+    "GC.GetTotalAllocatedBytes delta: 653208 bytes."
+  ],
+  "Limitations": [
+    "The retained-object count is the primary deterministic signal; GC heap deltas can vary across runtime versions."
+  ]
+}

@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ReconEngine.Api/ReconEngine.Api.csproj" />
+    <Project Path="src/ReconEngine.Application/ReconEngine.Application.csproj" />
+    <Project Path="src/ReconEngine.DataGen/ReconEngine.DataGen.csproj" />
+    <Project Path="src/ReconEngine.Domain/ReconEngine.Domain.csproj" />
+    <Project Path="src/ReconEngine.Infrastructure/ReconEngine.Infrastructure.csproj" />
+    <Project Path="src/ReconEngine.PerfHarness/ReconEngine.PerfHarness.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ReconEngine.IntegrationTests/ReconEngine.IntegrationTests.csproj" />
+    <Project Path="tests/ReconEngine.UnitTests/ReconEngine.UnitTests.csproj" />
+  </Folder>
+</Solution>

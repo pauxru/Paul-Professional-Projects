@@ -1,0 +1,36 @@
+# -------------------------------------------------------------------------------------------------
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has NOT been started or
+# verified. Provided for completeness only. The application runs with just the .NET SDK.
+# -------------------------------------------------------------------------------------------------
+services:
+  idp-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: idp-platform:local
+    container_name: idp-api
+    ports:
+      - "5009:5009"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:5009"
+      Seed: "true"
+      Database__Provider: "Sqlite"
+      Database__ConnectionString: "Data Source=/app/data/idp.db"
+      Storage__RootPath: "/app/data/object-store"
+      Export__OutboxPath: "/app/data/outbox"
+      Export__DeadLetterPath: "/app/data/deadletter"
+      # Provide a real signing key at deploy time; the app refuses the default key in Production.
+      Jwt__SigningKey: "${IDP_JWT_SIGNING_KEY:?set IDP_JWT_SIGNING_KEY to a real secret}"
+    volumes:
+      - idp-data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5009/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  idp-data:

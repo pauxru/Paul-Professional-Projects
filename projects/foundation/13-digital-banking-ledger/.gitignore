@@ -1,0 +1,35 @@
+# Build output
+bin/
+obj/
+[Bb]uild/
+artifacts/
+
+# Test output
+TestResults/
+*.trx
+coverage*.json
+*.coverage
+
+# SQLite databases (the ledger is recreated/seeded on startup)
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets & local overrides — only .env.example is committed
+.env
+appsettings.Development.local.json
+appsettings.*.local.json
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# OS noise
+Thumbs.db
+.DS_Store
+
+# Node (not used by the backend, kept for completeness)
+node_modules/

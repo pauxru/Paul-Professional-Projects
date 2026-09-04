@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.11" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Iiot.Protocol\Iiot.Protocol.csproj" />
+    <ProjectReference Include="..\..\src\Iiot.Broker\Iiot.Broker.csproj" />
+    <ProjectReference Include="..\..\src\Iiot.Domain\Iiot.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Iiot.Application\Iiot.Application.csproj" />
+    <ProjectReference Include="..\..\src\Iiot.Infrastructure\Iiot.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Iiot.Device\Iiot.Device.csproj" />
+    <ProjectReference Include="..\..\src\Iiot.EdgeGateway\Iiot.EdgeGateway.csproj" />
+  </ItemGroup>
+</Project>

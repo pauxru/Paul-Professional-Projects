@@ -1,0 +1,19 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started or verified.
+services:
+  enterprise-search:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5022:5022"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/app/data/enterprise-search.db
+      Jwt__Issuer: enterprise-search
+      Jwt__Audience: enterprise-search-clients
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?Set a non-development JWT_SIGNING_KEY in .env}
+    volumes:
+      - search-data:/app/data
+volumes:
+  search-data:

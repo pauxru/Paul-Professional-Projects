@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar IGA Administration</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">Northstar Group (fictional)</p>
+      <h1>Identity Governance Administration</h1>
+    </div>
+    <div id="connection" class="status">Connecting…</div>
+  </header>
+  <nav aria-label="Administration sections">
+    <button data-panel="directory">User directory</button>
+    <button data-panel="profile">Access profile</button>
+    <button data-panel="approvals">Approval inbox</button>
+    <button data-panel="campaigns">Campaign console</button>
+    <button data-panel="sod">SoD violations</button>
+    <button data-panel="simulator">Policy simulator</button>
+  </nav>
+  <main>
+    <section id="directory" class="panel active">
+      <div class="section-heading">
+        <div><p class="eyebrow">500 synthetic identities</p><h2>User directory</h2></div>
+        <button id="refresh-users">Refresh</button>
+      </div>
+      <table>
+        <thead><tr><th>Name</th><th>Department</th><th>Title</th><th>Status</th><th></th></tr></thead>
+        <tbody id="users-body"></tbody>
+      </table>
+    </section>
+
+    <section id="profile" class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Explainable access</p><h2>User access profile</h2></div></div>
+      <p id="profile-help">Select “Why access?” from the directory.</p>
+      <div id="profile-content"></div>
+    </section>
+
+    <section id="approvals" class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Manager → owner → security</p><h2>Request and approval inbox</h2></div><button id="refresh-requests">Refresh</button></div>
+      <div id="requests-content"></div>
+    </section>
+
+    <section id="campaigns" class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Certification control plane</p><h2>Campaign console</h2></div><button id="refresh-campaigns">Refresh</button></div>
+      <div id="campaign-content"></div>
+    </section>
+
+    <section id="sod" class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Preventive and detective</p><h2>Separation-of-duties violations</h2></div><button id="refresh-sod">Scan estate</button></div>
+      <div id="sod-content"></div>
+    </section>
+
+    <section id="simulator" class="panel">
+      <div class="section-heading"><div><p class="eyebrow">What-if analysis</p><h2>Policy simulator</h2></div></div>
+      <form id="simulation-form">
+        <label>Permission <input id="sim-permission" value="app:finance/vendor:create" required></label>
+        <label>Effect
+          <select id="sim-effect"><option>Allow</option><option>Deny</option></select>
+        </label>
+        <label>Subject department <input id="sim-department" value="Finance"></label>
+        <label>Network zone <input id="sim-network" value="Corporate"></label>
+        <button type="submit">Run simulation</button>
+      </form>
+      <pre id="simulation-output">No simulation run.</pre>
+    </section>
+  </main>
+  <footer>Production-style prototype · synthetic data only · governance plane, not an OIDC provider</footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>

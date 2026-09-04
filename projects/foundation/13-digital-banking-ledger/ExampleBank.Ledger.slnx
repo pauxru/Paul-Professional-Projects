@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ExampleBank.Ledger.Api/ExampleBank.Ledger.Api.csproj" />
+    <Project Path="src/ExampleBank.Ledger.Application/ExampleBank.Ledger.Application.csproj" />
+    <Project Path="src/ExampleBank.Ledger.Domain/ExampleBank.Ledger.Domain.csproj" />
+    <Project Path="src/ExampleBank.Ledger.Infrastructure/ExampleBank.Ledger.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ExampleBank.Ledger.IntegrationTests/ExampleBank.Ledger.IntegrationTests.csproj" />
+    <Project Path="tests/ExampleBank.Ledger.UnitTests/ExampleBank.Ledger.UnitTests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,84 @@
+:root {
+  --bg: #0f1720;
+  --panel: #17212b;
+  --ink: #e7edf3;
+  --muted: #8aa0b2;
+  --accent: #4aa3df;
+  --good: #3fb950;
+  --bad: #f85149;
+  --warn: #d29922;
+  --grid: #26333f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+header {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--grid);
+}
+
+header h1 { margin: 0; font-size: 20px; }
+header .sub { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 16px;
+  padding: 20px 28px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--grid);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+
+.card h2 { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
+
+.muted, .sub { color: var(--muted); font-size: 12px; }
+
+.dq-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.dq-pill {
+  flex: 1 1 160px;
+  border: 1px solid var(--grid);
+  border-radius: 6px;
+  padding: 12px;
+}
+.dq-pill .name { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.dq-pill .state { font-size: 18px; font-weight: 700; margin-top: 4px; }
+.state.pass { color: var(--good); }
+.state.fail { color: var(--bad); }
+.state.na { color: var(--muted); }
+
+.chart { display: flex; align-items: flex-end; gap: 2px; height: 160px; }
+.bar { flex: 1 1 auto; background: var(--accent); min-height: 1px; border-radius: 2px 2px 0 0; }
+.bar:hover { background: #6cc0f5; }
+
+#funnel .step { margin: 6px 0; }
+#funnel .label { font-size: 12px; display: flex; justify-content: space-between; }
+#funnel .track { background: var(--grid); border-radius: 4px; height: 18px; overflow: hidden; }
+#funnel .fill { background: var(--accent); height: 100%; }
+
+table { border-collapse: collapse; font-size: 12px; }
+th, td { border: 1px solid var(--grid); padding: 4px 8px; text-align: center; }
+th { color: var(--muted); font-weight: 600; }
+.scroll { overflow-x: auto; }
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-top: 1px solid var(--grid);
+  color: var(--muted);
+  font-size: 12px;
+}
+footer a { color: var(--accent); }

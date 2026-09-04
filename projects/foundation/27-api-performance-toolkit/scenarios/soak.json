@@ -1,0 +1,19 @@
+{
+  "name": "soak",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "Soak",
+    "constantArrivalRatePerSec": 15,
+    "duration": "00:03:00",
+    "warmUp": "00:00:05",
+    "maxVUs": 32
+  },
+  "steps": [
+    { "name": "Home", "method": "GET", "url": "/" },
+    { "name": "GetProduct", "method": "GET", "url": "/api/v1/catalog/products/SKU-00042" }
+  ],
+  "assertions": [
+    { "metric": "latency.p95", "op": "<", "value": 300 },
+    { "metric": "error_rate", "op": "<", "value": 0.01 }
+  ]
+}

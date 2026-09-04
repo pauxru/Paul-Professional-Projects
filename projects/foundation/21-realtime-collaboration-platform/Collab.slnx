@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Collab.Api/Collab.Api.csproj" />
+    <Project Path="src/Collab.Application/Collab.Application.csproj" />
+    <Project Path="src/Collab.Domain/Collab.Domain.csproj" />
+    <Project Path="src/Collab.Infrastructure/Collab.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Collab.IntegrationTests/Collab.IntegrationTests.csproj" />
+    <Project Path="tests/Collab.UnitTests/Collab.UnitTests.csproj" />
+  </Folder>
+</Solution>

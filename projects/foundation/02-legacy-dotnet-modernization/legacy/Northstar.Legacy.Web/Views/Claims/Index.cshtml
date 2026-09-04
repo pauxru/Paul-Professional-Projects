@@ -1,0 +1,24 @@
+@model IEnumerable<Northstar.Legacy.Web.Models.LegacyClaim>
+@{
+    ViewData["Title"] = "Legacy Claims";
+}
+<h1>Northstar Insurance — Legacy Claims</h1>
+<p>Open claims (formatted in controller): <strong>@ViewBag.OpenClaimCount</strong></p>
+<p>Last refreshed: @ViewBag.LastRefreshed</p>
+<p><a asp-action="Create">Intake a claim</a> | <a asp-controller="Administration" asp-action="Index">Policy administration</a></p>
+<form method="get">
+    <label>Policyholder filter <input name="policyholder" value="@ViewBag.Policyholder" /></label>
+    <button type="submit">Filter</button>
+</form>
+<table class="table">
+    <thead><tr><th>Reference</th><th>Policyholder</th><th>Status</th><th>Claimed</th><th>Reserve</th><th>Adjuster</th></tr></thead>
+    <tbody>
+    @foreach (var claim in Model)
+    {
+        <tr>
+            <td><a asp-action="Details" asp-route-id="@claim.Id">@claim.ClaimReference</a></td><td>@claim.PolicyholderName</td><td>@claim.Status</td>
+            <td>@claim.Currency @claim.ClaimedAmount.ToString("N2")</td><td>@claim.Currency @claim.ReserveAmount.ToString("N2")</td><td>@claim.Adjuster</td>
+        </tr>
+    }
+    </tbody>
+</table>

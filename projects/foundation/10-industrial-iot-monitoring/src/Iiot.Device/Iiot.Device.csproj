@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Iiot.Protocol\Iiot.Protocol.csproj" />
+    <ProjectReference Include="..\Iiot.Domain\Iiot.Domain.csproj" />
+    <ProjectReference Include="..\Iiot.Application\Iiot.Application.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

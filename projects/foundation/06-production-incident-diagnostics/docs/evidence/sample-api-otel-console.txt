@@ -1,0 +1,144 @@
+# Captured console exporter excerpt
+# Captured from the Development sample API after issuing a token, listing orders, and creating an order.
+# The local content-root path was redacted; trace, span, duration, SQL, and metric values below are actual output.
+
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5006
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: [redacted local project path]
+Activity.TraceId:            9beeefdaad9cba1a4aab7615b62c8cd6
+Activity.SpanId:             50f35e52891370fe
+Activity.TraceFlags:         Recorded
+Activity.DisplayName:        POST /api/v1/auth/token
+Activity.Kind:               Server
+Activity.StartTime:          2026-09-02T22:40:26.0282291Z
+Activity.Duration:           00:00:00.3129194
+Activity.Tags:
+    http.request.method: POST
+    server.address: localhost
+    server.port: 5006
+    url.scheme: http
+    url.path: /api/v1/auth/token
+    http.route: /api/v1/auth/token
+    http.response.status_code: 200
+Instrumentation scope (ActivitySource):
+    Name: Microsoft.AspNetCore
+Resource associated with Activity:
+    service.name: Northstar Logistics (fictional)
+    telemetry.sdk.name: opentelemetry
+    telemetry.sdk.language: dotnet
+    telemetry.sdk.version: 1.18.0
+
+Activity.TraceId:            91b6b77b8b347d658b0b4db8ef2382c7
+Activity.SpanId:             9212e87e30109a73
+Activity.TraceFlags:         Recorded
+Activity.ParentSpanId:       04c8d7f19851a8c4
+Activity.DisplayName:        main
+Activity.Kind:               Client
+Activity.StartTime:          2026-09-02T22:40:26.9662642Z
+Activity.Duration:           00:00:00.0967480
+Activity.Tags:
+    db.system: sqlite
+    peer.service: Users
+    db.name: main
+    db.statement: SELECT COUNT(*)
+FROM "Orders" AS "o"
+Instrumentation scope (ActivitySource):
+    Name: OpenTelemetry.Instrumentation.EntityFrameworkCore
+    Version: 1.18.0-beta.1
+
+Activity.TraceId:            91b6b77b8b347d658b0b4db8ef2382c7
+Activity.SpanId:             ec95e3f083eccbe7
+Activity.TraceFlags:         Recorded
+Activity.ParentSpanId:       04c8d7f19851a8c4
+Activity.DisplayName:        main
+Activity.Kind:               Client
+Activity.StartTime:          2026-09-02T22:40:27.3137510Z
+Activity.Duration:           00:00:00.0126374
+Activity.Tags:
+    db.system: sqlite
+    db.statement: SELECT "o"."Id", "o"."Reference", "c"."Name", "o"."Destination", "o"."Status", "o"."CreatedAt"
+FROM "Orders" AS "o"
+INNER JOIN "Customers" AS "c" ON "o"."CustomerId" = "c"."Id"
+ORDER BY "o"."CreatedAt" DESC
+LIMIT @p1 OFFSET @p0
+Instrumentation scope (ActivitySource):
+    Name: OpenTelemetry.Instrumentation.EntityFrameworkCore
+    Version: 1.18.0-beta.1
+
+Activity.TraceId:            91b6b77b8b347d658b0b4db8ef2382c7
+Activity.SpanId:             04c8d7f19851a8c4
+Activity.TraceFlags:         Recorded
+Activity.ParentSpanId:       d9f30cb075bfe653
+Activity.DisplayName:        orders.list
+Activity.Kind:               Internal
+Activity.StartTime:          2026-09-02T22:40:26.8427402Z
+Activity.Duration:           00:00:00.4903731
+Instrumentation scope (ActivitySource):
+    Name: ProductionIncidentDiagnostics.Northstar
+
+Activity.TraceId:            91b6b77b8b347d658b0b4db8ef2382c7
+Activity.SpanId:             d9f30cb075bfe653
+Activity.TraceFlags:         Recorded
+Activity.DisplayName:        GET /api/v1/orders/
+Activity.Kind:               Server
+Activity.StartTime:          2026-09-02T22:40:26.4225357Z
+Activity.Duration:           00:00:01.0070770
+Activity.Tags:
+    http.request.method: GET
+    server.address: localhost
+    server.port: 5006
+    url.scheme: http
+    url.path: /api/v1/orders
+    url.query: ?page=Redacted&pageSize=Redacted
+    http.route: /api/v1/orders/
+    http.response.status_code: 200
+Instrumentation scope (ActivitySource):
+    Name: Microsoft.AspNetCore
+
+Activity.TraceId:            e143aad65bb0c4793e84b329703677f7
+Activity.SpanId:             1d7192cef77d63c1
+Activity.TraceFlags:         Recorded
+Activity.ParentSpanId:       7b213d21190f5bff
+Activity.DisplayName:        orders.book
+Activity.Kind:               Internal
+Activity.StartTime:          2026-09-02T22:40:27.4561429Z
+Activity.Duration:           00:00:00.1566869
+Instrumentation scope (ActivitySource):
+    Name: ProductionIncidentDiagnostics.Northstar
+
+Activity.TraceId:            e143aad65bb0c4793e84b329703677f7
+Activity.SpanId:             7b213d21190f5bff
+Activity.TraceFlags:         Recorded
+Activity.DisplayName:        POST /api/v1/orders/
+Activity.Kind:               Server
+Activity.StartTime:          2026-09-02T22:40:27.4436631Z
+Activity.Duration:           00:00:00.1801117
+Activity.Tags:
+    http.request.method: POST
+    server.address: localhost
+    server.port: 5006
+    url.scheme: http
+    url.path: /api/v1/orders
+    http.route: /api/v1/orders/
+    http.response.status_code: 201
+Instrumentation scope (ActivitySource):
+    Name: Microsoft.AspNetCore
+
+Metric Name: northstar.orders.booked, Metric Type: LongSum
+Instrumentation scope (Meter):
+    Name: ProductionIncidentDiagnostics.Northstar
+(2026-09-02T22:40:26.8426508Z, 2026-09-02T22:40:35.4927751Z]
+Value: 1
+
+Metric Name: northstar.request.duration, Unit: ms, Metric Type: Histogram
+Instrumentation scope (Meter):
+    Name: ProductionIncidentDiagnostics.Northstar
+(2026-09-02T22:40:26.8426995Z, 2026-09-02T22:40:35.4927782Z] operation: orders.list
+Value: Sum: 489.3788 Count: 1 Min: 489.3788 Max: 489.3788
+(2026-09-02T22:40:26.8426995Z, 2026-09-02T22:40:35.4927782Z] operation: orders.book
+Value: Sum: 156.3786 Count: 1 Min: 156.3786 Max: 156.3786

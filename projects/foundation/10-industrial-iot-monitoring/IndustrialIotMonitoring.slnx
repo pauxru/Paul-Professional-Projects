@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Iiot.Api/Iiot.Api.csproj" />
+    <Project Path="src/Iiot.Application/Iiot.Application.csproj" />
+    <Project Path="src/Iiot.Broker/Iiot.Broker.csproj" />
+    <Project Path="src/Iiot.Device/Iiot.Device.csproj" />
+    <Project Path="src/Iiot.Domain/Iiot.Domain.csproj" />
+    <Project Path="src/Iiot.EdgeGateway/Iiot.EdgeGateway.csproj" />
+    <Project Path="src/Iiot.Infrastructure/Iiot.Infrastructure.csproj" />
+    <Project Path="src/Iiot.Protocol/Iiot.Protocol.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Iiot.IntegrationTests/Iiot.IntegrationTests.csproj" />
+    <Project Path="tests/Iiot.UnitTests/Iiot.UnitTests.csproj" />
+  </Folder>
+</Solution>

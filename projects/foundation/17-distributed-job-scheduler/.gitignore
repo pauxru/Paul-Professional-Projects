@@ -1,0 +1,37 @@
+# .gitignore — .NET build output, local databases, secrets, IDE/test artefacts
+
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Local SQLite databases (created at runtime; never committed)
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets / local config (only .env.example is committed)
+.env
+appsettings.Development.local.json
+appsettings.*.local.json
+
+# IDE / tooling
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Test / coverage output
+TestResults/
+[Tt]est[Rr]esults/
+coverage/
+*.coverage
+*.trx
+
+# Node (dashboard tooling, if ever added)
+node_modules/
+
+# Logs / misc
+*.log

@@ -1,0 +1,39 @@
+# ============================================================================
+# UNVERIFIED — this compose file has NOT been executed in this environment.
+# Documented as a template for future containerised deployment. The current
+# validated workflow is `dotnet run` on Windows with SQLite.
+# ============================================================================
+
+version: "3.9"
+
+services:
+  audit-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: audit-platform:local
+    container_name: audit-api
+    ports:
+      - "5019:5019"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5019
+      - Database__Provider=Sqlite
+      - Database__ConnectionString=Data Source=/data/audit.db;Cache=Shared
+      - Jwt__Issuer=audit-platform
+      - Jwt__Audience=audit-clients
+      # Replace with a real signing key when running for anything other than the local demo.
+      - Jwt__SigningKey=change-this-signing-key-please-32-chars-min
+      - Signing__KeyId=compose-key-1
+      - Seed__Enabled=false
+    volumes:
+      - audit-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5019/health/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  audit-data:

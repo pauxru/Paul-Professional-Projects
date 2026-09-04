@@ -1,0 +1,142 @@
+{
+  "RulesetVersion": "v1.1.0",
+  "RulesetName": "PesaGate tuned v1.1",
+  "Label": "v1.1.0",
+  "Bands": {
+    "ApproveMax": 200,
+    "StepUpMax": 350,
+    "ReviewMax": 650
+  },
+  "Scored": 1226,
+  "FraudInjected": 106,
+  "LabelledTransactions": 1226,
+  "TruePositives": 59,
+  "FalsePositives": 5,
+  "TrueNegatives": 1115,
+  "FalseNegatives": 47,
+  "Precision": 0.921875,
+  "Recall": 0.5566037735849056,
+  "FalsePositiveRate": 0.004464285714285714,
+  "F1": 0.6941176470588236,
+  "AlertVolume": 64,
+  "ValueDetected": 119400,
+  "PatternBreakdown": [
+    {
+      "Pattern": "legit",
+      "Total": 1120,
+      "PredictedFraud": 5,
+      "PredictedLegit": 1115,
+      "ValueCaught": 1000
+    },
+    {
+      "Pattern": "takeover-burst",
+      "Total": 60,
+      "PredictedFraud": 15,
+      "PredictedLegit": 45,
+      "ValueCaught": 24400
+    },
+    {
+      "Pattern": "card-testing",
+      "Total": 20,
+      "PredictedFraud": 20,
+      "PredictedLegit": 0,
+      "ValueCaught": 70000
+    },
+    {
+      "Pattern": "impossible-travel",
+      "Total": 20,
+      "PredictedFraud": 20,
+      "PredictedLegit": 0,
+      "ValueCaught": 5000
+    },
+    {
+      "Pattern": "refund-abuse",
+      "Total": 6,
+      "PredictedFraud": 4,
+      "PredictedLegit": 2,
+      "ValueCaught": 20000
+    }
+  ],
+  "TopRulesByFires": [
+    {
+      "RuleId": "mcc-risk",
+      "Fires": 171,
+      "TruePositives": 86,
+      "FalsePositives": 85,
+      "Precision": 0.5029239766081871,
+      "ValueDetected": 178000
+    },
+    {
+      "RuleId": "ip-country-mismatch",
+      "Fires": 98,
+      "TruePositives": 41,
+      "FalsePositives": 57,
+      "Precision": 0.41836734693877553,
+      "ValueDetected": 64000
+    },
+    {
+      "RuleId": "velocity-5m",
+      "Fires": 60,
+      "TruePositives": 40,
+      "FalsePositives": 20,
+      "Precision": 0.6666666666666666,
+      "ValueDetected": 104000
+    },
+    {
+      "RuleId": "distinct-merchants-1h",
+      "Fires": 38,
+      "TruePositives": 27,
+      "FalsePositives": 11,
+      "Precision": 0.7105263157894737,
+      "ValueDetected": 72800
+    },
+    {
+      "RuleId": "device-sharing",
+      "Fires": 35,
+      "TruePositives": 11,
+      "FalsePositives": 24,
+      "Precision": 0.3142857142857143,
+      "ValueDetected": 10750
+    },
+    {
+      "RuleId": "time-of-day",
+      "Fires": 35,
+      "TruePositives": 8,
+      "FalsePositives": 27,
+      "Precision": 0.22857142857142856,
+      "ValueDetected": 18250
+    },
+    {
+      "RuleId": "amount-sum-1h",
+      "Fires": 30,
+      "TruePositives": 30,
+      "FalsePositives": 0,
+      "Precision": 1,
+      "ValueDetected": 68400
+    },
+    {
+      "RuleId": "unusual-amount-z",
+      "Fires": 27,
+      "TruePositives": 27,
+      "FalsePositives": 0,
+      "Precision": 1,
+      "ValueDetected": 96800
+    },
+    {
+      "RuleId": "impossible-travel",
+      "Fires": 27,
+      "TruePositives": 22,
+      "FalsePositives": 5,
+      "Precision": 0.8148148148148148,
+      "ValueDetected": 15000
+    },
+    {
+      "RuleId": "velocity-1m",
+      "Fires": 20,
+      "TruePositives": 20,
+      "FalsePositives": 0,
+      "Precision": 1,
+      "ValueDetected": 70000
+    }
+  ]
+}

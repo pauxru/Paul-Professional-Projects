@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Contoso.Storefront.Api/Contoso.Storefront.Api.csproj" />
+    <Project Path="src/Contoso.Storefront.Application/Contoso.Storefront.Application.csproj" />
+    <Project Path="src/Contoso.Storefront.Domain/Contoso.Storefront.Domain.csproj" />
+    <Project Path="src/Contoso.Storefront.Infrastructure/Contoso.Storefront.Infrastructure.csproj" />
+    <Project Path="src/Contoso.Storefront.MigrationRunner/Contoso.Storefront.MigrationRunner.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Contoso.Storefront.IntegrationTests/Contoso.Storefront.IntegrationTests.csproj" />
+    <Project Path="tests/Contoso.Storefront.UnitTests/Contoso.Storefront.UnitTests.csproj" />
+  </Folder>
+</Solution>

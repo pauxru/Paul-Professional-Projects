@@ -1,0 +1,31 @@
+# UNVERIFIED: Docker/Compose is unavailable on the build host; this stack has not been started.
+services:
+  migrations:
+    build:
+      context: .
+      target: migrations
+    environment:
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/storefront.db
+    volumes:
+      - storefront-data:/data
+
+  api:
+    build:
+      context: .
+      target: api
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/storefront.db
+      Observability__Exporter: None
+    ports:
+      - "5028:8080"
+    volumes:
+      - storefront-data:/data
+
+volumes:
+  storefront-data:

@@ -1,0 +1,54 @@
+# Build output
+bin/
+obj/
+out/
+publish/
+TestResults/
+
+# IDE and workspace
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+
+# .NET user secrets and config
+appsettings.Development.local.json
+appsettings.*.local.json
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# SampleApi runtime artefacts (SQLite file and journals)
+*.db
+*.db-shm
+*.db-wal
+sampleapi.db*
+
+# LoadRunner results — regenerated on demand
+# (case-study results ARE checked in; everything else in results/ is transient)
+results/*.html
+results/*.md
+!results/case-study-baseline-*.html
+!results/case-study-baseline-*.md
+!results/case-study-optimised-*.html
+!results/case-study-optimised-*.md
+!results/compare-*.html
+!results/compare-*.md
+
+# Node
+node_modules/
+
+# Misc
+*.log
+*.tmp
+Thumbs.db
+.DS_Store

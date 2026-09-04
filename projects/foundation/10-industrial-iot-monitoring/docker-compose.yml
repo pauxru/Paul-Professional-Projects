@@ -1,0 +1,17 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started.
+services:
+  iiot-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5010:5010"
+      - "18830:18830"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/iiot.db
+    volumes:
+      - iiot-data:/data
+volumes:
+  iiot-data:

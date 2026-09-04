@@ -1,0 +1,40 @@
+# ------------------------------------------------------------------------------------------------
+# UNVERIFIED: Docker is not available on the build host. This compose stack has NOT been started
+# or verified. It documents the intended local topology only.
+#
+# The `redis` service illustrates the SignalR scale-out backplane discussed in
+# docs/decisions/ADR-005-scale-out-backplane.md. It is provided FOR ILLUSTRATION and is NOT wired
+# in by default; single-node (api only, SQLite) is the only verified topology.
+# ------------------------------------------------------------------------------------------------
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5021:5021"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5021
+      ConnectionStrings__Default: Data Source=/data/collab.db
+      # Provide a real key when running for real; the app refuses the default key in Production.
+      Jwt__Key: change-me-to-a-real-secret-please-0123456789abcdef
+      Seed__Demo: "true"
+      # To exercise the (UNVERIFIED) backplane, uncomment and add the redis service dependency:
+      # Backplane__Provider: Redis
+      # Backplane__Redis: redis:6379
+    volumes:
+      - collab-data:/data
+    # depends_on:
+    #   - redis
+
+  # ---- Illustration only; not verified, not enabled by default (see ADR-005) ----
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    profiles:
+      - backplane   # only starts with `docker compose --profile backplane up`
+
+volumes:
+  collab-data:

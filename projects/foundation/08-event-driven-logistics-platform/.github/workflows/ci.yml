@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Restore
+        run: dotnet restore SavannaLogistics.sln
+      - name: Build
+        run: dotnet build SavannaLogistics.sln -c Release --no-restore
+      - name: Test
+        run: dotnet test SavannaLogistics.sln -c Release --no-build

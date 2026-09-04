@@ -1,0 +1,17 @@
+name: Build and test
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore FeatureFlags.sln
+      - run: dotnet build FeatureFlags.sln -c Release --no-restore
+      - run: dotnet test FeatureFlags.sln -c Release --no-build --no-restore

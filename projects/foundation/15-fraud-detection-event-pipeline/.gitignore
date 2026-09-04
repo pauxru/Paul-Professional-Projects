@@ -1,0 +1,76 @@
+# ==============================================================================
+# .gitignore for FraudPipeline (.NET 10 solution)
+# ==============================================================================
+
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+
+# .NET user files & user-specific settings
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.pidb
+project.lock.json
+project.fragment.lock.json
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.DS_Store
+
+# SQLite databases (default local dev store)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Secrets & environment
+.env
+.env.*
+!.env.example
+appsettings.Development.local.json
+appsettings.Local.json
+secrets.json
+
+# Test results & coverage
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+*.trx
+lcov.info
+
+# Volatile timing artefacts written by the perf/benchmark tests. Detection
+# metrics (deterministic) live in docs/*.snapshot.json under version control;
+# wall-clock and percentile timings (environmental) are written here on every
+# run and referenced by docs/detection-performance.md rather than committed.
+artifacts/
+
+# Package caches
+packages/
+!**/packages/build/
+[Pp]ackage[Ll]ock.json
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Node (only relevant if we ever add a front-end)
+node_modules/

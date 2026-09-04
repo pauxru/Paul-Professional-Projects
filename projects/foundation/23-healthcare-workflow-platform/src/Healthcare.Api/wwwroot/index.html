@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Healthcare Workflow — Operational Dashboard (fictional demo)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 0; color: #1a1a1a; background: #f5f7f9; }
+    header { background: #143c5c; color: #fff; padding: 12px 24px; }
+    header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    header .subtitle { font-size: 12px; opacity: 0.85; }
+    main { padding: 16px 24px; }
+    .banner { background: #fff8e1; border: 1px solid #ffc107; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; }
+    .card { background: #fff; border: 1px solid #e2e5e9; border-radius: 6px; padding: 12px 16px; margin-bottom: 12px; }
+    .card h2 { margin: 0 0 8px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #143c5c; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 6px 8px; background: #eef2f5; border-bottom: 1px solid #d5dbe1; }
+    td { padding: 6px 8px; border-bottom: 1px solid #eef1f4; }
+    .status { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .s-Booked { background: #e3f2fd; color: #0d47a1; }
+    .s-Confirmed { background: #e8f5e9; color: #2e7d32; }
+    .s-CheckedIn { background: #fff3e0; color: #ef6c00; }
+    .s-InTriage { background: #f3e5f5; color: #6a1b9a; }
+    .s-WithClinician { background: #e0f7fa; color: #00695c; }
+    .s-AwaitingResults { background: #fff8e1; color: #ff8f00; }
+    .s-Completed { background: #e8f5e9; color: #1b5e20; }
+    .s-NoShow { background: #ffebee; color: #b71c1c; }
+    .s-Cancelled { background: #eceff1; color: #455a64; }
+    .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 6px; }
+    button { background: #143c5c; color: #fff; border: 0; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    input, select { padding: 4px 6px; border: 1px solid #cfd6dc; border-radius: 4px; font-size: 12px; }
+    .muted { color: #6b7681; font-size: 12px; }
+    .pill { background:#eef2f5; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Healthcare Workflow Platform — Operational Dashboard</h1>
+    <div class="subtitle">All data is synthetic. No real patient data, no HIPAA/GDPR/ISO compliance is claimed or performed.</div>
+  </header>
+  <main>
+    <div class="banner">
+      <strong>Sign in required.</strong> Use the dev-token endpoint at <span class="pill">POST /api/v1/auth/dev-token</span> with a role and paste the token below.
+      <div class="row" style="margin-top: 6px;">
+        <input id="token" placeholder="paste JWT here" style="flex:1" />
+        <button onclick="saveToken()">Save token</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Facility</label>
+        <select id="facility"></select>
+        <label style="margin-left: 12px;">Date</label>
+        <input id="date" type="date" />
+        <button onclick="refresh()" style="margin-left: 8px;">Refresh</button>
+      </div>
+      <div class="muted" id="status">Idle</div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Clinic Board (today's schedule / patient journey)</h2>
+          <table id="board"><thead>
+            <tr><th>Time</th><th>Patient</th><th>Clinician</th><th>Status</th><th>Wait (min)</th></tr>
+          </thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+          <h2>Utilisation (past 7 days)</h2>
+          <table id="util"><thead>
+            <tr><th>Clinician</th><th>Booked min</th><th>Total min</th><th>Utilisation %</th><th>Patients</th></tr>
+          </thead><tbody></tbody></table>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>DNA / no-show (past 7 days)</h2>
+          <table id="dna"><thead>
+            <tr><th>Clinician</th><th>Booked</th><th>DNA</th><th>DNA %</th></tr>
+          </thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+          <h2>Referral SLA breaches</h2>
+          <table id="breach"><thead>
+            <tr><th>Ref</th><th>Priority</th><th>Due</th></tr>
+          </thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+          <h2>Access anomalies (last 200)</h2>
+          <table id="anom"><thead>
+            <tr><th>When</th><th>Actor</th><th>Reason</th></tr>
+          </thead><tbody></tbody></table>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    function saveToken() {
+      localStorage.setItem('token', document.getElementById('token').value.trim());
+      alert('token saved');
+    }
+    function auth() { return { 'Authorization': 'Bearer ' + (localStorage.getItem('token') || '') }; }
+    async function j(url) {
+      const r = await fetch(url, { headers: auth() });
+      if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
+      return await r.json();
+    }
+    async function loadFacilities() {
+      const items = await j('/api/v1/facilities');
+      const sel = document.getElementById('facility');
+      sel.innerHTML = '';
+      for (const f of items) {
+        const o = document.createElement('option');
+        o.value = f.id; o.textContent = f.name + ' (' + f.code + ')';
+        sel.appendChild(o);
+      }
+    }
+    async function refresh() {
+      const facilityId = document.getElementById('facility').value;
+      const date = document.getElementById('date').value || new Date().toISOString().slice(0, 10);
+      const status = document.getElementById('status'); status.textContent = 'Loading...';
+      try {
+        const board = await j('/api/v1/reports/clinic-board?facilityId=' + facilityId + '&date=' + date);
+        const boardBody = document.querySelector('#board tbody'); boardBody.innerHTML = '';
+        for (const e of board) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${new Date(e.startUtc).toLocaleTimeString()}</td>
+                          <td>${e.patientGivenName} ${e.patientFamilyName}<br><span class="muted">${e.patientExternalId}</span></td>
+                          <td>${e.clinicianName}</td>
+                          <td><span class="status s-${e.status}">${e.status}</span></td>
+                          <td>${e.waitMinutes ?? ''}</td>`;
+          boardBody.appendChild(tr);
+        }
+        const today = new Date(); const from = new Date(today); from.setDate(today.getDate() - 6);
+        const dateStr = d => d.toISOString().slice(0, 10);
+        const util = await j('/api/v1/reports/utilisation?facilityId=' + facilityId + '&fromDate=' + dateStr(from) + '&toDate=' + dateStr(today));
+        const utilBody = document.querySelector('#util tbody'); utilBody.innerHTML = '';
+        for (const u of util) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${u.clinicianName}</td><td>${u.bookedMinutes}</td><td>${u.totalMinutes}</td><td>${u.utilisationPct}%</td><td>${u.patientCount}</td>`;
+          utilBody.appendChild(tr);
+        }
+        const dna = await j('/api/v1/reports/dna?facilityId=' + facilityId + '&fromDate=' + dateStr(from) + '&toDate=' + dateStr(today));
+        const dnaBody = document.querySelector('#dna tbody'); dnaBody.innerHTML = '';
+        for (const d of dna) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${d.clinicianName}</td><td>${d.booked}</td><td>${d.noShow}</td><td>${d.dnaPct}%</td>`;
+          dnaBody.appendChild(tr);
+        }
+        const breach = await j('/api/v1/reports/referral-breaches');
+        const breachBody = document.querySelector('#breach tbody'); breachBody.innerHTML = '';
+        for (const b of breach) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td><span class="pill">${b.id.substring(0, 8)}</span></td><td>${b.priority}</td><td>${new Date(b.slaDueUtc).toLocaleString()}</td>`;
+          breachBody.appendChild(tr);
+        }
+        const anom = await j('/api/v1/reports/access-anomalies');
+        const anomBody = document.querySelector('#anom tbody'); anomBody.innerHTML = '';
+        for (const a of anom) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${new Date(a.occurredAt).toLocaleString()}</td><td>${a.actorId}<br><span class="muted">${a.actorRole}</span></td><td>${a.reason}</td>`;
+          anomBody.appendChild(tr);
+        }
+        status.textContent = 'Loaded at ' + new Date().toLocaleTimeString();
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+      }
+    }
+    (async () => {
+      document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+      try { await loadFacilities(); } catch (e) { /* ignore until token entered */ }
+    })();
+  </script>
+</body>
+</html>

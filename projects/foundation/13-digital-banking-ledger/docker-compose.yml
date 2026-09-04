@@ -1,0 +1,51 @@
+# ------------------------------------------------------------------------------
+# Example Bank — Digital Banking Ledger — local compose stack
+#
+# ⚠️  UNVERIFIED: Docker is not available on the build host. This compose file
+#     was authored but has NOT been started or verified. `docker compose up`
+#     has never been executed against it.
+#
+# The default build needs no external services — SQLite runs in-process. This
+# file demonstrates how the API would be containerised, with an OPTIONAL Postgres
+# service shown (commented) to illustrate the Postgres-serializable mapping from
+# ADR-005. The committed default remains SQLite.
+# ------------------------------------------------------------------------------
+services:
+  ledger-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: example-bank/digital-banking-ledger:dev
+    container_name: ledger-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://0.0.0.0:5013
+      ConnectionStrings__Ledger: "Data Source=/data/ledger.db"
+      # Override the dev signing key in any real deployment:
+      Auth__SigningKey: "change-me-in-real-deployments-please-0123456789abcdef"
+      Auth__EnableDevTokens: "false"
+    ports:
+      - "5013:5013"
+    volumes:
+      - ledger-data:/data
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # OPTIONAL Postgres backend (see ADR-005). Not used by the default SQLite
+  # build. Left commented so the default `up` stays infrastructure-free.
+  # ---------------------------------------------------------------------------
+  # postgres:
+  #   image: postgres:16
+  #   container_name: ledger-postgres
+  #   environment:
+  #     POSTGRES_DB: ledger
+  #     POSTGRES_USER: ledger
+  #     POSTGRES_PASSWORD: change-me
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  ledger-data:
+  # postgres-data:

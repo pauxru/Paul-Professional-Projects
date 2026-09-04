@@ -1,0 +1,23 @@
+﻿{
+  "ScenarioId": "INC-010",
+  "ScenarioName": "Cache stampede on concurrent miss",
+  "Mode": "Broken",
+  "RequestedOperations": 20,
+  "StartedAtUtc": "2026-09-02T22:34:27.6237733+00:00",
+  "ElapsedMilliseconds": 63.0896,
+  "CompletedWithinBudget": true,
+  "Metrics": {
+    "originLoads": 20,
+    "coalescedWaiters": 0,
+    "p95LatencyMilliseconds": 36.68,
+    "distinctValuesReturned": 1,
+    "ttlPolicy": "200 ms base TTL plus deterministic 0-24 ms jitter"
+  },
+  "Evidence": [
+    "OutboundCallCounter observed 20 origin loads for 20 simultaneous cache callers.",
+    "Fixed mode uses ConcurrentDictionary\u003Cstring, Lazy\u003CTask\u003CCacheEntry\u003E\u003E\u003E execution-and-publication coalescing."
+  ],
+  "Limitations": [
+    "Single-flight state is process-local. A multi-node cache needs a distributed lock or a stale-while-revalidate strategy to prevent cross-node stampedes."
+  ]
+}

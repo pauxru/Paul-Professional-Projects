@@ -1,0 +1,15 @@
+# Companion Dockerfile for the CLI referenced by docker-compose.yml. UNVERIFIED.
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY LoadRunner.slnx ./
+COPY src/ src/
+COPY tests/ tests/
+RUN dotnet restore src/LoadRunner.Cli/LoadRunner.Cli.csproj
+RUN dotnet publish src/LoadRunner.Cli/LoadRunner.Cli.csproj -c Release -o /out/cli \
+    --no-restore /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+COPY --from=build /out/cli ./
+ENV LOADRUN_BASE=http://sampleapi:5027
+ENTRYPOINT ["dotnet", "loadrun.dll"]

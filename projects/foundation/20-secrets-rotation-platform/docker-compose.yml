@@ -1,0 +1,18 @@
+# UNVERIFIED: Docker is unavailable on the build host. This file has not been executed.
+services:
+  secrets-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5020:5020"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      NORTHSTAR_MASTER_KEY: demo-only-not-a-real-secret-container-placeholder
+      Jwt__SigningKey: demo-only-not-a-real-secret-jwt-signing-key-change-me-0123456789
+      Database__ConnectionString: Data Source=/data/secrets.db
+    volumes:
+      - secrets-data:/data
+
+volumes:
+  secrets-data:

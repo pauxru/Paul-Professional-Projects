@@ -1,0 +1,54 @@
+# ---------------------------------------------------------------------------
+# docker-compose for the Financial Reconciliation Engine   —   UNVERIFIED
+#
+# Docker is NOT available on the build host; this stack has NOT been started or
+# verified. It is authored for completeness only.
+#
+# The default application uses SQLite and needs no services at all. The optional
+# `postgres` service below illustrates the provider-swap path (EF Core supports
+# Npgsql); it is commented out because SQLite is the committed default.
+# ---------------------------------------------------------------------------
+
+services:
+  api:
+    # UNVERIFIED: image has never been built on this host.
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: recon-engine-api:local
+    container_name: recon-engine-api
+    ports:
+      - "5005:5005"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://+:5005"
+      ConnectionStrings__Default: "Data Source=/app/data/recon.db"
+      # Provide a real 32+ char key in a real deployment (do NOT commit secrets).
+      Jwt__Key: "dev-only-not-a-real-secret-change-me-0123456789"
+      Reconciliation__WriteOffApprovalThresholdMinor: "100000"
+      Reconciliation__HighSeverityAmountMinor: "50000"
+    volumes:
+      - recon-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/bin/sh", "-c", "wget -qO- http://localhost:5005/health/ready || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ---- OPTIONAL: Postgres provider-swap demonstration (UNVERIFIED, disabled) ----
+  # postgres:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_DB: recon
+  #     POSTGRES_USER: recon
+  #     POSTGRES_PASSWORD: change-me
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pg-data:/var/lib/postgresql/data
+
+volumes:
+  recon-data:
+  # pg-data:

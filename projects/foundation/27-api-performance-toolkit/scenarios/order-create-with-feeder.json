@@ -1,0 +1,39 @@
+{
+  "name": "order-create-with-feeder",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "ConstantVUs",
+    "constantVUs": 4,
+    "duration": "00:00:10",
+    "warmUp": "00:00:02"
+  },
+  "feeder": {
+    "path": "scenarios/data/customers.csv",
+    "variable": "row",
+    "cycle": true
+  },
+  "steps": [
+    {
+      "name": "CreateOrder",
+      "method": "POST",
+      "url": "/api/v1/orders",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"customerRef\":\"{{customerRef}}\",\"lines\":[{\"productId\":{{productId}},\"quantity\":{{quantity}}}]}",
+      "expectedStatus": 201,
+      "extractFromJson": {
+        "orderId": "$.orderId"
+      }
+    },
+    {
+      "name": "FetchOrder",
+      "method": "GET",
+      "url": "/api/v1/orders/{{orderId}}"
+    }
+  ],
+  "assertions": [
+    { "metric": "latency.p95", "op": "<", "value": 500 },
+    { "metric": "error_rate", "op": "<", "value": 0.02 }
+  ]
+}

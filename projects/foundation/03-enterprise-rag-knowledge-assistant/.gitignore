@@ -1,0 +1,46 @@
+# .NET / Visual Studio
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+.vs/
+.vscode/
+*.log
+
+# Test / coverage
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+
+# Publish artifacts
+publish/
+*.nupkg
+
+# Rider
+.idea/
+
+# EF Core / SQLite
+*.db
+*.db-shm
+*.db-wal
+rag.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Session workspace (do not commit local scratch files)
+docs/raw-*.txt

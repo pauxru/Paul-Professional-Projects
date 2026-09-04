@@ -1,0 +1,57 @@
+# UNVERIFIED: this compose file is committed to show the intended production topology
+# but the stack has never been started or verified — Docker is unavailable on the host that
+# produced this repository. Every service below is labelled `# UNVERIFIED` for that reason.
+#
+# When Docker is available:
+#   docker compose --env-file .env up --build
+# The API will start on port 5001 (per the ASPNETCORE_URLS env var above).
+
+services:
+  api:  # UNVERIFIED
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      ASPNETCORE_URLS: http://+:5001
+      ASPNETCORE_ENVIRONMENT: Production
+      Database__Provider: Postgres
+      Database__ConnectionString: Host=postgres;Port=5432;Database=contoso;Username=contoso;Password=change-me
+      Messaging__Provider: RabbitMq
+      Messaging__RabbitMq__Host: rabbitmq
+      Messaging__RabbitMq__User: guest
+      Messaging__RabbitMq__Password: guest
+      Cache__Provider: Redis
+      Cache__Redis__ConnectionString: redis:6379
+      Jwt__SigningKey: ${Jwt__SigningKey}
+      PaymentProvider__WebhookSigningSecret: ${PaymentProvider__WebhookSigningSecret}
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+
+  postgres:  # UNVERIFIED
+    image: postgres:16
+    environment:
+      POSTGRES_DB: contoso
+      POSTGRES_USER: contoso
+      POSTGRES_PASSWORD: change-me
+    ports:
+      - "5432:5432"
+    volumes:
+      - contoso-postgres:/var/lib/postgresql/data
+
+  redis:  # UNVERIFIED
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  rabbitmq:  # UNVERIFIED
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  contoso-postgres:

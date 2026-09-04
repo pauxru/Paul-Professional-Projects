@@ -1,0 +1,40 @@
+# docker-compose.yml — SampleApi + loadrun runner.
+#
+# THIS COMPOSE STACK HAS NOT BEEN STARTED OR VERIFIED — Docker is not installed
+# on the build host that produced this repository. Read the README section
+# "Running with Docker" for the honest disclaimer.
+
+services:
+  sampleapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: loadrunner/sampleapi:latest
+    container_name: loadrunner-sampleapi
+    ports:
+      - "5027:5027"
+    environment:
+      ASPNETCORE_URLS: http://+:5027
+      ASPNETCORE_ENVIRONMENT: Production
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:5027/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  loadrun:
+    build:
+      context: .
+      dockerfile: Dockerfile.cli
+    image: loadrunner/cli:latest
+    container_name: loadrunner-cli
+    depends_on:
+      sampleapi:
+        condition: service_healthy
+    volumes:
+      - ./scenarios:/scenarios:ro
+      - ./results:/results
+    environment:
+      LOADRUN_BASE: http://sampleapi:5027
+    entrypoint: ["dotnet", "loadrun.dll"]
+    command: ["run", "/scenarios/smoke.json", "--results", "/results", "--out", "/results"]

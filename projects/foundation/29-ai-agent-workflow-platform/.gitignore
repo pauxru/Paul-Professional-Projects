@@ -1,0 +1,42 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+
+# Test output
+TestResults/
+*.trx
+coverage*.json
+coverage*.xml
+*.coverage
+
+# EF Core / SQLite local databases
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets & local config (only .env.example is committed)
+.env
+appsettings.Development.local.json
+appsettings.*.local.json
+
+# IDE / tooling
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# OS noise
+Thumbs.db
+.DS_Store
+
+# Node (web console tooling, if any)
+node_modules/
+
+# Scratch artifacts produced while measuring the evaluation harness
+docs/_build.txt
+docs/_test.txt
+docs/evaluation-raw.json

@@ -1,0 +1,47 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose file has not been started.
+name: integration-hub-demo
+services:
+  hub:
+    build:
+      context: .
+      target: api
+    ports:
+      - "5012:5012"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__ConnectionString: Data Source=/data/integration-hub.db
+      Secrets__FilePath: /data/secrets.enc
+      Secrets__MasterKey: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      Connectors__CrmBaseUrl: http://crm:5112
+      Connectors__ErpBaseUrl: http://erp:5212
+      Connectors__PaymentsBaseUrl: http://payments:5312
+      Connectors__AllowedHosts__0: crm
+      Connectors__AllowedHosts__1: erp
+      Connectors__AllowedHosts__2: payments
+      Connectors__AllowPrivateNetworks: "true"
+    volumes:
+      - hub-data:/data
+    depends_on:
+      - crm
+      - erp
+      - payments
+  crm:
+    build:
+      context: .
+      target: crm
+    ports:
+      - "5112:5112"
+  erp:
+    build:
+      context: .
+      target: erp
+    ports:
+      - "5212:5212"
+  payments:
+    build:
+      context: .
+      target: payments
+    ports:
+      - "5312:5312"
+volumes:
+  hub-data:

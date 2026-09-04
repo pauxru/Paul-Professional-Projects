@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ZeroTrust.Api/ZeroTrust.Api.csproj" />
+    <Project Path="src/ZeroTrust.Application/ZeroTrust.Application.csproj" />
+    <Project Path="src/ZeroTrust.Domain/ZeroTrust.Domain.csproj" />
+    <Project Path="src/ZeroTrust.Infrastructure/ZeroTrust.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ZeroTrust.IntegrationTests/ZeroTrust.IntegrationTests.csproj" />
+    <Project Path="tests/ZeroTrust.UnitTests/ZeroTrust.UnitTests.csproj" />
+  </Folder>
+</Solution>

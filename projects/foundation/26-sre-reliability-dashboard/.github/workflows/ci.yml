@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore Northstar.Reliability.sln
+      - run: dotnet build Northstar.Reliability.sln -c Release --no-restore
+      - run: dotnet test Northstar.Reliability.sln -c Release --no-build --verbosity normal

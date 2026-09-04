@@ -1,0 +1,34 @@
+# UNVERIFIED: Docker is not available on the build host. This compose file was authored for completeness
+# and has NOT been started or verified. See README "Running with Docker".
+#
+# Single-service stack: the Lakehouse API with a persistent volume for the filesystem lake + SQLite
+# serving database. No external infrastructure is required (SQLite is embedded in the API process).
+
+services:
+  lakehouse-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lakehouse-api:local
+    container_name: lakehouse-api
+    ports:
+      - "5025:5025"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://+:5025"
+      Lakehouse__LakeRoot: /data/lake
+      Lakehouse__ServingDbPath: /data/serving/serving.db
+      Lakehouse__SeedOnStartup: "true"
+      # DEV-ONLY placeholder key; supply a real key via secrets in any real deployment.
+      Lakehouse__Auth__SigningKey: "dev-only-signing-key-change-me-please-32bytes!"
+    volumes:
+      - lakehouse-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5025/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  lakehouse-data:

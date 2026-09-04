@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Contoso.Payments.Api/Contoso.Payments.Api.csproj" />
+    <Project Path="src/Contoso.Payments.Application/Contoso.Payments.Application.csproj" />
+    <Project Path="src/Contoso.Payments.Domain/Contoso.Payments.Domain.csproj" />
+    <Project Path="src/Contoso.Payments.Infrastructure/Contoso.Payments.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Contoso.Payments.IntegrationTests/Contoso.Payments.IntegrationTests.csproj" />
+    <Project Path="tests/Contoso.Payments.UnitTests/Contoso.Payments.UnitTests.csproj" />
+  </Folder>
+</Solution>

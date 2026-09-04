@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LoadRunner.Cli/LoadRunner.Cli.csproj" />
+    <Project Path="src/LoadRunner.Core/LoadRunner.Core.csproj" />
+    <Project Path="src/LoadRunner.Reporting/LoadRunner.Reporting.csproj" />
+    <Project Path="src/SampleApi/SampleApi.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LoadRunner.IntegrationTests/LoadRunner.IntegrationTests.csproj" />
+    <Project Path="tests/LoadRunner.UnitTests/LoadRunner.UnitTests.csproj" />
+  </Folder>
+</Solution>

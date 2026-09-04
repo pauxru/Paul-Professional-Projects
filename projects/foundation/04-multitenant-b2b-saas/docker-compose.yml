@@ -1,0 +1,23 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started.
+services:
+  fieldops-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5004:5004"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/fieldops.db
+      Jwt__SigningKey: dev-only-not-a-real-secret-change-me-0123456789
+      Billing__WebhookSecret: dev-only-webhook-secret-change-me
+    volumes:
+      - fieldops-data:/data
+      - fieldops-objects:/app/App_Data/objects
+    labels:
+      fieldops.compose-status: "UNVERIFIED"
+
+volumes:
+  fieldops-data:
+  fieldops-objects:

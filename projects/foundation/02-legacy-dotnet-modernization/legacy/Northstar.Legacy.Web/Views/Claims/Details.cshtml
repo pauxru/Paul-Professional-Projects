@@ -1,0 +1,31 @@
+@model Northstar.Legacy.Web.Models.LegacyClaim
+@{
+    ViewData["Title"] = "Legacy claim detail";
+}
+<h1>Claim @Model.ClaimReference</h1>
+<dl>
+    <dt>Policyholder</dt><dd>@Model.PolicyholderName</dd>
+    <dt>Status</dt><dd>@Model.Status</dd>
+    <dt>Claimed amount</dt><dd>@Model.Currency @Model.ClaimedAmount.ToString("N2")</dd>
+    <dt>Reserve</dt><dd>@Model.Currency @Model.ReserveAmount.ToString("N2")</dd>
+    <dt>Potential settlement</dt><dd>@Model.Currency @ViewBag.PotentialSettlement</dd>
+</dl>
+<h2>Assessment / workflow</h2>
+<form asp-action="Assess" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <label>Adjuster <input name="adjuster" value="@Model.Adjuster" /></label><br />
+    <label>Reserve <input name="reserveAmount" value="@Model.ReserveAmount" /></label><br />
+    <label>Status
+        <select name="status">
+            <option>UnderReview</option><option>Approved</option><option>Rejected</option><option>Settled</option><option>Closed</option>
+        </select>
+    </label><br />
+    <button type="submit">Save assessment</button>
+</form>
+<h2>Attach evidence</h2>
+<form asp-action="AttachDocument" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <input type="file" name="document" />
+    <button type="submit">Attach</button>
+</form>
+<p><a asp-action="Index">Back to claims</a></p>

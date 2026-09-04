@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Collab — Real-Time Collaboration Demo</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 0; background: #0f1115; color: #d7dae0; }
+    header { background: #161a22; padding: 10px 16px; border-bottom: 1px solid #2a2f3a; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    header h1 { font-size: 15px; margin: 0 16px 0 0; color: #7aa2f7; }
+    input, button { font-family: inherit; font-size: 13px; padding: 6px 8px; background: #0f1115; color: #d7dae0; border: 1px solid #2a2f3a; border-radius: 4px; }
+    button { background: #24304a; cursor: pointer; }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+    main { display: grid; grid-template-columns: 1fr 320px; gap: 12px; padding: 12px; }
+    textarea { width: 100%; height: 60vh; resize: vertical; background: #0b0d11; color: #e6e9ef; border: 1px solid #2a2f3a; border-radius: 4px; padding: 10px; font-size: 14px; line-height: 1.5; }
+    .panel { background: #12151c; border: 1px solid #2a2f3a; border-radius: 6px; padding: 10px; margin-bottom: 12px; }
+    .panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #8a93a6; margin: 0 0 8px; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    li { padding: 3px 0; font-size: 12px; border-bottom: 1px solid #1c2029; }
+    #log { white-space: pre-wrap; font-size: 11px; height: 200px; overflow: auto; color: #9aa4b8; }
+    .pill { padding: 2px 8px; border-radius: 999px; background: #24304a; font-size: 11px; }
+    label { font-size: 12px; color: #8a93a6; }
+    .row { display: flex; gap: 6px; align-items: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Collab · realtime</h1>
+    <div class="row">
+      <label>email</label>
+      <input id="email" value="ada@acme.example" size="20" />
+      <button id="loginBtn">Sign in</button>
+      <span id="who" class="pill">not signed in</span>
+    </div>
+    <div class="row">
+      <label>document</label>
+      <input id="docId" value="55555555-5555-5555-5555-555555555555" size="36" />
+      <button id="connect" disabled>Connect &amp; join</button>
+      <span id="status" class="pill">idle</span>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <textarea id="editor" disabled placeholder="Sign in and connect to begin co-editing…"></textarea>
+    </section>
+    <aside>
+      <div class="panel">
+        <h2>Presence — <span id="peers">0</span> peer(s)</h2>
+        <ul id="presence"></ul>
+      </div>
+      <div class="panel">
+        <h2>Event log</h2>
+        <div id="log"></div>
+      </div>
+      <div class="panel">
+        <h2>How to demo</h2>
+        <p style="font-size:12px;color:#8a93a6;line-height:1.5">
+          Open this page in <strong>two browser tabs</strong>. Sign in as
+          <code>ada@acme.example</code> in one and <code>grace@acme.example</code>
+          in the other, connect both to the same document id, then type in either —
+          edits and cursors converge live.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

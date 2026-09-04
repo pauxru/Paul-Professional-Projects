@@ -1,0 +1,21 @@
+# UNVERIFIED: Docker is unavailable on the build host; this stack has not been started.
+services:
+  northstar-iga:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5024:5024"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5024
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/northstar-iga.db
+      Jwt__Issuer: northstar-iga-local
+      Jwt__Audience: northstar-iga-api
+      Jwt__SigningKey: dev-only-not-a-real-secret-change-me-0123456789
+    volumes:
+      - northstar-iga-data:/data
+
+volumes:
+  northstar-iga-data:

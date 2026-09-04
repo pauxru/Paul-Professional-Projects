@@ -1,0 +1,41 @@
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# .NET / IDE
+.vs/
+*.user
+*.suo
+.idea/
+*.DotSettings.user
+
+# Test output
+TestResults/
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+*.coveragexml
+
+# SQLite databases (all local/dev/test artifacts)
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets / local config (only .env.example is committed)
+.env
+appsettings.Development.local.json
+appsettings.*.local.json
+*.pfx
+*.key
+secrets.json
+
+# Runtime artifacts (object store, outbox, dead-letter, drop folder, logs)
+artifacts/
+artifacts-*/
+**/artifacts/
+*.log
+
+# Node (review console tooling, if any)
+node_modules/

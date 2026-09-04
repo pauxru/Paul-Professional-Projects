@@ -1,0 +1,468 @@
+{
+  "runId": "case-study-optimised-20260902-224506-ecc079",
+  "scenarioName": "case-study-optimised",
+  "startedUtc": "2026-09-02T22:45:06.9681991+00:00",
+  "finishedUtc": "2026-09-02T22:45:37.1203496+00:00",
+  "warmup": "00:00:03",
+  "environment": {
+    "operatingSystem": "Microsoft Windows 10.0.26200",
+    "logicalCores": 16,
+    "runtimeVersion": ".NET 10.0.11",
+    "processArchitecture": "X64",
+    "machineName": "CPC-rukwa-0IU7J",
+    "toolkitVersion": "1.0.0"
+  },
+  "scenario": {
+    "name": "case-study-optimised",
+    "baseUrl": "http://localhost:5027",
+    "load": {
+      "model": "ConstantArrivalRate",
+      "constantArrivalRatePerSec": 40,
+      "duration": "00:00:30",
+      "warmUp": "00:00:03",
+      "maxVUs": 64
+    },
+    "steps": [
+      {
+        "name": "ListOrders",
+        "method": "GET",
+        "url": "/api/v1/orders?page=1\u0026pageSize=25",
+        "headers": {
+          "X-Pathology-Optimised": "true"
+        },
+        "expectedStatus": 200
+      },
+      {
+        "name": "SearchCatalog",
+        "method": "GET",
+        "url": "/api/v1/catalog/products?category=coffee\u0026page=1\u0026pageSize=25",
+        "headers": {
+          "X-Pathology-Optimised": "true"
+        },
+        "expectedStatus": 200
+      },
+      {
+        "name": "GetProduct",
+        "method": "GET",
+        "url": "/api/v1/catalog/products/SKU-00042",
+        "headers": {
+          "X-Pathology-Optimised": "true"
+        },
+        "expectedStatus": 200
+      }
+    ],
+    "assertions": [
+      {
+        "metric": "latency.p95",
+        "op": "\u003C",
+        "value": 250
+      },
+      {
+        "metric": "error_rate",
+        "op": "\u003C",
+        "value": 0.01
+      }
+    ]
+  },
+  "aggregate": {
+    "stepName": "__aggregate__",
+    "count": 3261,
+    "errors": 0,
+    "errorRate": 0,
+    "throughputRps": 120.09280400677616,
+    "connectionErrors": 0,
+    "timeoutErrors": 0,
+    "http4xx": 0,
+    "http5xx": 0,
+    "assertionErrors": 0,
+    "bytesReceived": 8702522,
+    "service": {
+      "p50Ms": 6.6849,
+      "p75Ms": 11.9756,
+      "p90Ms": 19.2702,
+      "p95Ms": 24.262,
+      "p99Ms": 38.4645,
+      "p999Ms": 56.2435,
+      "minMs": 0.6715,
+      "maxMs": 78.7392,
+      "meanMs": 9.119475038331815,
+      "stdDevMs": 7.868361729278522
+    },
+    "intended": {
+      "p50Ms": 28,
+      "p75Ms": 43,
+      "p90Ms": 60,
+      "p95Ms": 73,
+      "p99Ms": 105,
+      "p999Ms": 136,
+      "minMs": 2,
+      "maxMs": 144,
+      "meanMs": 32.499846672799755,
+      "stdDevMs": 21.01529976620651
+    }
+  },
+  "perStep": [
+    {
+      "stepName": "ListOrders",
+      "count": 1087,
+      "errors": 0,
+      "errorRate": 0,
+      "throughputRps": 40.05158437730287,
+      "connectionErrors": 0,
+      "timeoutErrors": 0,
+      "http4xx": 0,
+      "http5xx": 0,
+      "assertionErrors": 0,
+      "bytesReceived": 3730584,
+      "service": {
+        "p50Ms": 7.2517,
+        "p75Ms": 13.5422,
+        "p90Ms": 20.5571,
+        "p95Ms": 26.7777,
+        "p99Ms": 43.1398,
+        "p999Ms": 58.5285,
+        "minMs": 1.2842,
+        "maxMs": 78.7392,
+        "meanMs": 10.107675804967798,
+        "stdDevMs": 8.62849554057485
+      },
+      "intended": {
+        "p50Ms": 20,
+        "p75Ms": 31,
+        "p90Ms": 45,
+        "p95Ms": 54,
+        "p99Ms": 80,
+        "p999Ms": 100,
+        "minMs": 2,
+        "maxMs": 114,
+        "meanMs": 23.580496780128794,
+        "stdDevMs": 15.995017236194032
+      }
+    },
+    {
+      "stepName": "SearchCatalog",
+      "count": 1087,
+      "errors": 0,
+      "errorRate": 0,
+      "throughputRps": 40.0456822870616,
+      "connectionErrors": 0,
+      "timeoutErrors": 0,
+      "http4xx": 0,
+      "http5xx": 0,
+      "assertionErrors": 0,
+      "bytesReceived": 4781713,
+      "service": {
+        "p50Ms": 7.0754,
+        "p75Ms": 12.4821,
+        "p90Ms": 19.8648,
+        "p95Ms": 26.1288,
+        "p99Ms": 38.3784,
+        "p999Ms": 48.4263,
+        "minMs": 1.2083,
+        "maxMs": 52.2754,
+        "meanMs": 9.482713799448042,
+        "stdDevMs": 7.770775642754149
+      },
+      "intended": {
+        "p50Ms": 28,
+        "p75Ms": 43,
+        "p90Ms": 59,
+        "p95Ms": 71,
+        "p99Ms": 99,
+        "p999Ms": 117,
+        "minMs": 3,
+        "maxMs": 137,
+        "meanMs": 33.06531738730451,
+        "stdDevMs": 19.54873518533534
+      }
+    },
+    {
+      "stepName": "GetProduct",
+      "count": 1087,
+      "errors": 0,
+      "errorRate": 0,
+      "throughputRps": 40.05158437730287,
+      "connectionErrors": 0,
+      "timeoutErrors": 0,
+      "http4xx": 0,
+      "http5xx": 0,
+      "assertionErrors": 0,
+      "bytesReceived": 190225,
+      "service": {
+        "p50Ms": 5.4119,
+        "p75Ms": 10.6952,
+        "p90Ms": 17.4987,
+        "p95Ms": 21.4603,
+        "p99Ms": 30.8195,
+        "p999Ms": 43.0208,
+        "minMs": 0.6715,
+        "maxMs": 48.6593,
+        "meanMs": 7.768035510579584,
+        "stdDevMs": 6.925502694725799
+      },
+      "intended": {
+        "p50Ms": 36,
+        "p75Ms": 52,
+        "p90Ms": 72,
+        "p95Ms": 85,
+        "p99Ms": 116,
+        "p999Ms": 141,
+        "minMs": 4,
+        "maxMs": 144,
+        "meanMs": 40.85372585096596,
+        "stdDevMs": 23.179149943382228
+      }
+    }
+  ],
+  "timeSeries": [
+    {
+      "timestampUtc": "2026-09-02T22:45:09+00:00",
+      "count": 6,
+      "errors": 0,
+      "p50Ms": 7.5833,
+      "p95Ms": 19.4877,
+      "p99Ms": 19.4877
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:10+00:00",
+      "count": 121,
+      "errors": 0,
+      "p50Ms": 6.6013,
+      "p95Ms": 27.0602,
+      "p99Ms": 35.8238
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:11+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 5.9887,
+      "p95Ms": 16.21,
+      "p99Ms": 24.2511
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:12+00:00",
+      "count": 121,
+      "errors": 0,
+      "p50Ms": 10.7501,
+      "p95Ms": 34.3723,
+      "p99Ms": 48.3619
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:13+00:00",
+      "count": 116,
+      "errors": 0,
+      "p50Ms": 8.0486,
+      "p95Ms": 18.871,
+      "p99Ms": 20.7859
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:14+00:00",
+      "count": 122,
+      "errors": 0,
+      "p50Ms": 9.3791,
+      "p95Ms": 21.1216,
+      "p99Ms": 24.812
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:15+00:00",
+      "count": 118,
+      "errors": 0,
+      "p50Ms": 5.7703,
+      "p95Ms": 17.8603,
+      "p99Ms": 24.0839
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:16+00:00",
+      "count": 123,
+      "errors": 0,
+      "p50Ms": 9.3138,
+      "p95Ms": 25.6243,
+      "p99Ms": 33.1123
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:17+00:00",
+      "count": 115,
+      "errors": 0,
+      "p50Ms": 7.0754,
+      "p95Ms": 22.5344,
+      "p99Ms": 37.7727
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:18+00:00",
+      "count": 125,
+      "errors": 0,
+      "p50Ms": 8.3092,
+      "p95Ms": 22.5902,
+      "p99Ms": 38.6377
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:19+00:00",
+      "count": 119,
+      "errors": 0,
+      "p50Ms": 5.6282,
+      "p95Ms": 16.6085,
+      "p99Ms": 38.3502
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:20+00:00",
+      "count": 119,
+      "errors": 0,
+      "p50Ms": 7.7295,
+      "p95Ms": 20.9544,
+      "p99Ms": 23.3272
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:21+00:00",
+      "count": 124,
+      "errors": 0,
+      "p50Ms": 6.363,
+      "p95Ms": 20.6232,
+      "p99Ms": 22.1704
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:22+00:00",
+      "count": 116,
+      "errors": 0,
+      "p50Ms": 7.7787,
+      "p95Ms": 26.1071,
+      "p99Ms": 40.8449
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:23+00:00",
+      "count": 124,
+      "errors": 0,
+      "p50Ms": 6.7657,
+      "p95Ms": 23.9514,
+      "p99Ms": 29.4512
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:24+00:00",
+      "count": 117,
+      "errors": 0,
+      "p50Ms": 5.3742,
+      "p95Ms": 39.5248,
+      "p99Ms": 56.4083
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:25+00:00",
+      "count": 123,
+      "errors": 0,
+      "p50Ms": 6.9196,
+      "p95Ms": 20.1849,
+      "p99Ms": 33.038
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:26+00:00",
+      "count": 117,
+      "errors": 0,
+      "p50Ms": 5.4162,
+      "p95Ms": 29.7809,
+      "p99Ms": 31.5369
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:27+00:00",
+      "count": 116,
+      "errors": 0,
+      "p50Ms": 4.949,
+      "p95Ms": 19.8559,
+      "p99Ms": 22.7798
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:28+00:00",
+      "count": 126,
+      "errors": 0,
+      "p50Ms": 5.9546,
+      "p95Ms": 30.546,
+      "p99Ms": 48.1906
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:29+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 4.5279,
+      "p95Ms": 20.3285,
+      "p99Ms": 22.0792
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:30+00:00",
+      "count": 121,
+      "errors": 0,
+      "p50Ms": 3.4174,
+      "p95Ms": 15.674,
+      "p99Ms": 18.2228
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:31+00:00",
+      "count": 118,
+      "errors": 0,
+      "p50Ms": 4.3539,
+      "p95Ms": 14.3452,
+      "p99Ms": 22.8963
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:32+00:00",
+      "count": 112,
+      "errors": 0,
+      "p50Ms": 6.5167,
+      "p95Ms": 23.2796,
+      "p99Ms": 33.9178
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:33+00:00",
+      "count": 127,
+      "errors": 0,
+      "p50Ms": 6.5873,
+      "p95Ms": 30.7435,
+      "p99Ms": 37.9905
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:34+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 6.2245,
+      "p95Ms": 28.6976,
+      "p99Ms": 35.0789
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:35+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 7.2909,
+      "p95Ms": 19.3269,
+      "p99Ms": 23.369
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:36+00:00",
+      "count": 117,
+      "errors": 0,
+      "p50Ms": 8.2434,
+      "p95Ms": 34.087,
+      "p99Ms": 43.0727
+    },
+    {
+      "timestampUtc": "2026-09-02T22:45:37+00:00",
+      "count": 18,
+      "errors": 0,
+      "p50Ms": 11.8495,
+      "p95Ms": 43.5546,
+      "p99Ms": 43.5546
+    }
+  ],
+  "assertions": [
+    {
+      "metric": "latency.p95",
+      "op": "\u003C",
+      "value": 250,
+      "actual": 24.262,
+      "passed": true
+    },
+    {
+      "metric": "error_rate",
+      "op": "\u003C",
+      "value": 0.01,
+      "actual": 0,
+      "passed": true
+    }
+  ],
+  "omittedWarmupSamples": 339
+}

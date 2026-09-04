@@ -1,0 +1,28 @@
+@model Northstar.Legacy.Web.Models.LegacyAdministrationViewModel
+@{
+    ViewData["Title"] = "Legacy policy administration";
+}
+<h1>Legacy policy administration</h1>
+<h2>Add policyholder</h2>
+<form asp-action="CreatePolicyholder" method="post">
+    <label>Name <input name="name" /></label>
+    <label>Email <input name="email" /></label>
+    <button type="submit">Add policyholder</button>
+</form>
+<h2>Add policy</h2>
+<form asp-action="CreatePolicy" method="post">
+    <label>Policy number <input name="policyNumber" /></label>
+    <label>Policyholder
+        <select name="policyholderId">
+        @foreach (var holder in Model.Policyholders) { <option value="@holder.Id">@holder.Name</option> }
+        </select>
+    </label>
+    <label>Deductible <input name="deductible" value="0" /></label>
+    <label>Limit <input name="policyLimit" value="1000" /></label>
+    <label>Currency <input name="currency" value="USD" /></label>
+    <button type="submit">Add policy</button>
+</form>
+<h2>Policies</h2>
+<table class="table"><thead><tr><th>Number</th><th>Holder</th><th>Limit</th></tr></thead>
+<tbody>@foreach (var policy in Model.Policies) { <tr><td>@policy.PolicyNumber</td><td>@policy.PolicyholderName</td><td>@policy.Currency @policy.PolicyLimit</td></tr> }</tbody></table>
+<p><a asp-controller="Claims" asp-action="Index">Back to claims</a></p>

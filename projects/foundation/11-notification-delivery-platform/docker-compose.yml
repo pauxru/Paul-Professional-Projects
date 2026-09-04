@@ -1,0 +1,25 @@
+# UNVERIFIED — Docker is unavailable on the build host.  This compose file
+# has never been up'd.  Provided for completeness; volume paths,
+# health-check semantics, and network aliases have not been validated.
+
+services:
+  api:
+    build: .
+    ports:
+      - "5011:5011"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5011
+      ConnectionStrings__AppDb: "Data Source=/data/notifications.db;Cache=Shared"
+      Jwt__SigningKey: "dev-only-not-a-real-secret-change-me-0123456789"
+      Webhook__SigningKey: "dev-only-webhook-signing-secret-please-change-0123456789"
+    volumes:
+      - notifications-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5011/health/live"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  notifications-data:

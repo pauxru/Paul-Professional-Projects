@@ -1,0 +1,22 @@
+# UNVERIFIED — Docker is unavailable on the build host and this compose stack has NOT been
+# started or verified. Provided as a starting point only.
+
+version: "3.9"
+services:
+  api:
+    build: .
+    image: healthcare-api:local
+    ports:
+      - "5023:5023"
+    environment:
+      ASPNETCORE_URLS: http://+:5023
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: Data Source=/data/healthcare.db
+      Auth__Issuer: healthcare-dev
+      Auth__Audience: healthcare-clients
+      Auth__SigningKey: CHANGE-ME-A-32-CHAR-SECRET-9e7a17b0d4324a5c
+    volumes:
+      - healthcare-data:/data
+
+volumes:
+  healthcare-data:

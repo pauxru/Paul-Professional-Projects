@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar Reliability Control Room</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0c111b; --panel:#141c2b; --line:#26344a; --text:#dce6f5; --muted:#91a4bf; --good:#2fd18b; --warn:#f6bd4b; --bad:#ff6675; --blue:#69a9ff; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--text); font:14px system-ui,-apple-system,Segoe UI,sans-serif; }
+    header { padding:20px 28px; border-bottom:1px solid var(--line); display:flex; gap:18px; justify-content:space-between; align-items:center; }
+    h1 { font-size:20px; margin:0; } h2 { font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 14px; } p { color:var(--muted); }
+    button { background:var(--blue); color:#07111f; border:0; border-radius:4px; font-weight:700; padding:8px 12px; cursor:pointer; } button.secondary { background:#273950; color:var(--text); }
+    main { max-width:1500px; padding:24px 28px 48px; margin:auto; } .grid { display:grid; gap:16px; grid-template-columns:repeat(12,minmax(0,1fr)); margin-bottom:16px; }
+    .panel { grid-column:span 6; min-height:230px; padding:18px; background:var(--panel); border:1px solid var(--line); border-radius:7px; overflow:auto; }
+    .wide { grid-column:span 12; } .third { grid-column:span 4; } .health { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; }
+    .service { border-left:4px solid var(--good); padding:10px; background:#101827; } .service.warn { border-color:var(--warn); } .service.bad { border-color:var(--bad); }
+    .service strong { display:block; } .metric { font-size:22px; color:var(--text); font-weight:650; margin:4px 0; }
+    .gauge-row { display:flex; flex-wrap:wrap; gap:18px; } .gauge { width:145px; text-align:center; color:var(--muted); }
+    svg { width:100%; height:180px; overflow:visible; } .axis { stroke:#52647e; stroke-width:1; } .target { stroke:var(--warn); stroke-dasharray:5 4; } .line { fill:none; stroke:var(--blue); stroke-width:2.5; } .budget { fill:none; stroke:var(--bad); stroke-width:2.5; }
+    .timeline { padding:0; margin:0; list-style:none; border-left:2px solid var(--line); } .timeline li { margin:0 0 14px; padding-left:15px; position:relative; } .timeline li::before { content:""; position:absolute; left:-6px; top:4px; width:9px; height:9px; border-radius:99px; background:var(--blue); }
+    .gate { display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); } .pill { border-radius:20px; padding:3px 8px; font-size:11px; font-weight:700; } .allow { background:#164830; color:#81e7b2; } .deny { background:#5a202a; color:#ffb4bc; } .warning { background:#5f4819; color:#ffe09a; }
+    #message { margin:0; } .hidden { display:none; } code { color:#b6d3ff; } @media (max-width:900px) { .panel,.third { grid-column:span 12; } header { align-items:flex-start; flex-direction:column; } }
+  </style>
+</head>
+<body>
+<header>
+  <div><h1>Northstar Group <span style="color:var(--muted);font-weight:400">/ Reliability Control Room</span></h1><p id="message">Get a local development token to query the synthetic platform.</p></div>
+  <div><button id="tokenButton">Get demo token</button> <button class="secondary" id="refreshButton">Refresh</button></div>
+</header>
+<main>
+  <section class="grid">
+    <article class="panel wide"><h2>Service health grid</h2><div id="healthGrid" class="health"><p>Waiting for authenticated API data.</p></div></article>
+    <article class="panel"><h2>SLI trend vs target</h2><div id="sliTrend"><p>Select a demo token to load history.</p></div></article>
+    <article class="panel"><h2>Error-budget burn-down</h2><div id="budgetTrend"><p>Budget consumption will appear here.</p></div></article>
+    <article class="panel third"><h2>Burn-rate gauges</h2><div id="burnGauges" class="gauge-row"></div></article>
+    <article class="panel third"><h2>Deploy gate status</h2><div id="gates"><p>Gate decisions will appear here.</p></div></article>
+    <article class="panel third"><h2>Incident timeline</h2><div id="timeline"><p>No timeline loaded.</p></div></article>
+  </section>
+</main>
+<script>
+(() => {
+  const state = { token: sessionStorage.getItem("northstar-token") || "", slos: [] };
+  const el = id => document.getElementById(id);
+  const message = text => el("message").textContent = text;
+  const api = async path => {
+    const response = await fetch(`/api/v1${path}`, { headers: { Authorization: `Bearer ${state.token}` } });
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+    return response.json();
+  };
+  const label = value => (value || "").replaceAll("-", " ");
+  const percent = value => `${(Number(value) * (Number(value) <= 1 ? 100 : 1)).toFixed(2)}%`;
+  function chart(values, target, klass) {
+    if (!values.length) return "<p>No observations in this evaluation period.</p>";
+    const w = 620, h = 170, pad = 20;
+    const min = Math.min(...values, target ?? Infinity), max = Math.max(...values, target ?? -Infinity);
+    const span = Math.max(.001, max - min), y = item => h - pad - ((item - min) / span) * (h - 2 * pad);
+    const x = i => pad + (i / Math.max(1, values.length - 1)) * (w - 2 * pad);
+    const points = values.map((value, i) => `${x(i).toFixed(1)},${y(value).toFixed(1)}`).join(" ");
+    const targetLine = target === undefined ? "" : `<line class="target" x1="${pad}" x2="${w-pad}" y1="${y(target)}" y2="${y(target)}"/><text x="${pad+4}" y="${y(target)-5}" fill="#f6bd4b" font-size="11">target ${(target*100).toFixed(2)}%</text>`;
+    return `<svg viewBox="0 0 ${w} ${h}" role="img"><line class="axis" x1="${pad}" x2="${w-pad}" y1="${h-pad}" y2="${h-pad}"/>${targetLine}<polyline class="${klass}" points="${points}"/><text x="${pad}" y="13" fill="#91a4bf" font-size="11">${(min*100).toFixed(2)}%–${(max*100).toFixed(2)}%</text></svg>`;
+  }
+  function gauge(reading) {
+    const value = Math.min(20, Number(reading.longWindow.burnRate));
+    const ratio = value / 20, r = 48, circumference = 2 * Math.PI * r, color = value >= reading.longThreshold ? "#ff6675" : value >= 1 ? "#f6bd4b" : "#2fd18b";
+    return `<div class="gauge"><svg viewBox="0 0 120 110"><circle cx="60" cy="55" r="${r}" fill="none" stroke="#26344a" stroke-width="10"/><circle cx="60" cy="55" r="${r}" fill="none" stroke="${color}" stroke-width="10" transform="rotate(-90 60 55)" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference*(1-ratio)}"/><text x="60" y="60" text-anchor="middle" fill="#dce6f5" font-size="18">${value.toFixed(1)}×</text><text x="60" y="78" text-anchor="middle" fill="#91a4bf" font-size="10">${reading.ruleName}</text></svg><small>${reading.longWindow.window} @ ${reading.longThreshold}× + ${reading.shortWindow.window} @ ${reading.shortThreshold}×</small></div>`;
+  }
+  async function load() {
+    if (!state.token) { message("Get a local development token to query the synthetic platform."); return; }
+    try {
+      message("Loading SLO evaluations, alert state, incidents, and deployment gates…");
+      const [servicesPage, slos, alerts, incidents] = await Promise.all([api("/services?page=1&pageSize=100"), api("/slos"), api("/alerts"), api("/incidents")]);
+      state.slos = slos;
+      const reports = await Promise.all(servicesPage.items.map(service => api(`/reports/service/${encodeURIComponent(service.slug)}`)));
+      el("healthGrid").innerHTML = reports.map(report => {
+        const score = report.scorecard.score, remaining = report.sloStatuses.length ? Math.min(...report.sloStatuses.map(status => status.errorBudget.remainingPercent)) : 100;
+        const cls = remaining < 25 ? "bad" : remaining < 50 ? "warn" : "";
+        return `<div class="service ${cls}"><strong>${report.serviceSlug}</strong><span>${report.owningTeam}</span><div class="metric">${score}/100</div><small>budget ${Number(remaining).toFixed(1)}% · ${report.scorecard.dependencyRisk}</small></div>`;
+      }).join("") || "<p>No services have been catalogued.</p>";
+      const selected = slos[0];
+      if (selected) {
+        const [history, status, burns] = await Promise.all([api(`/slos/${selected.id}/history?days=14`), api(`/slos/${selected.id}/status`), api(`/burn-rates?sloId=${selected.id}`)]);
+        el("sliTrend").innerHTML = chart(history.map(point => Number(point.attainment)), Number(selected.target), "line");
+        el("budgetTrend").innerHTML = chart(history.map(point => 1 - Number(point.remainingBudgetPercent) / 100), undefined, "budget") + `<p>Current remaining: <code>${Number(status.errorBudget.remainingPercent).toFixed(2)}%</code>; projected exhaustion: <code>${status.projectedExhaustionAt || "no current exhaustion projection"}</code></p>`;
+        el("burnGauges").innerHTML = burns.map(gauge).join("");
+      }
+      const gates = await Promise.all(servicesPage.items.map(async service => ({ service, decision: await api(`/gates/${encodeURIComponent(service.slug)}/deploy`) })));
+      el("gates").innerHTML = gates.map(({service, decision}) => `<div class="gate"><span>${service.slug}</span><span class="pill ${decision.allowed ? (decision.action === "Warn" ? "warning" : "allow") : "deny"}">${decision.allowed ? "ALLOW" : "DENY"} · ${label(decision.action)}</span></div>`).join("");
+      const events = incidents.flatMap(incident => incident.timeline.map(item => ({...item, title: incident.title}))).sort((a,b) => new Date(a.occurredAt)-new Date(b.occurredAt)).slice(-12);
+      el("timeline").innerHTML = events.length ? `<ul class="timeline">${events.map(item => `<li><strong>${item.type}</strong> · ${item.title}<br><small>${new Date(item.occurredAt).toLocaleString()} — ${item.message}</small></li>`).join("")}</ul>` : "<p>No declared incidents. This is expected before the outage demo.</p>";
+      message(`Loaded ${servicesPage.totalCount} synthetic services, ${alerts.length} alert evaluations, and ${incidents.length} incidents.`);
+    } catch (error) {
+      message(`Dashboard query failed: ${error.message}. Request a fresh local token and try again.`);
+    }
+  }
+  el("tokenButton").addEventListener("click", async () => {
+    try {
+      const response = await fetch("/api/v1/auth/token", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({subject:"dashboard.demo@northstar.invalid",scopes:["reliability.read","reliability.write","reliability.admin"]}) });
+      if (!response.ok) throw new Error("token endpoint is available only in Development");
+      state.token = (await response.json()).accessToken; sessionStorage.setItem("northstar-token", state.token); await load();
+    } catch (error) { message(`Unable to issue local token: ${error.message}`); }
+  });
+  el("refreshButton").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

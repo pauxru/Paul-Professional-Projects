@@ -1,0 +1,17 @@
+{
+  "name": "stress",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "Stress",
+    "stressStartRate": 20,
+    "stressStepRate": 40,
+    "stressStepDuration": "00:00:05",
+    "stressMaxRate": 400,
+    "stressKneeP95Ms": 500,
+    "stressKneeErrorRate": 0.05,
+    "maxVUs": 128
+  },
+  "steps": [
+    { "name": "Home", "method": "GET", "url": "/" }
+  ]
+}

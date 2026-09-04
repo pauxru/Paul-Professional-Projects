@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Lab.Application/Lab.Application.csproj" />
+    <Project Path="src/Lab.Diagnostics/Lab.Diagnostics.csproj" />
+    <Project Path="src/Lab.Domain/Lab.Domain.csproj" />
+    <Project Path="src/Lab.Harness/Lab.Harness.csproj" />
+    <Project Path="src/Lab.Infrastructure/Lab.Infrastructure.csproj" />
+    <Project Path="src/Lab.SampleApp/Lab.SampleApp.csproj" />
+    <Project Path="src/Lab.Scenarios/Lab.Scenarios.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Lab.IntegrationTests/Lab.IntegrationTests.csproj" />
+    <Project Path="tests/Lab.UnitTests/Lab.UnitTests.csproj" />
+  </Folder>
+</Solution>

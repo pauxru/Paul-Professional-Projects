@@ -1,0 +1,17 @@
+# UNVERIFIED: Docker is unavailable on the build host.
+services:
+  northstar-modern-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/northstar-modern.db
+      DocumentStore__RootPath: /data/documents
+    ports:
+      - "5002:5002"
+    volumes:
+      - northstar-data:/data
+volumes:
+  northstar-data:

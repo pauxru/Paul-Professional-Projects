@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapping test bench · Integration Hub</title><link rel="stylesheet" href="/site.css"></head>
+<body data-page="mapping"><header><h1>Mapping test bench</h1><nav><a href="/">Home</a><a href="/connectors.html">Connectors</a></nav></header>
+<main><section class="panel grid"><label>Sample input<textarea id="input" rows="15">{"firstName":" Ada ","lastName":"Lovelace","currency":"KSH","amount":"125.50"}</textarea></label>
+<label>Mappings<textarea id="mappings" rows="15">[{"targetPath":"$.name","expression":"concat(trim($.firstName), ' ', upper($.lastName))"},{"targetPath":"$.currency","expression":"currency($.currency)"},{"targetPath":"$.minorUnits","expression":"decimal_scale($.amount, 100)"}]</textarea></label></section>
+<section class="panel"><button id="run-mapping">Run mapping</button><pre id="content"></pre></section></main>
+<script src="/app.js"></script></body></html>

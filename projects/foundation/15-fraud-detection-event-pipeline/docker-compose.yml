@@ -1,0 +1,34 @@
+# =============================================================================
+# UNVERIFIED — This compose file was authored but NOT run on this host.
+# The host has no Docker installed. Do NOT rely on this file until you have
+# actually done `docker compose up` and confirmed the API responds on 5015.
+# =============================================================================
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fraud-pipeline-api:local
+    container_name: fraud-pipeline-api
+    ports:
+      - "5015:5015"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5015
+      # In-container SQLite file (persisted to a named volume below)
+      ConnectionStrings__Default: "Data Source=/data/fraud.db;Cache=Shared"
+      # Dev-only JWT signing key. REPLACE for anything approaching production.
+      Jwt__SigningKey: "dev-signing-key-please-replace-32bytes-min-length-hunter2"
+      Jwt__Issuer: fraud-pipeline-dev
+      Jwt__Audience: fraud-pipeline-clients
+      Scoring__LatencyBudgetMs: "50"
+    volumes:
+      - fraud-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5015/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  fraud-data:

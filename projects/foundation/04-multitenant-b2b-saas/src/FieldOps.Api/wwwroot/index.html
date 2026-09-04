@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FieldOps SaaS Admin</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">SELF-DIRECTED ENGINEERING CASE STUDY</p>
+      <h1>FieldOps SaaS Admin</h1>
+      <p>Tenant operations, entitlements, feature delivery and audit evidence.</p>
+    </div>
+    <a href="/docs">OpenAPI</a>
+  </header>
+
+  <main>
+    <section class="login card">
+      <div>
+        <label for="tenant">Tenant</label>
+        <select id="tenant">
+          <option value="savanna-logistics">Savanna Logistics Ltd (fictional)</option>
+          <option value="jua-kali-manufacturing">Jua Kali Manufacturing Ltd (fictional)</option>
+          <option value="acme-manufacturing">Acme Manufacturing (fictional)</option>
+        </select>
+      </div>
+      <div>
+        <label for="identity">Identity</label>
+        <select id="identity">
+          <option value="owner@fieldops.demo">Owner</option>
+          <option value="technician@fieldops.demo">Technician</option>
+          <option value="viewer@fieldops.demo">Viewer</option>
+          <option value="platform@fieldops.demo">Platform admin</option>
+        </select>
+      </div>
+      <button id="connect">Connect</button>
+      <span id="session">Not connected</span>
+    </section>
+
+    <section class="metrics" id="metrics">
+      <article class="card"><span>Plan</span><strong id="plan">—</strong></article>
+      <article class="card"><span>Jobs this month</span><strong id="jobUsage">—</strong></article>
+      <article class="card"><span>Asset allowance</span><strong id="assetLimit">—</strong></article>
+      <article class="card"><span>API requests/min</span><strong id="apiLimit">—</strong></article>
+    </section>
+
+    <section class="grid">
+      <article class="card panel">
+        <div class="panel-title"><h2>Jobs board</h2><button data-refresh="jobs">Refresh</button></div>
+        <div id="jobs" class="list empty">Connect to load jobs.</div>
+      </article>
+      <article class="card panel">
+        <div class="panel-title"><h2>Feature flags</h2><button data-refresh="flags">Refresh</button></div>
+        <div id="flags" class="list empty">Connect to load flags.</div>
+      </article>
+      <article class="card panel wide">
+        <div class="panel-title"><h2>Audit viewer</h2><button data-refresh="audit">Refresh</button></div>
+        <div id="audit" class="list empty">Connect to load audit events.</div>
+      </article>
+      <article class="card panel wide">
+        <div class="panel-title"><h2>Platform tenant list</h2><button data-refresh="tenants">Admin refresh</button></div>
+        <div id="tenants" class="list empty">Use the platform admin identity to load all tenants.</div>
+      </article>
+    </section>
+  </main>
+  <div id="toast" role="status"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

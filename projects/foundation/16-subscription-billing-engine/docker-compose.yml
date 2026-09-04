@@ -1,0 +1,19 @@
+# UNVERIFIED: Docker is unavailable on the build host; this stack has not been started.
+services:
+  billing-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5016:5016"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/billing.db
+      Jwt__SigningKey: dev-only-not-a-real-secret-change-me-0123456789
+      Billing__WebhookSigningSecret: dev-only-not-a-real-secret-webhook-key-0123456789
+    volumes:
+      - billing-data:/data
+
+volumes:
+  billing-data:

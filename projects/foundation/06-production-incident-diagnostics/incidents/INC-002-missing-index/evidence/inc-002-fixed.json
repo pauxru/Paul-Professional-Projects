@@ -1,0 +1,24 @@
+﻿{
+  "ScenarioId": "INC-002",
+  "ScenarioName": "Missing database index",
+  "Mode": "Fixed",
+  "RequestedOperations": 20000,
+  "StartedAtUtc": "2026-09-02T22:34:39.446142+00:00",
+  "ElapsedMilliseconds": 365.9908,
+  "CompletedWithinBudget": true,
+  "Metrics": {
+    "seededRows": 20000,
+    "rowsFoundAcrossFiveQueries": 5,
+    "queryP50Milliseconds": 0.029,
+    "queryP95Milliseconds": 0.121,
+    "sqliteQueryPlan": "SEARCH CargoEvents USING INDEX IX_CargoEvents_LookupCode (LookupCode=?)",
+    "indexCreated": true
+  },
+  "Evidence": [
+    "SQLite EXPLAIN QUERY PLAN was captured from the same connection and SQL predicate used for timing.",
+    "Plan: SEARCH CargoEvents USING INDEX IX_CargoEvents_LookupCode (LookupCode=?)"
+  ],
+  "Limitations": [
+    "SQLite query plans demonstrate scan versus index selection; production cardinality estimates and I/O behaviour differ by database engine."
+  ]
+}

@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore Contoso.Storefront.slnx
+
+      - name: Build
+        run: dotnet build Contoso.Storefront.slnx -c Release --no-restore
+
+      - name: Test
+        run: dotnet test Contoso.Storefront.slnx -c Release --no-build --logger "trx;LogFileName=tests.trx"
+
+      - name: Publish API
+        run: dotnet publish src/Contoso.Storefront.Api -c Release --no-build -o artifacts/api
+
+      - name: Publish migration runner
+        run: dotnet publish src/Contoso.Storefront.MigrationRunner -c Release --no-build -o artifacts/migrations
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: artifacts
+          format: spdx-json
+          output-file: artifacts/sbom.spdx.json
+
+      - name: Upload deployable artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: storefront-release
+          path: artifacts
+
+      - name: Build container images
+        run: |
+          docker build --target api -t contoso/storefront-api:${{ github.sha }} .
+          docker build --target migrations -t contoso/storefront-migrations:${{ github.sha }} .
+        # GitHub-hosted runners provide Docker. This step was authored but could not be run on the local build host.

@@ -1,0 +1,21 @@
+{
+  "name": "load",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "RampingVUs",
+    "warmUp": "00:00:02",
+    "stages": [
+      { "targetLoad": 10, "duration": "00:00:10" },
+      { "targetLoad": 25, "duration": "00:00:20" },
+      { "targetLoad": 0,  "duration": "00:00:05" }
+    ]
+  },
+  "steps": [
+    { "name": "Home", "method": "GET", "url": "/" },
+    { "name": "ListProducts", "method": "GET", "url": "/api/v1/catalog/products?page=1&size=20" }
+  ],
+  "assertions": [
+    { "metric": "latency.p95", "op": "<", "value": 500 },
+    { "metric": "error_rate", "op": "<", "value": 0.02 }
+  ]
+}

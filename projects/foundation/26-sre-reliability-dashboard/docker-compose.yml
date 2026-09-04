@@ -1,0 +1,16 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started.
+services:
+  northstar-reliability:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5026:5026"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__ConnectionString: Data Source=/data/northstar-reliability.db
+    volumes:
+      - northstar-reliability-data:/data
+
+volumes:
+  northstar-reliability-data:

@@ -1,0 +1,854 @@
+[
+  {
+    "RulesetVersion": "v1.1.0",
+    "RulesetName": "PesaGate tuned v1.1",
+    "Label": "v1.1@default(a=250,s=500,r=800)",
+    "Bands": {
+      "ApproveMax": 250,
+      "StepUpMax": 500,
+      "ReviewMax": 800
+    },
+    "Scored": 1226,
+    "FraudInjected": 106,
+    "LabelledTransactions": 1226,
+    "TruePositives": 43,
+    "FalsePositives": 5,
+    "TrueNegatives": 1115,
+    "FalseNegatives": 63,
+    "Precision": 0.8958333333333334,
+    "Recall": 0.4056603773584906,
+    "FalsePositiveRate": 0.004464285714285714,
+    "F1": 0.5584415584415585,
+    "AlertVolume": 48,
+    "ValueDetected": 86800,
+    "PatternBreakdown": [
+      {
+        "Pattern": "legit",
+        "Total": 1120,
+        "PredictedFraud": 5,
+        "PredictedLegit": 1115,
+        "ValueCaught": 1000
+      },
+      {
+        "Pattern": "takeover-burst",
+        "Total": 60,
+        "PredictedFraud": 1,
+        "PredictedLegit": 59,
+        "ValueCaught": 1800
+      },
+      {
+        "Pattern": "card-testing",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 70000
+      },
+      {
+        "Pattern": "impossible-travel",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 5000
+      },
+      {
+        "Pattern": "refund-abuse",
+        "Total": 6,
+        "PredictedFraud": 2,
+        "PredictedLegit": 4,
+        "ValueCaught": 10000
+      }
+    ],
+    "TopRulesByFires": [
+      {
+        "RuleId": "mcc-risk",
+        "Fires": 171,
+        "TruePositives": 86,
+        "FalsePositives": 85,
+        "Precision": 0.5029239766081871,
+        "ValueDetected": 178000
+      },
+      {
+        "RuleId": "ip-country-mismatch",
+        "Fires": 98,
+        "TruePositives": 41,
+        "FalsePositives": 57,
+        "Precision": 0.41836734693877553,
+        "ValueDetected": 64000
+      },
+      {
+        "RuleId": "velocity-5m",
+        "Fires": 60,
+        "TruePositives": 40,
+        "FalsePositives": 20,
+        "Precision": 0.6666666666666666,
+        "ValueDetected": 104000
+      },
+      {
+        "RuleId": "distinct-merchants-1h",
+        "Fires": 38,
+        "TruePositives": 27,
+        "FalsePositives": 11,
+        "Precision": 0.7105263157894737,
+        "ValueDetected": 72800
+      },
+      {
+        "RuleId": "device-sharing",
+        "Fires": 35,
+        "TruePositives": 11,
+        "FalsePositives": 24,
+        "Precision": 0.3142857142857143,
+        "ValueDetected": 10750
+      },
+      {
+        "RuleId": "time-of-day",
+        "Fires": 35,
+        "TruePositives": 8,
+        "FalsePositives": 27,
+        "Precision": 0.22857142857142856,
+        "ValueDetected": 18250
+      },
+      {
+        "RuleId": "amount-sum-1h",
+        "Fires": 30,
+        "TruePositives": 30,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 68400
+      },
+      {
+        "RuleId": "unusual-amount-z",
+        "Fires": 27,
+        "TruePositives": 27,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 96800
+      },
+      {
+        "RuleId": "impossible-travel",
+        "Fires": 27,
+        "TruePositives": 22,
+        "FalsePositives": 5,
+        "Precision": 0.8148148148148148,
+        "ValueDetected": 15000
+      },
+      {
+        "RuleId": "velocity-1m",
+        "Fires": 20,
+        "TruePositives": 20,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 70000
+      }
+    ]
+  },
+  {
+    "RulesetVersion": "v1.1.0",
+    "RulesetName": "PesaGate tuned v1.1",
+    "Label": "v1.1@tighter-stepup(a=250,s=400,r=700)",
+    "Bands": {
+      "ApproveMax": 250,
+      "StepUpMax": 400,
+      "ReviewMax": 700
+    },
+    "Scored": 1226,
+    "FraudInjected": 106,
+    "LabelledTransactions": 1226,
+    "TruePositives": 51,
+    "FalsePositives": 5,
+    "TrueNegatives": 1115,
+    "FalseNegatives": 55,
+    "Precision": 0.9107142857142857,
+    "Recall": 0.4811320754716981,
+    "FalsePositiveRate": 0.004464285714285714,
+    "F1": 0.6296296296296295,
+    "AlertVolume": 56,
+    "ValueDetected": 99600,
+    "PatternBreakdown": [
+      {
+        "Pattern": "legit",
+        "Total": 1120,
+        "PredictedFraud": 5,
+        "PredictedLegit": 1115,
+        "ValueCaught": 1000
+      },
+      {
+        "Pattern": "takeover-burst",
+        "Total": 60,
+        "PredictedFraud": 9,
+        "PredictedLegit": 51,
+        "ValueCaught": 14600
+      },
+      {
+        "Pattern": "card-testing",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 70000
+      },
+      {
+        "Pattern": "impossible-travel",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 5000
+      },
+      {
+        "Pattern": "refund-abuse",
+        "Total": 6,
+        "PredictedFraud": 2,
+        "PredictedLegit": 4,
+        "ValueCaught": 10000
+      }
+    ],
+    "TopRulesByFires": [
+      {
+        "RuleId": "mcc-risk",
+        "Fires": 171,
+        "TruePositives": 86,
+        "FalsePositives": 85,
+        "Precision": 0.5029239766081871,
+        "ValueDetected": 178000
+      },
+      {
+        "RuleId": "ip-country-mismatch",
+        "Fires": 98,
+        "TruePositives": 41,
+        "FalsePositives": 57,
+        "Precision": 0.41836734693877553,
+        "ValueDetected": 64000
+      },
+      {
+        "RuleId": "velocity-5m",
+        "Fires": 60,
+        "TruePositives": 40,
+        "FalsePositives": 20,
+        "Precision": 0.6666666666666666,
+        "ValueDetected": 104000
+      },
+      {
+        "RuleId": "distinct-merchants-1h",
+        "Fires": 38,
+        "TruePositives": 27,
+        "FalsePositives": 11,
+        "Precision": 0.7105263157894737,
+        "ValueDetected": 72800
+      },
+      {
+        "RuleId": "device-sharing",
+        "Fires": 35,
+        "TruePositives": 11,
+        "FalsePositives": 24,
+        "Precision": 0.3142857142857143,
+        "ValueDetected": 10750
+      },
+      {
+        "RuleId": "time-of-day",
+        "Fires": 35,
+        "TruePositives": 8,
+        "FalsePositives": 27,
+        "Precision": 0.22857142857142856,
+        "ValueDetected": 18250
+      },
+      {
+        "RuleId": "amount-sum-1h",
+        "Fires": 30,
+        "TruePositives": 30,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 68400
+      },
+      {
+        "RuleId": "unusual-amount-z",
+        "Fires": 27,
+        "TruePositives": 27,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 96800
+      },
+      {
+        "RuleId": "impossible-travel",
+        "Fires": 27,
+        "TruePositives": 22,
+        "FalsePositives": 5,
+        "Precision": 0.8148148148148148,
+        "ValueDetected": 15000
+      },
+      {
+        "RuleId": "velocity-1m",
+        "Fires": 20,
+        "TruePositives": 20,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 70000
+      }
+    ]
+  },
+  {
+    "RulesetVersion": "v1.1.0",
+    "RulesetName": "PesaGate tuned v1.1",
+    "Label": "v1.1@tighter-approve(a=200,s=400,r=700)",
+    "Bands": {
+      "ApproveMax": 200,
+      "StepUpMax": 400,
+      "ReviewMax": 700
+    },
+    "Scored": 1226,
+    "FraudInjected": 106,
+    "LabelledTransactions": 1226,
+    "TruePositives": 51,
+    "FalsePositives": 5,
+    "TrueNegatives": 1115,
+    "FalseNegatives": 55,
+    "Precision": 0.9107142857142857,
+    "Recall": 0.4811320754716981,
+    "FalsePositiveRate": 0.004464285714285714,
+    "F1": 0.6296296296296295,
+    "AlertVolume": 56,
+    "ValueDetected": 99600,
+    "PatternBreakdown": [
+      {
+        "Pattern": "legit",
+        "Total": 1120,
+        "PredictedFraud": 5,
+        "PredictedLegit": 1115,
+        "ValueCaught": 1000
+      },
+      {
+        "Pattern": "takeover-burst",
+        "Total": 60,
+        "PredictedFraud": 9,
+        "PredictedLegit": 51,
+        "ValueCaught": 14600
+      },
+      {
+        "Pattern": "card-testing",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 70000
+      },
+      {
+        "Pattern": "impossible-travel",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 5000
+      },
+      {
+        "Pattern": "refund-abuse",
+        "Total": 6,
+        "PredictedFraud": 2,
+        "PredictedLegit": 4,
+        "ValueCaught": 10000
+      }
+    ],
+    "TopRulesByFires": [
+      {
+        "RuleId": "mcc-risk",
+        "Fires": 171,
+        "TruePositives": 86,
+        "FalsePositives": 85,
+        "Precision": 0.5029239766081871,
+        "ValueDetected": 178000
+      },
+      {
+        "RuleId": "ip-country-mismatch",
+        "Fires": 98,
+        "TruePositives": 41,
+        "FalsePositives": 57,
+        "Precision": 0.41836734693877553,
+        "ValueDetected": 64000
+      },
+      {
+        "RuleId": "velocity-5m",
+        "Fires": 60,
+        "TruePositives": 40,
+        "FalsePositives": 20,
+        "Precision": 0.6666666666666666,
+        "ValueDetected": 104000
+      },
+      {
+        "RuleId": "distinct-merchants-1h",
+        "Fires": 38,
+        "TruePositives": 27,
+        "FalsePositives": 11,
+        "Precision": 0.7105263157894737,
+        "ValueDetected": 72800
+      },
+      {
+        "RuleId": "device-sharing",
+        "Fires": 35,
+        "TruePositives": 11,
+        "FalsePositives": 24,
+        "Precision": 0.3142857142857143,
+        "ValueDetected": 10750
+      },
+      {
+        "RuleId": "time-of-day",
+        "Fires": 35,
+        "TruePositives": 8,
+        "FalsePositives": 27,
+        "Precision": 0.22857142857142856,
+        "ValueDetected": 18250
+      },
+      {
+        "RuleId": "amount-sum-1h",
+        "Fires": 30,
+        "TruePositives": 30,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 68400
+      },
+      {
+        "RuleId": "unusual-amount-z",
+        "Fires": 27,
+        "TruePositives": 27,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 96800
+      },
+      {
+        "RuleId": "impossible-travel",
+        "Fires": 27,
+        "TruePositives": 22,
+        "FalsePositives": 5,
+        "Precision": 0.8148148148148148,
+        "ValueDetected": 15000
+      },
+      {
+        "RuleId": "velocity-1m",
+        "Fires": 20,
+        "TruePositives": 20,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 70000
+      }
+    ]
+  },
+  {
+    "RulesetVersion": "v1.1.0",
+    "RulesetName": "PesaGate tuned v1.1",
+    "Label": "v1.1@aggressive(a=200,s=350,r=650)",
+    "Bands": {
+      "ApproveMax": 200,
+      "StepUpMax": 350,
+      "ReviewMax": 650
+    },
+    "Scored": 1226,
+    "FraudInjected": 106,
+    "LabelledTransactions": 1226,
+    "TruePositives": 59,
+    "FalsePositives": 5,
+    "TrueNegatives": 1115,
+    "FalseNegatives": 47,
+    "Precision": 0.921875,
+    "Recall": 0.5566037735849056,
+    "FalsePositiveRate": 0.004464285714285714,
+    "F1": 0.6941176470588236,
+    "AlertVolume": 64,
+    "ValueDetected": 119400,
+    "PatternBreakdown": [
+      {
+        "Pattern": "legit",
+        "Total": 1120,
+        "PredictedFraud": 5,
+        "PredictedLegit": 1115,
+        "ValueCaught": 1000
+      },
+      {
+        "Pattern": "takeover-burst",
+        "Total": 60,
+        "PredictedFraud": 15,
+        "PredictedLegit": 45,
+        "ValueCaught": 24400
+      },
+      {
+        "Pattern": "card-testing",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 70000
+      },
+      {
+        "Pattern": "impossible-travel",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 5000
+      },
+      {
+        "Pattern": "refund-abuse",
+        "Total": 6,
+        "PredictedFraud": 4,
+        "PredictedLegit": 2,
+        "ValueCaught": 20000
+      }
+    ],
+    "TopRulesByFires": [
+      {
+        "RuleId": "mcc-risk",
+        "Fires": 171,
+        "TruePositives": 86,
+        "FalsePositives": 85,
+        "Precision": 0.5029239766081871,
+        "ValueDetected": 178000
+      },
+      {
+        "RuleId": "ip-country-mismatch",
+        "Fires": 98,
+        "TruePositives": 41,
+        "FalsePositives": 57,
+        "Precision": 0.41836734693877553,
+        "ValueDetected": 64000
+      },
+      {
+        "RuleId": "velocity-5m",
+        "Fires": 60,
+        "TruePositives": 40,
+        "FalsePositives": 20,
+        "Precision": 0.6666666666666666,
+        "ValueDetected": 104000
+      },
+      {
+        "RuleId": "distinct-merchants-1h",
+        "Fires": 38,
+        "TruePositives": 27,
+        "FalsePositives": 11,
+        "Precision": 0.7105263157894737,
+        "ValueDetected": 72800
+      },
+      {
+        "RuleId": "device-sharing",
+        "Fires": 35,
+        "TruePositives": 11,
+        "FalsePositives": 24,
+        "Precision": 0.3142857142857143,
+        "ValueDetected": 10750
+      },
+      {
+        "RuleId": "time-of-day",
+        "Fires": 35,
+        "TruePositives": 8,
+        "FalsePositives": 27,
+        "Precision": 0.22857142857142856,
+        "ValueDetected": 18250
+      },
+      {
+        "RuleId": "amount-sum-1h",
+        "Fires": 30,
+        "TruePositives": 30,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 68400
+      },
+      {
+        "RuleId": "unusual-amount-z",
+        "Fires": 27,
+        "TruePositives": 27,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 96800
+      },
+      {
+        "RuleId": "impossible-travel",
+        "Fires": 27,
+        "TruePositives": 22,
+        "FalsePositives": 5,
+        "Precision": 0.8148148148148148,
+        "ValueDetected": 15000
+      },
+      {
+        "RuleId": "velocity-1m",
+        "Fires": 20,
+        "TruePositives": 20,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 70000
+      }
+    ]
+  },
+  {
+    "RulesetVersion": "v1.1.0",
+    "RulesetName": "PesaGate tuned v1.1",
+    "Label": "v1.1@looser(a=300,s=550,r=850)",
+    "Bands": {
+      "ApproveMax": 300,
+      "StepUpMax": 550,
+      "ReviewMax": 850
+    },
+    "Scored": 1226,
+    "FraudInjected": 106,
+    "LabelledTransactions": 1226,
+    "TruePositives": 40,
+    "FalsePositives": 5,
+    "TrueNegatives": 1115,
+    "FalseNegatives": 66,
+    "Precision": 0.8888888888888888,
+    "Recall": 0.37735849056603776,
+    "FalsePositiveRate": 0.004464285714285714,
+    "F1": 0.5298013245033113,
+    "AlertVolume": 45,
+    "ValueDetected": 78000,
+    "PatternBreakdown": [
+      {
+        "Pattern": "legit",
+        "Total": 1120,
+        "PredictedFraud": 5,
+        "PredictedLegit": 1115,
+        "ValueCaught": 1000
+      },
+      {
+        "Pattern": "takeover-burst",
+        "Total": 60,
+        "PredictedFraud": 0,
+        "PredictedLegit": 60,
+        "ValueCaught": 0
+      },
+      {
+        "Pattern": "card-testing",
+        "Total": 20,
+        "PredictedFraud": 18,
+        "PredictedLegit": 2,
+        "ValueCaught": 63000
+      },
+      {
+        "Pattern": "impossible-travel",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 5000
+      },
+      {
+        "Pattern": "refund-abuse",
+        "Total": 6,
+        "PredictedFraud": 2,
+        "PredictedLegit": 4,
+        "ValueCaught": 10000
+      }
+    ],
+    "TopRulesByFires": [
+      {
+        "RuleId": "mcc-risk",
+        "Fires": 171,
+        "TruePositives": 86,
+        "FalsePositives": 85,
+        "Precision": 0.5029239766081871,
+        "ValueDetected": 178000
+      },
+      {
+        "RuleId": "ip-country-mismatch",
+        "Fires": 98,
+        "TruePositives": 41,
+        "FalsePositives": 57,
+        "Precision": 0.41836734693877553,
+        "ValueDetected": 64000
+      },
+      {
+        "RuleId": "velocity-5m",
+        "Fires": 60,
+        "TruePositives": 40,
+        "FalsePositives": 20,
+        "Precision": 0.6666666666666666,
+        "ValueDetected": 104000
+      },
+      {
+        "RuleId": "distinct-merchants-1h",
+        "Fires": 38,
+        "TruePositives": 27,
+        "FalsePositives": 11,
+        "Precision": 0.7105263157894737,
+        "ValueDetected": 72800
+      },
+      {
+        "RuleId": "device-sharing",
+        "Fires": 35,
+        "TruePositives": 11,
+        "FalsePositives": 24,
+        "Precision": 0.3142857142857143,
+        "ValueDetected": 10750
+      },
+      {
+        "RuleId": "time-of-day",
+        "Fires": 35,
+        "TruePositives": 8,
+        "FalsePositives": 27,
+        "Precision": 0.22857142857142856,
+        "ValueDetected": 18250
+      },
+      {
+        "RuleId": "amount-sum-1h",
+        "Fires": 30,
+        "TruePositives": 30,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 68400
+      },
+      {
+        "RuleId": "unusual-amount-z",
+        "Fires": 27,
+        "TruePositives": 27,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 96800
+      },
+      {
+        "RuleId": "impossible-travel",
+        "Fires": 27,
+        "TruePositives": 22,
+        "FalsePositives": 5,
+        "Precision": 0.8148148148148148,
+        "ValueDetected": 15000
+      },
+      {
+        "RuleId": "velocity-1m",
+        "Fires": 20,
+        "TruePositives": 20,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 70000
+      }
+    ]
+  },
+  {
+    "RulesetVersion": "v1.1.0",
+    "RulesetName": "PesaGate tuned v1.1",
+    "Label": "v1.1@very-tight(a=150,s=350,r=600)",
+    "Bands": {
+      "ApproveMax": 150,
+      "StepUpMax": 350,
+      "ReviewMax": 600
+    },
+    "Scored": 1226,
+    "FraudInjected": 106,
+    "LabelledTransactions": 1226,
+    "TruePositives": 59,
+    "FalsePositives": 5,
+    "TrueNegatives": 1115,
+    "FalseNegatives": 47,
+    "Precision": 0.921875,
+    "Recall": 0.5566037735849056,
+    "FalsePositiveRate": 0.004464285714285714,
+    "F1": 0.6941176470588236,
+    "AlertVolume": 64,
+    "ValueDetected": 119400,
+    "PatternBreakdown": [
+      {
+        "Pattern": "legit",
+        "Total": 1120,
+        "PredictedFraud": 5,
+        "PredictedLegit": 1115,
+        "ValueCaught": 1000
+      },
+      {
+        "Pattern": "takeover-burst",
+        "Total": 60,
+        "PredictedFraud": 15,
+        "PredictedLegit": 45,
+        "ValueCaught": 24400
+      },
+      {
+        "Pattern": "card-testing",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 70000
+      },
+      {
+        "Pattern": "impossible-travel",
+        "Total": 20,
+        "PredictedFraud": 20,
+        "PredictedLegit": 0,
+        "ValueCaught": 5000
+      },
+      {
+        "Pattern": "refund-abuse",
+        "Total": 6,
+        "PredictedFraud": 4,
+        "PredictedLegit": 2,
+        "ValueCaught": 20000
+      }
+    ],
+    "TopRulesByFires": [
+      {
+        "RuleId": "mcc-risk",
+        "Fires": 171,
+        "TruePositives": 86,
+        "FalsePositives": 85,
+        "Precision": 0.5029239766081871,
+        "ValueDetected": 178000
+      },
+      {
+        "RuleId": "ip-country-mismatch",
+        "Fires": 98,
+        "TruePositives": 41,
+        "FalsePositives": 57,
+        "Precision": 0.41836734693877553,
+        "ValueDetected": 64000
+      },
+      {
+        "RuleId": "velocity-5m",
+        "Fires": 60,
+        "TruePositives": 40,
+        "FalsePositives": 20,
+        "Precision": 0.6666666666666666,
+        "ValueDetected": 104000
+      },
+      {
+        "RuleId": "distinct-merchants-1h",
+        "Fires": 38,
+        "TruePositives": 27,
+        "FalsePositives": 11,
+        "Precision": 0.7105263157894737,
+        "ValueDetected": 72800
+      },
+      {
+        "RuleId": "device-sharing",
+        "Fires": 35,
+        "TruePositives": 11,
+        "FalsePositives": 24,
+        "Precision": 0.3142857142857143,
+        "ValueDetected": 10750
+      },
+      {
+        "RuleId": "time-of-day",
+        "Fires": 35,
+        "TruePositives": 8,
+        "FalsePositives": 27,
+        "Precision": 0.22857142857142856,
+        "ValueDetected": 18250
+      },
+      {
+        "RuleId": "amount-sum-1h",
+        "Fires": 30,
+        "TruePositives": 30,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 68400
+      },
+      {
+        "RuleId": "unusual-amount-z",
+        "Fires": 27,
+        "TruePositives": 27,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 96800
+      },
+      {
+        "RuleId": "impossible-travel",
+        "Fires": 27,
+        "TruePositives": 22,
+        "FalsePositives": 5,
+        "Precision": 0.8148148148148148,
+        "ValueDetected": 15000
+      },
+      {
+        "RuleId": "velocity-1m",
+        "Fires": 20,
+        "TruePositives": 20,
+        "FalsePositives": 0,
+        "Precision": 1,
+        "ValueDetected": 70000
+      }
+    ]
+  }
+]

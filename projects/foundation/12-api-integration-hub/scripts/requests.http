@@ -1,0 +1,16 @@
+@hub = http://localhost:5012
+@crm = http://localhost:5112
+
+### Development token
+POST {{hub}}/api/v1/auth/token
+Content-Type: application/json
+
+{
+  "clientId": "demo-client",
+  "clientSecret": "dev-only-client-secret",
+  "scopes": ["hub.read", "hub.write", "hub.admin"]
+}
+
+### CRM first page
+GET {{crm}}/api/contacts?page=1&pageSize=2
+X-Api-Key: dev-only-simulator-key

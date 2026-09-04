@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FraudPipeline.Api/FraudPipeline.Api.csproj" />
+    <Project Path="src/FraudPipeline.Application/FraudPipeline.Application.csproj" />
+    <Project Path="src/FraudPipeline.Domain/FraudPipeline.Domain.csproj" />
+    <Project Path="src/FraudPipeline.Infrastructure/FraudPipeline.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FraudPipeline.IntegrationTests/FraudPipeline.IntegrationTests.csproj" />
+    <Project Path="tests/FraudPipeline.UnitTests/FraudPipeline.UnitTests.csproj" />
+  </Folder>
+</Solution>

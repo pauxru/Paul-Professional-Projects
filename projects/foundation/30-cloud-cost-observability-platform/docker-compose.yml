@@ -1,0 +1,16 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack was not started or verified.
+services:
+  finops:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5030:5030"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/cloud-cost-observability.db
+    volumes:
+      - finops-data:/data
+volumes:
+  finops-data:

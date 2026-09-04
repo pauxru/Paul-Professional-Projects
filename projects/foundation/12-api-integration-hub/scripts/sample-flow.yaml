@@ -1,0 +1,27 @@
+name: CRM contacts to ERP customers
+trigger:
+  kind: Manual
+  catchUpPolicy: latest
+steps:
+  - id: fetch-crm
+    kind: Fetch
+    timeoutSeconds: 30
+    retryCount: 3
+    settings:
+      connectorId: "contoso-crm"
+      operation: "contacts.list"
+      pageSize: "2"
+  - id: map-customer
+    kind: Transform
+    timeoutSeconds: 10
+    retryCount: 0
+    settings:
+      mappings: "[{\"targetPath\":\"$.id\",\"expression\":\"$.id\"},{\"targetPath\":\"$.name\",\"expression\":\"trim($.displayName)\"},{\"targetPath\":\"$.currency\",\"expression\":\"currency(default($.currency, 'KES'))\"}]"
+  - id: load-erp
+    kind: Load
+    timeoutSeconds: 30
+    retryCount: 2
+    settings:
+      connectorId: "acme-erp"
+      operation: "customers.upsert"
+      batchKey: "crm-to-erp"

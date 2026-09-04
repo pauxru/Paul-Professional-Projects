@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/JobScheduler.Api/JobScheduler.Api.csproj" />
+    <Project Path="src/JobScheduler.Application/JobScheduler.Application.csproj" />
+    <Project Path="src/JobScheduler.Domain/JobScheduler.Domain.csproj" />
+    <Project Path="src/JobScheduler.Infrastructure/JobScheduler.Infrastructure.csproj" />
+    <Project Path="src/JobScheduler.Worker/JobScheduler.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/JobScheduler.IntegrationTests/JobScheduler.IntegrationTests.csproj" />
+    <Project Path="tests/JobScheduler.UnitTests/JobScheduler.UnitTests.csproj" />
+  </Folder>
+</Solution>

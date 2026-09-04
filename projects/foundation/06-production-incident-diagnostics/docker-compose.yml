@@ -1,0 +1,17 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started or verified.
+services:
+  northstar-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5006:5006"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/northstar-lab.db
+    volumes:
+      - northstar-data:/data
+
+volumes:
+  northstar-data:

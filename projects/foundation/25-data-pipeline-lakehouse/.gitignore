@@ -1,0 +1,39 @@
+# ---- .NET build output ----
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+
+# ---- test results ----
+TestResults/
+[Tt]est[Rr]esults/
+*.trx
+
+# ---- SQLite serving databases ----
+*.db
+*.db-shm
+*.db-wal
+
+# ---- local lake / demo / doc-generation data (regenerated on demand) ----
+_data/
+_demo/
+_docgen/
+_smoke/
+
+# ---- secrets / local config ----
+.env
+appsettings.Development.local.json
+
+# ---- IDE ----
+.vs/
+.vscode/
+.idea/
+
+# ---- node (dashboard assets, if any) ----
+node_modules/
+
+# ---- OS ----
+Thumbs.db
+.DS_Store

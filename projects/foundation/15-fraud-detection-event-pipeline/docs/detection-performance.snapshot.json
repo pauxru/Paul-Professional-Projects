@@ -1,0 +1,15 @@
+{
+  "Scored": 1226,
+  "FraudInjected": 106,
+  "LabelledTransactions": 1226,
+  "TruePositives": 17,
+  "FalsePositives": 0,
+  "TrueNegatives": 1120,
+  "FalseNegatives": 89,
+  "Precision": 1,
+  "Recall": 0.16037735849056603,
+  "FalsePositiveRate": 0,
+  "F1": 0.2764227642276422,
+  "AlertVolume": 17,
+  "ValueDetected": 61000
+}

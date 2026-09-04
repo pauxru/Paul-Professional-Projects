@@ -1,0 +1,61 @@
+# -----------------------------------------------------------------------------
+# UNVERIFIED: Docker is unavailable on the build host. This compose file was
+# authored but has NOT been started or verified. Treat as illustrative.
+# -----------------------------------------------------------------------------
+# One API + three worker nodes, all coordinating through a single shared SQLite
+# database on a named volume. The workers are peers; exactly one becomes leader
+# via the lease-based election. WAL + busy_timeout (SqlitePragmaInterceptor)
+# lets the concurrent claim UPDATEs serialise instead of erroring.
+#
+# NOTE: a shared SQLite file across containers is deliberately the single-writer
+# demonstration. For real multi-writer throughput, swap Database__ConnectionString
+# to PostgreSQL (see docs/decisions/ADR-002-db-as-queue-skip-locked.md).
+
+services:
+  api:
+    build: .
+    image: jobscheduler:local
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5017
+      Database__ConnectionString: "Data Source=/data/jobscheduler.db;Cache=Shared"
+      # The API runs the leader (materialise/reap/retention) but not a worker loop;
+      # the dedicated worker services below do the claiming.
+      Node__NodeId: api
+      Node__RunWorker: "false"
+      Node__RunLeader: "true"
+      Seed__DemoData: "true"
+    ports:
+      - "5017:5017"
+    volumes:
+      - scheduler-data:/data
+
+  worker1:
+    image: jobscheduler:local
+    depends_on: [api]
+    command: ["dotnet", "/app/worker/JobScheduler.Worker.dll", "--node-id", "w1", "--tags", "etl,reports"]
+    environment:
+      Database__ConnectionString: "Data Source=/data/jobscheduler.db;Cache=Shared"
+    volumes:
+      - scheduler-data:/data
+
+  worker2:
+    image: jobscheduler:local
+    depends_on: [api]
+    command: ["dotnet", "/app/worker/JobScheduler.Worker.dll", "--node-id", "w2", "--tags", "exports"]
+    environment:
+      Database__ConnectionString: "Data Source=/data/jobscheduler.db;Cache=Shared"
+    volumes:
+      - scheduler-data:/data
+
+  worker3:
+    image: jobscheduler:local
+    depends_on: [api]
+    command: ["dotnet", "/app/worker/JobScheduler.Worker.dll", "--node-id", "w3", "--tags", "cleanup"]
+    environment:
+      Database__ConnectionString: "Data Source=/data/jobscheduler.db;Cache=Shared"
+    volumes:
+      - scheduler-data:/data
+
+volumes:
+  scheduler-data:

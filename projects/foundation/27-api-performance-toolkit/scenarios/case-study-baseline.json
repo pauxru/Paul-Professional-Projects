@@ -1,0 +1,43 @@
+{
+  "name": "case-study-baseline",
+  "baseUrl": "http://localhost:5027",
+  "load": {
+    "model": "ConstantArrivalRate",
+    "constantArrivalRatePerSec": 40,
+    "duration": "00:00:30",
+    "warmUp": "00:00:03",
+    "maxVUs": 64
+  },
+  "steps": [
+    {
+      "name": "ListOrders",
+      "method": "GET",
+      "url": "/api/v1/orders?page=1&pageSize=25",
+      "headers": {
+        "X-Pathology-NPlusOne": "true",
+        "X-Pathology-DownstreamLatencyMs": "20"
+      }
+    },
+    {
+      "name": "SearchCatalog",
+      "method": "GET",
+      "url": "/api/v1/catalog/products?category=coffee&page=1&pageSize=25",
+      "headers": {
+        "X-Pathology-MissingIndex": "true"
+      }
+    },
+    {
+      "name": "GetProduct",
+      "method": "GET",
+      "url": "/api/v1/catalog/products/SKU-00042",
+      "headers": {
+        "X-Pathology-MissingIndex": "true",
+        "X-Pathology-DownstreamLatencyMs": "20"
+      }
+    }
+  ],
+  "assertions": [
+    { "metric": "latency.p95", "op": "<", "value": 5000 },
+    { "metric": "error_rate", "op": "<", "value": 0.20 }
+  ]
+}

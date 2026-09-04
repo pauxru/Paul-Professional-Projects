@@ -1,0 +1,44 @@
+# --- .NET
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.suo
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+node_modules/
+.vs/
+.vscode/
+
+# --- Databases
+*.db
+*.db-shm
+*.db-wal
+
+# --- Test outputs
+TestResults/
+coverage.*
+*.trx
+*.coverage
+*.coveragexml
+
+# --- Secrets and local overrides
+.env
+.env.local
+.env.*.local
+secrets.json
+appsettings.Development.local.json
+appsettings.Local.json
+appsettings.Production.local.json
+*.key
+*.pem
+!signing-keys.example.pem
+
+# --- OS artefacts
+Thumbs.db
+.DS_Store

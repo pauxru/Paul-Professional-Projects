@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent Platform Console</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Agent Platform <span class="muted">— deterministic orchestration console</span></h1>
+    <div id="auth" class="auth">
+      <label>tenant <input id="tenant" value="tenant-alpha" /></label>
+      <button id="connect">Connect (mint dev token)</button>
+      <span id="who" class="muted"></span>
+    </div>
+  </header>
+
+  <nav>
+    <button data-tab="runs" class="active">Runs</button>
+    <button data-tab="approvals">Approvals</button>
+    <button data-tab="tools">Tools</button>
+    <button data-tab="prompts">Prompts</button>
+    <button data-tab="evals">Evaluation</button>
+    <button data-tab="metrics">Metrics</button>
+  </nav>
+
+  <main>
+    <!-- RUNS -->
+    <section id="runs" class="tab active">
+      <div class="cols">
+        <div class="col">
+          <h2>Start a run</h2>
+          <label>Workflow
+            <select id="wf"></select>
+          </label>
+          <label>Inputs (JSON)
+            <textarea id="inputs" rows="6">{ "ticket_id": "TCK-1001" }</textarea>
+          </label>
+          <button id="start">Start run</button>
+          <p class="hint">Try workflows: triage (<code>{ "ticket_id": "TCK-1001" }</code>),
+            summarisation (<code>{ "document": "…text…" }</code>),
+            refund (<code>{ "customer_id": "CUST-001", "order_id": "ORD-9001", "reason": "defective", "amount": 120.0 }</code>).</p>
+          <h2>Runs</h2>
+          <button id="refreshRuns">Refresh</button>
+          <table id="runsTable"><thead><tr><th>Id</th><th>Workflow</th><th>Status</th><th>Outcome</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="col">
+          <h2>Trace <span id="traceRun" class="muted"></span></h2>
+          <div id="trace" class="trace"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPROVALS -->
+    <section id="approvals" class="tab">
+      <h2>Approvals inbox</h2>
+      <button id="refreshApprovals">Refresh</button>
+      <div id="approvalsList"></div>
+    </section>
+
+    <!-- TOOLS -->
+    <section id="tools" class="tab">
+      <h2>Tool registry <span class="muted">(closed allow-list)</span></h2>
+      <button id="refreshTools">Refresh</button>
+      <table id="toolsTable"><thead><tr><th>Name</th><th>Side-effect</th><th>Risk</th><th>Scopes</th><th>Approval</th></tr></thead><tbody></tbody></table>
+    </section>
+
+    <!-- PROMPTS -->
+    <section id="prompts" class="tab">
+      <h2>Prompt registry</h2>
+      <button id="refreshPrompts">Refresh</button>
+      <div id="promptsList"></div>
+    </section>
+
+    <!-- EVALS -->
+    <section id="evals" class="tab">
+      <h2>Evaluation harness</h2>
+      <p class="muted">Runs the seeded scenario suite against the deterministic mock model and scores it.</p>
+      <button id="runEvals">Run evaluation (admin)</button>
+      <span id="evalStatus" class="muted"></span>
+      <div id="evalResults"></div>
+    </section>
+
+    <!-- METRICS -->
+    <section id="metrics" class="tab">
+      <h2>Metrics snapshot</h2>
+      <button id="refreshMetrics">Refresh</button>
+      <table id="metricsTable"><thead><tr><th>Counter</th><th>Value</th></tr></thead><tbody></tbody></table>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

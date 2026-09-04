@@ -1,0 +1,21 @@
+# UNVERIFIED: Docker is unavailable on the build host; this compose stack has not been started.
+services:
+  savanna-logistics-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5008:5008"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5008
+      Database__Provider: Sqlite
+      Database__ConnectionString: Data Source=/data/savanna-logistics.db;Default Timeout=10;Cache=Shared
+      Jwt__SigningKey: dev-only-not-a-real-secret-change-me-0123456789
+    volumes:
+      - savanna-logistics-data:/data
+    labels:
+      portfolio.verification: "UNVERIFIED-Docker-unavailable-on-build-host"
+
+volumes:
+  savanna-logistics-data:

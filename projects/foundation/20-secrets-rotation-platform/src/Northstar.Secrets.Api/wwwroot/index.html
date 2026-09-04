@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Northstar Secrets Control Plane</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, Segoe UI, sans-serif; }
+    body { margin: 0; background: #09111f; color: #dce8ff; }
+    header { padding: 24px 32px; background: #0d1b2f; border-bottom: 1px solid #29415f; }
+    h1 { margin: 0 0 6px; font-size: 24px; } h2 { font-size: 17px; }
+    .warning { color: #ffd166; } main { padding: 24px 32px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 12px; }
+    .card, section { background: #101f35; border: 1px solid #29415f; border-radius: 8px; padding: 16px; }
+    section { margin-top: 16px; overflow-x: auto; }
+    .metric { font-size: 28px; font-weight: 700; } .label { color: #9bb0cc; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #29415f; }
+    .ok { color: #70e1a1; } .warn { color: #ffd166; } .danger { color: #ff7b85; }
+    code { color: #9ad5ff; } button { padding: 8px 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Northstar Secrets Rotation Platform</h1>
+  <div class="warning">Synthetic demonstration control plane — never use the development keys in production.</div>
+</header>
+<main>
+  <div class="cards">
+    <div class="card"><div id="secret-count" class="metric">—</div><div class="label">registered secrets</div></div>
+    <div class="card"><div id="rotation-count" class="metric">—</div><div class="label">rotations</div></div>
+    <div class="card"><div id="expiry-count" class="metric">—</div><div class="label">expiring in 30 days</div></div>
+    <div class="card"><div id="anomaly-count" class="metric">—</div><div class="label">access anomalies</div></div>
+  </div>
+  <section><h2>Secret inventory</h2><table><thead><tr><th>Name</th><th>Type</th><th>Owner</th><th>Version</th><th>Expiry heat</th><th>Consumers</th></tr></thead><tbody id="secrets"></tbody></table></section>
+  <section><h2>Rotation progress & acknowledgements</h2><table><thead><tr><th>ID</th><th>Strategy</th><th>State</th><th>Acknowledged</th><th>Deadline</th></tr></thead><tbody id="rotations"></tbody></table></section>
+  <section><h2>Upcoming expiries</h2><table><thead><tr><th>Secret</th><th>Version</th><th>Expires</th><th>Status</th></tr></thead><tbody id="expiries"></tbody></table></section>
+  <section><h2>Access anomalies</h2><table><thead><tr><th>Type</th><th>Actor</th><th>Resource</th><th>Severity</th></tr></thead><tbody id="anomalies"></tbody></table></section>
+</main>
+<script>
+const api = '/api/v1';
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function token() {
+  const response = await fetch(`${api}/auth/token`, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({subject:'demo-admin',scopes:['secrets.manage','secrets.read','secrets.rotate','secrets.ack','secrets.breakglass','secrets.approve']}) });
+  return (await response.json()).accessToken;
+}
+async function load() {
+  try {
+    const bearer = await token(); const headers = { authorization:`Bearer ${bearer}` };
+    const [inventory, rotations, expiries, anomalies] = await Promise.all([
+      fetch(`${api}/secrets?pageSize=100`,{headers}).then(r=>r.json()),
+      fetch(`${api}/rotations`,{headers}).then(r=>r.json()),
+      fetch(`${api}/reports/upcoming-expiries?horizonHours=720`,{headers}).then(r=>r.json()),
+      fetch(`${api}/reports/anomalies`,{headers}).then(r=>r.json())
+    ]);
+    document.querySelector('#secret-count').textContent = inventory.totalCount;
+    document.querySelector('#rotation-count').textContent = rotations.length;
+    document.querySelector('#expiry-count').textContent = expiries.length;
+    document.querySelector('#anomaly-count').textContent = anomalies.length;
+    document.querySelector('#secrets').innerHTML = inventory.items.map(s => {
+      const hours = s.currentExpiresAt ? (new Date(s.currentExpiresAt)-Date.now())/36e5 : 0;
+      const heat = hours < 0 ? ['danger','expired'] : hours < 168 ? ['danger','< 7d'] : hours < 720 ? ['warn','< 30d'] : ['ok','healthy'];
+      return `<tr><td><code>${esc(s.name)}</code></td><td>${esc(s.type)}</td><td>${esc(s.ownerTeam)}</td><td>v${esc(s.currentVersion)}</td><td class="${heat[0]}">${heat[1]}</td><td>${s.consumerCount}</td></tr>`;
+    }).join('');
+    document.querySelector('#rotations').innerHTML = rotations.map(r => `<tr><td><code>${esc(r.id).slice(0,8)}</code></td><td>${esc(r.strategy)}</td><td>${esc(r.state)}</td><td>${r.acknowledgements.filter(a=>a.status==='Acknowledged').length}/${r.acknowledgements.length}</td><td>${new Date(r.acknowledgementDeadline).toLocaleString()}</td></tr>`).join('');
+    document.querySelector('#expiries').innerHTML = expiries.map(e => `<tr><td>${esc(e.name)}</td><td>v${e.version}</td><td>${new Date(e.expiresAt).toLocaleString()}</td><td class="${e.overdue?'danger':'warn'}">${e.overdue?'overdue':'upcoming'}</td></tr>`).join('');
+    document.querySelector('#anomalies').innerHTML = anomalies.map(a => `<tr><td>${esc(a.type)}</td><td>${esc(a.actor)}</td><td>${esc(a.resource)}</td><td>${esc(a.severity)}</td></tr>`).join('');
+  } catch (error) { document.querySelector('main').insertAdjacentHTML('afterbegin', `<p class="danger">Dashboard load failed: ${esc(error.message)}</p>`); }
+}
+load();
+</script>
+</body>
+</html>

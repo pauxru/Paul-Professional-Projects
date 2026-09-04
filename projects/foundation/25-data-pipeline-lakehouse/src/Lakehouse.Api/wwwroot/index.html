@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contoso Retail — Lakehouse Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Contoso Retail — Lakehouse</h1>
+    <p class="sub">Medallion analytics · bronze → silver → gold · served read-only from SQLite</p>
+  </header>
+
+  <main>
+    <section class="card" id="dq-card">
+      <h2>Data quality</h2>
+      <div id="dq" class="dq-grid">Loading…</div>
+    </section>
+
+    <section class="card">
+      <h2>Revenue trend (USD, daily)</h2>
+      <div id="revenue-chart" class="chart"></div>
+      <p class="muted" id="revenue-summary"></p>
+    </section>
+
+    <section class="card">
+      <h2>Conversion funnel</h2>
+      <div id="funnel"></div>
+    </section>
+
+    <section class="card">
+      <h2>Cohort retention (customers active N months after first order)</h2>
+      <div id="cohort" class="scroll"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>API on port 5025 · aggregates are anonymous; control-plane routes require a JWT.</span>
+    <a href="/openapi/v1.json">OpenAPI</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

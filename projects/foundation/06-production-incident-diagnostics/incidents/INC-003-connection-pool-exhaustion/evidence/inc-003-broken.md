@@ -1,0 +1,23 @@
+﻿# INC-003 — Connection pool exhaustion (Broken)
+
+- Started (UTC): 2026-09-02T22:33:49.6516154+00:00
+- Requested operations: 20
+- Elapsed: 227.53 ms
+- Completed within budget: True
+
+## Metrics
+
+- **poolCapacity:** 3
+- **completedOperations:** 3
+- **acquireTimeouts:** 17
+- **leasedAfterCleanup:** 0
+- **hardAcquireTimeoutMilliseconds:** 80
+
+## Evidence
+
+- Each lease owns a real Microsoft.Data.Sqlite connection and a semaphore-backed capacity token.
+- Broken mode retains the first three leases until the bounded contender phase has timed out; cleanup always disposes them.
+
+## Limitations
+
+- Microsoft.Data.Sqlite does not expose server-pool exhaustion like a network database. The lab uses an explicit bounded lease pool so failure and cleanup are deterministic.

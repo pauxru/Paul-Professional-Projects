@@ -1,0 +1,33 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: Immutable image tag already present in ACR
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-dev:
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment_name: dev
+      image_tag: ${{ inputs.image_tag }}
+
+  deploy-staging:
+    needs: deploy-dev
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment_name: staging
+      image_tag: ${{ inputs.image_tag }}
+
+  deploy-prod:
+    needs: deploy-staging
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment_name: prod
+      image_tag: ${{ inputs.image_tag }}

@@ -1,0 +1,23 @@
+﻿{
+  "ScenarioId": "INC-001",
+  "ScenarioName": "N\u002B1 EF Core query pattern",
+  "Mode": "Fixed",
+  "RequestedOperations": 20,
+  "StartedAtUtc": "2026-09-02T22:34:34.3173033+00:00",
+  "ElapsedMilliseconds": 2474.3842,
+  "CompletedWithinBudget": true,
+  "Metrics": {
+    "sqlRoundTrips": 1,
+    "ordersRead": 20,
+    "shipmentsRead": 20,
+    "roundTripsPerOrder": 0.05,
+    "allocatedBytes": 4335520
+  },
+  "Evidence": [
+    "EF DbCommandInterceptor captured 1 commands after seeding.",
+    "First SQL command: SELECT \u0022o\u0022.\u0022Id\u0022, (     SELECT COUNT(*)     FROM \u0022Shipments\u0022 AS \u0022s\u0022     WHERE \u0022o\u0022.\u0022Id\u0022 = \u0022s\u0022.\u0022OrderId\u0022) AS \u0022ShipmentCount\u0022 FROM \u0022Orders\u0022 AS \u0022o\u0022 ORDER BY \u0022o\u0022.\u0022Id\u0022"
+  ],
+  "Limitations": [
+    "The lab deliberately uses explicit loop loading rather than lazy-loading proxies so the query count is deterministic."
+  ]
+}

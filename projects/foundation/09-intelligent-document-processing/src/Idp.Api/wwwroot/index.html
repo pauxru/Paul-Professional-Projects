@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IDP — Accounts-Payable Review Console</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>IDP Review Console</h1>
+    <div class="sub">Acme Manufacturing (fictional) · accounts-payable automation</div>
+    <div id="metrics" class="metrics">Loading metrics…</div>
+  </header>
+
+  <main>
+    <section id="queue-panel">
+      <div class="panel-head">
+        <h2>Review queue</h2>
+        <button id="refresh-btn" type="button">Refresh</button>
+      </div>
+      <table id="queue-table">
+        <thead>
+          <tr>
+            <th>Priority</th><th>Document</th><th>Type</th><th>Value</th>
+            <th>Confidence</th><th>Age (min)</th><th>SLA</th>
+          </tr>
+        </thead>
+        <tbody id="queue-body"><tr><td colspan="7">Loading…</td></tr></tbody>
+      </table>
+    </section>
+
+    <section id="detail-panel">
+      <div class="panel-head">
+        <h2>Document detail</h2>
+        <span id="detail-state" class="pill"></span>
+      </div>
+      <div id="detail-empty" class="empty">Select a document from the queue to review its fields.</div>
+      <div id="detail" hidden>
+        <div id="detail-meta" class="meta"></div>
+
+        <div class="actions">
+          <input id="reviewer" type="text" placeholder="reviewer id" value="reviewer-1" />
+          <button id="claim-btn" type="button">Claim</button>
+          <button id="approve-btn" type="button" class="ok">Approve &amp; export</button>
+          <button id="reject-btn" type="button" class="danger">Reject</button>
+          <button id="save-btn" type="button" class="primary">Save corrections</button>
+        </div>
+
+        <h3>Fields</h3>
+        <table id="fields-table">
+          <thead>
+            <tr><th>Field</th><th>Value</th><th>Confidence</th><th>Strategy</th><th>Evidence (box)</th></tr>
+          </thead>
+          <tbody id="fields-body"></tbody>
+        </table>
+
+        <h3>Line items</h3>
+        <table id="lines-table">
+          <thead>
+            <tr><th>#</th><th>Description</th><th>Qty</th><th>Unit</th><th>Line total</th><th>Tax rate</th></tr>
+          </thead>
+          <tbody id="lines-body"></tbody>
+        </table>
+
+        <h3>Validation findings</h3>
+        <ul id="validations"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span id="status" class="status"></span>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

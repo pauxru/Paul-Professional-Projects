@@ -1,0 +1,462 @@
+{
+  "runId": "case-study-baseline-20260902-224428-6116ae",
+  "scenarioName": "case-study-baseline",
+  "startedUtc": "2026-09-02T22:44:28.8112629+00:00",
+  "finishedUtc": "2026-09-02T22:44:58.9162064+00:00",
+  "warmup": "00:00:03",
+  "environment": {
+    "operatingSystem": "Microsoft Windows 10.0.26200",
+    "logicalCores": 16,
+    "runtimeVersion": ".NET 10.0.11",
+    "processArchitecture": "X64",
+    "machineName": "CPC-rukwa-0IU7J",
+    "toolkitVersion": "1.0.0"
+  },
+  "scenario": {
+    "name": "case-study-baseline",
+    "baseUrl": "http://localhost:5027",
+    "load": {
+      "model": "ConstantArrivalRate",
+      "constantArrivalRatePerSec": 40,
+      "duration": "00:00:30",
+      "warmUp": "00:00:03",
+      "maxVUs": 64
+    },
+    "steps": [
+      {
+        "name": "ListOrders",
+        "method": "GET",
+        "url": "/api/v1/orders?page=1\u0026pageSize=25",
+        "headers": {
+          "X-Pathology-NPlusOne": "true",
+          "X-Pathology-DownstreamLatencyMs": "20"
+        },
+        "expectedStatus": 200
+      },
+      {
+        "name": "SearchCatalog",
+        "method": "GET",
+        "url": "/api/v1/catalog/products?category=coffee\u0026page=1\u0026pageSize=25",
+        "headers": {
+          "X-Pathology-MissingIndex": "true"
+        },
+        "expectedStatus": 200
+      },
+      {
+        "name": "GetProduct",
+        "method": "GET",
+        "url": "/api/v1/catalog/products/SKU-00042",
+        "headers": {
+          "X-Pathology-MissingIndex": "true",
+          "X-Pathology-DownstreamLatencyMs": "20"
+        },
+        "expectedStatus": 200
+      }
+    ],
+    "assertions": [
+      {
+        "metric": "latency.p95",
+        "op": "\u003C",
+        "value": 5000
+      },
+      {
+        "metric": "error_rate",
+        "op": "\u003C",
+        "value": 0.2
+      }
+    ]
+  },
+  "aggregate": {
+    "stepName": "__aggregate__",
+    "count": 3289,
+    "errors": 0,
+    "errorRate": 0,
+    "throughputRps": 120.73269216650759,
+    "connectionErrors": 0,
+    "timeoutErrors": 0,
+    "http4xx": 0,
+    "http5xx": 0,
+    "assertionErrors": 0,
+    "bytesReceived": 8714903,
+    "service": {
+      "p50Ms": 33.7477,
+      "p75Ms": 43.3427,
+      "p90Ms": 56.8943,
+      "p95Ms": 66.6229,
+      "p99Ms": 97.4291,
+      "p999Ms": 162.6588,
+      "minMs": 1.5394,
+      "maxMs": 238.3402,
+      "meanMs": 32.18056847065973,
+      "stdDevMs": 22.135718738131047
+    },
+    "intended": {
+      "p50Ms": 72,
+      "p75Ms": 96,
+      "p90Ms": 123,
+      "p95Ms": 142,
+      "p99Ms": 218,
+      "p999Ms": 903,
+      "minMs": 27,
+      "maxMs": 1680,
+      "meanMs": 82.32988750380055,
+      "stdDevMs": 61.88452518932066
+    }
+  },
+  "perStep": [
+    {
+      "stepName": "ListOrders",
+      "count": 1088,
+      "errors": 0,
+      "errorRate": 0,
+      "throughputRps": 39.98529952223447,
+      "connectionErrors": 0,
+      "timeoutErrors": 0,
+      "http4xx": 0,
+      "http5xx": 0,
+      "assertionErrors": 0,
+      "bytesReceived": 3734016,
+      "service": {
+        "p50Ms": 42.7019,
+        "p75Ms": 53.2071,
+        "p90Ms": 66.7528,
+        "p95Ms": 78.4568,
+        "p99Ms": 115.681,
+        "p999Ms": 168.8963,
+        "minMs": 24.5515,
+        "maxMs": 238.3402,
+        "meanMs": 47.66931222426473,
+        "stdDevMs": 17.12794404669987
+      },
+      "intended": {
+        "p50Ms": 54,
+        "p75Ms": 69,
+        "p90Ms": 85,
+        "p95Ms": 98,
+        "p99Ms": 137,
+        "p999Ms": 193,
+        "minMs": 27,
+        "maxMs": 238,
+        "meanMs": 59.622242647058826,
+        "stdDevMs": 20.526967147259047
+      }
+    },
+    {
+      "stepName": "GetProduct",
+      "count": 1113,
+      "errors": 0,
+      "errorRate": 0,
+      "throughputRps": 40.87853968487163,
+      "connectionErrors": 0,
+      "timeoutErrors": 0,
+      "http4xx": 0,
+      "http5xx": 0,
+      "assertionErrors": 0,
+      "bytesReceived": 194775,
+      "service": {
+        "p50Ms": 35.9579,
+        "p75Ms": 44.6922,
+        "p90Ms": 57.096,
+        "p95Ms": 65.8422,
+        "p99Ms": 109.7563,
+        "p999Ms": 162.6588,
+        "minMs": 20.7915,
+        "maxMs": 168.7612,
+        "meanMs": 39.9031489667565,
+        "stdDevMs": 16.483916752058295
+      },
+      "intended": {
+        "p50Ms": 102,
+        "p75Ms": 122,
+        "p90Ms": 152,
+        "p95Ms": 180,
+        "p99Ms": 521,
+        "p999Ms": 1153,
+        "minMs": 62,
+        "maxMs": 1680,
+        "meanMs": 118.12398921832884,
+        "stdDevMs": 91.51416157912851
+      }
+    },
+    {
+      "stepName": "SearchCatalog",
+      "count": 1088,
+      "errors": 0,
+      "errorRate": 0,
+      "throughputRps": 40.189125295508276,
+      "connectionErrors": 0,
+      "timeoutErrors": 0,
+      "http4xx": 0,
+      "http5xx": 0,
+      "assertionErrors": 0,
+      "bytesReceived": 4786112,
+      "service": {
+        "p50Ms": 6.2907,
+        "p75Ms": 10.9103,
+        "p90Ms": 18.1768,
+        "p95Ms": 24.1458,
+        "p99Ms": 37.1412,
+        "p999Ms": 51.0241,
+        "minMs": 1.5394,
+        "maxMs": 110.3765,
+        "meanMs": 8.791795220588241,
+        "stdDevMs": 7.871153025256157
+      },
+      "intended": {
+        "p50Ms": 63,
+        "p75Ms": 79,
+        "p90Ms": 98,
+        "p95Ms": 114,
+        "p99Ms": 148,
+        "p999Ms": 218,
+        "minMs": 29,
+        "maxMs": 241,
+        "meanMs": 68.42095588235294,
+        "stdDevMs": 23.847308436687875
+      }
+    }
+  ],
+  "timeSeries": [
+    {
+      "timestampUtc": "2026-09-02T22:44:31+00:00",
+      "count": 59,
+      "errors": 0,
+      "p50Ms": 38.0642,
+      "p95Ms": 146.2404,
+      "p99Ms": 162.6588
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:32+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 34.6741,
+      "p95Ms": 63.3058,
+      "p99Ms": 83.3617
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:33+00:00",
+      "count": 117,
+      "errors": 0,
+      "p50Ms": 34.433,
+      "p95Ms": 61.865,
+      "p99Ms": 81.537
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:34+00:00",
+      "count": 124,
+      "errors": 0,
+      "p50Ms": 35.6888,
+      "p95Ms": 70.6794,
+      "p99Ms": 84.2509
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:35+00:00",
+      "count": 119,
+      "errors": 0,
+      "p50Ms": 31.2705,
+      "p95Ms": 54.6436,
+      "p99Ms": 69.3994
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:36+00:00",
+      "count": 118,
+      "errors": 0,
+      "p50Ms": 32.889,
+      "p95Ms": 50.2224,
+      "p99Ms": 54.862
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:37+00:00",
+      "count": 123,
+      "errors": 0,
+      "p50Ms": 36.3487,
+      "p95Ms": 61.3396,
+      "p99Ms": 71.5969
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:38+00:00",
+      "count": 115,
+      "errors": 0,
+      "p50Ms": 37.4453,
+      "p95Ms": 79.0738,
+      "p99Ms": 87.8456
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:39+00:00",
+      "count": 121,
+      "errors": 0,
+      "p50Ms": 39.6416,
+      "p95Ms": 91.0565,
+      "p99Ms": 109.7563
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:40+00:00",
+      "count": 125,
+      "errors": 0,
+      "p50Ms": 33.2081,
+      "p95Ms": 110.3765,
+      "p99Ms": 168.8963
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:41+00:00",
+      "count": 115,
+      "errors": 0,
+      "p50Ms": 34.1149,
+      "p95Ms": 62.7007,
+      "p99Ms": 72.6034
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:42+00:00",
+      "count": 119,
+      "errors": 0,
+      "p50Ms": 34.8228,
+      "p95Ms": 91.3786,
+      "p99Ms": 99.8545
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:43+00:00",
+      "count": 125,
+      "errors": 0,
+      "p50Ms": 34.3406,
+      "p95Ms": 71.1593,
+      "p99Ms": 81.3336
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:44+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 32.1571,
+      "p95Ms": 61.8472,
+      "p99Ms": 72.1276
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:45+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 32.3795,
+      "p95Ms": 54.7639,
+      "p99Ms": 65.2752
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:46+00:00",
+      "count": 119,
+      "errors": 0,
+      "p50Ms": 33.7477,
+      "p95Ms": 58.5608,
+      "p99Ms": 65.058
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:47+00:00",
+      "count": 121,
+      "errors": 0,
+      "p50Ms": 32.9723,
+      "p95Ms": 64.7795,
+      "p99Ms": 72.8041
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:48+00:00",
+      "count": 119,
+      "errors": 0,
+      "p50Ms": 32.0355,
+      "p95Ms": 50.7078,
+      "p99Ms": 58.4341
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:49+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 33.8866,
+      "p95Ms": 77.3127,
+      "p99Ms": 90.9697
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:50+00:00",
+      "count": 122,
+      "errors": 0,
+      "p50Ms": 38.311,
+      "p95Ms": 69.2026,
+      "p99Ms": 115.681
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:51+00:00",
+      "count": 118,
+      "errors": 0,
+      "p50Ms": 35.6824,
+      "p95Ms": 58.7463,
+      "p99Ms": 78.3392
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:52+00:00",
+      "count": 117,
+      "errors": 0,
+      "p50Ms": 30.365,
+      "p95Ms": 53.0508,
+      "p99Ms": 60.8665
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:53+00:00",
+      "count": 126,
+      "errors": 0,
+      "p50Ms": 31.1421,
+      "p95Ms": 56.3973,
+      "p99Ms": 58.9531
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:54+00:00",
+      "count": 116,
+      "errors": 0,
+      "p50Ms": 34.2713,
+      "p95Ms": 60.6195,
+      "p99Ms": 85.0251
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:55+00:00",
+      "count": 121,
+      "errors": 0,
+      "p50Ms": 34.7926,
+      "p95Ms": 57.9693,
+      "p99Ms": 62.9194
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:56+00:00",
+      "count": 120,
+      "errors": 0,
+      "p50Ms": 32.1145,
+      "p95Ms": 53.0569,
+      "p99Ms": 62.7284
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:57+00:00",
+      "count": 117,
+      "errors": 0,
+      "p50Ms": 27.1708,
+      "p95Ms": 42.6269,
+      "p99Ms": 55.7014
+    },
+    {
+      "timestampUtc": "2026-09-02T22:44:58+00:00",
+      "count": 113,
+      "errors": 0,
+      "p50Ms": 31.8726,
+      "p95Ms": 63.0071,
+      "p99Ms": 89.4281
+    }
+  ],
+  "assertions": [
+    {
+      "metric": "latency.p95",
+      "op": "\u003C",
+      "value": 5000,
+      "actual": 66.6229,
+      "passed": true
+    },
+    {
+      "metric": "error_rate",
+      "op": "\u003C",
+      "value": 0.2,
+      "actual": 0,
+      "passed": true
+    }
+  ],
+  "omittedWarmupSamples": 311
+}
