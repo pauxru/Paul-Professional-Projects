@@ -1,6 +1,6 @@
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\28-cloud-deployment-reference\tests\Contoso.Storefront.UnitTests\bin\Release\net10.0\Contoso.Storefront.UnitTests.dll (.NETCoreApp,Version=v10.0)
-A total of 1 test files matched the specified pattern.
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\28-cloud-deployment-reference\tests\Contoso.Storefront.IntegrationTests\bin\Release\net10.0\Contoso.Storefront.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
 A total of 1 test files matched the specified pattern.
 
 Passed!  - Failed:     0, Passed:    50, Skipped:     0, Total:    50, Duration: 2 s - Contoso.Storefront.UnitTests.dll (net10.0)

@@ -3,6 +3,6 @@ A total of 1 test files matched the specified pattern.
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\09-intelligent-document-processing\tests\Idp.IntegrationTests\bin\Release\net10.0\Idp.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   112, Skipped:     0, Total:   112, Duration: 733 ms - Idp.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   112, Skipped:     0, Total:   112, Duration: 610 ms - Idp.UnitTests.dll (net10.0)
 
 Passed!  - Failed:     0, Passed:    13, Skipped:     0, Total:    13, Duration: 5 s - Idp.IntegrationTests.dll (net10.0)

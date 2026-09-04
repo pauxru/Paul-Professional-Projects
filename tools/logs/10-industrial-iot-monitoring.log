@@ -3,6 +3,6 @@ A total of 1 test files matched the specified pattern.
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\10-industrial-iot-monitoring\tests\Iiot.IntegrationTests\bin\Release\net10.0\Iiot.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    88, Skipped:     0, Total:    88, Duration: 966 ms - Iiot.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    88, Skipped:     0, Total:    88, Duration: 841 ms - Iiot.UnitTests.dll (net10.0)
 
 Passed!  - Failed:     0, Passed:     9, Skipped:     0, Total:     9, Duration: 3 s - Iiot.IntegrationTests.dll (net10.0)

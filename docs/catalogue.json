@@ -85,9 +85,9 @@
     "slug": "04-multitenant-b2b-saas",
     "scan": {
       "files": 74,
-      "total_lines": 5427,
+      "total_lines": 5478,
       "lines_by_language": {
-        "C#": 5372,
+        "C#": 5423,
         "PowerShell": 55
       },
       "languages": [
@@ -585,9 +585,9 @@
     "slug": "24-identity-access-management",
     "scan": {
       "files": 72,
-      "total_lines": 8422,
+      "total_lines": 8447,
       "lines_by_language": {
-        "C#": 8266,
+        "C#": 8291,
         "PowerShell": 156
       },
       "languages": [
@@ -609,7 +609,7 @@
     "built": true,
     "slug": "25-data-pipeline-lakehouse",
     "scan": {
-      "files": 127,
+      "files": 256,
       "total_lines": 6794,
       "lines_by_language": {
         "C#": 6612,
@@ -862,11 +862,12 @@
     "built": true,
     "slug": "35-crown-jewels-bridge",
     "scan": {
-      "files": 26,
-      "total_lines": 4382,
+      "files": 28,
+      "total_lines": 4663,
       "lines_by_language": {
-        "C#": 3102,
-        "C++": 1280
+        "C#": 3336,
+        "C++": 1280,
+        "PowerShell": 47
       },
       "languages": [
         "C#",
@@ -1000,10 +1001,10 @@
     "slug": "41-llm-eval-harness",
     "scan": {
       "files": 30,
-      "total_lines": 5629,
+      "total_lines": 5638,
       "lines_by_language": {
         "Python": 5404,
-        "PowerShell": 225
+        "PowerShell": 234
       },
       "languages": [
         "Python"
@@ -1025,9 +1026,9 @@
     "slug": "42-semantic-cache",
     "scan": {
       "files": 33,
-      "total_lines": 6924,
+      "total_lines": 6937,
       "lines_by_language": {
-        "Go": 6843,
+        "Go": 6856,
         "PowerShell": 81
       },
       "languages": [
@@ -1050,10 +1051,10 @@
     "slug": "43-retrieval-lab",
     "scan": {
       "files": 40,
-      "total_lines": 6943,
+      "total_lines": 6947,
       "lines_by_language": {
         "Python": 6811,
-        "PowerShell": 132
+        "PowerShell": 136
       },
       "languages": [
         "Python"
@@ -1075,10 +1076,10 @@
     "slug": "44-prompt-injection-redteam",
     "scan": {
       "files": 41,
-      "total_lines": 6274,
+      "total_lines": 6285,
       "lines_by_language": {
         "Python": 6190,
-        "PowerShell": 84
+        "PowerShell": 95
       },
       "languages": [
         "Python"
@@ -1137,11 +1138,11 @@
     "built": true,
     "slug": "47-inference-gateway",
     "scan": {
-      "files": 34,
-      "total_lines": 6545,
+      "files": 35,
+      "total_lines": 6547,
       "lines_by_language": {
         "Rust": 6370,
-        "PowerShell": 175
+        "PowerShell": 177
       },
       "languages": [
         "Rust"

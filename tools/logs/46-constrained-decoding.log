@@ -2,34 +2,10 @@
 ==> configuring and building the native core
 'vswhere.exe' is not recognized as an internal or external command,
 operable program or batch file.
--- The CXX compiler identification is MSVC 19.51.36256.0
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Configuring done (2.8s)
+-- Configuring done (0.1s)
 -- Generating done (0.1s)
 -- Build files have been written to: C:/Users/rukwaropaul/Downloads/DEV/_portfolio-repo/Paul-Professional-Projects/projects/ai-application-engineering/46-constrained-decoding/build
-[1/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\json.cpp.obj
-[2/19] Building CXX object CMakeFiles\cdec.dir\src\bindings\capi.cpp.obj
-[3/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\regex.cpp.obj
-[4/19] Building CXX object CMakeFiles\cdec.dir\src\core\regex.cpp.obj
-[5/19] Building CXX object CMakeFiles\cdec_tests.dir\tests\cpp\main.cpp.obj
-[6/19] Building CXX object CMakeFiles\cdec.dir\src\core\json.cpp.obj
-[7/19] Building CXX object CMakeFiles\cdec_tests.dir\tests\cpp\test_core.cpp.obj
-[8/19] Building CXX object CMakeFiles\cdec.dir\src\core\automaton.cpp.obj
-[9/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\automaton.cpp.obj
-[10/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\mask.cpp.obj
-[11/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\schema.cpp.obj
-[12/19] Building CXX object CMakeFiles\cdec.dir\src\core\mask.cpp.obj
-[13/19] Linking CXX static library cdec_core.lib
-[14/19] Building CXX object CMakeFiles\cdec_tests.dir\tests\cpp\test_schema_mask.cpp.obj
-[15/19] Building CXX object CMakeFiles\cdec.dir\src\core\schema.cpp.obj
-[16/19] Building CXX object CMakeFiles\cdec_bench.dir\bench\bench_main.cpp.obj
-[17/19] Linking CXX executable cdec_tests.exe
-[18/19] Linking CXX shared library lib\cdec.dll
-[19/19] Linking CXX executable cdec_bench.exe
+ninja: no work to do.
 ==> preparing the Python environment
 ==> build complete
 === verify.ps1: test.ps1 ===
@@ -81,6 +57,6 @@ operable program or batch file.
 
 ==> Python tests
 ............................................                             [100%]
-44 passed in 2.36s
+44 passed in 2.26s
 
 ==> all tests passed

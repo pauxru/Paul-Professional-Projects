@@ -6,14 +6,14 @@ clean
 
 == go test ./... ==
 ?   	semcache/cmd/semcache	[no test files]
-ok  	semcache/internal/cache	0.769s
-ok  	semcache/internal/corpus	0.278s
-ok  	semcache/internal/embed	0.344s
-ok  	semcache/internal/flight	0.348s
-ok  	semcache/internal/gateway	9.022s
-ok  	semcache/internal/lexicon	0.299s
-ok  	semcache/internal/report	0.292s
-ok  	semcache/internal/workload	0.388s
+ok  	semcache/internal/cache	0.734s
+ok  	semcache/internal/corpus	0.290s
+ok  	semcache/internal/embed	0.282s
+ok  	semcache/internal/flight	0.309s
+ok  	semcache/internal/gateway	8.996s
+ok  	semcache/internal/lexicon	0.267s
+ok  	semcache/internal/report	0.268s
+ok  	semcache/internal/workload	0.364s
 
 == concurrency stress (internal/flight, 50 runs, GOMAXPROCS=8) ==
 ok  	semcache/internal/flight	1.170s

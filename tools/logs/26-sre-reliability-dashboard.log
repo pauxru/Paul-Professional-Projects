@@ -1,7 +1,7 @@
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\26-sre-reliability-dashboard\tests\Northstar.Reliability.UnitTests\bin\Release\net10.0\Northstar.Reliability.UnitTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    45, Skipped:     0, Total:    45, Duration: 340 ms - Northstar.Reliability.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    45, Skipped:     0, Total:    45, Duration: 316 ms - Northstar.Reliability.UnitTests.dll (net10.0)
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\26-sre-reliability-dashboard\tests\Northstar.Reliability.IntegrationTests\bin\Release\net10.0\Northstar.Reliability.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
