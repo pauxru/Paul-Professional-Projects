@@ -1,6 +1,86 @@
-[31;1mException: [0mC:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\ai-application-engineering\46-constrained-decoding\test.ps1:9[0m
-[31;1m[0m[36;1mLine |[0m
-[31;1m[0m[36;1m[36;1m   9 | [0m … ot (Test-Path $exe)) { [36;1mthrow "run build.ps1 first: $exe is missing"[0m }[0m
-[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mrun build.ps1 first:[0m
-[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m[31;1m[36;1m     | [31;1mC:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\ai-application-engineering\46-constrained-decoding\build\cdec_tests.exe is missing[0m
+=== verify.ps1: build.ps1 ===
+==> configuring and building the native core
+'vswhere.exe' is not recognized as an internal or external command,
+operable program or batch file.
+-- The CXX compiler identification is MSVC 19.51.36256.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (2.8s)
+-- Generating done (0.1s)
+-- Build files have been written to: C:/Users/rukwaropaul/Downloads/DEV/_portfolio-repo/Paul-Professional-Projects/projects/ai-application-engineering/46-constrained-decoding/build
+[1/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\json.cpp.obj
+[2/19] Building CXX object CMakeFiles\cdec.dir\src\bindings\capi.cpp.obj
+[3/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\regex.cpp.obj
+[4/19] Building CXX object CMakeFiles\cdec.dir\src\core\regex.cpp.obj
+[5/19] Building CXX object CMakeFiles\cdec_tests.dir\tests\cpp\main.cpp.obj
+[6/19] Building CXX object CMakeFiles\cdec.dir\src\core\json.cpp.obj
+[7/19] Building CXX object CMakeFiles\cdec_tests.dir\tests\cpp\test_core.cpp.obj
+[8/19] Building CXX object CMakeFiles\cdec.dir\src\core\automaton.cpp.obj
+[9/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\automaton.cpp.obj
+[10/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\mask.cpp.obj
+[11/19] Building CXX object CMakeFiles\cdec_core.dir\src\core\schema.cpp.obj
+[12/19] Building CXX object CMakeFiles\cdec.dir\src\core\mask.cpp.obj
+[13/19] Linking CXX static library cdec_core.lib
+[14/19] Building CXX object CMakeFiles\cdec_tests.dir\tests\cpp\test_schema_mask.cpp.obj
+[15/19] Building CXX object CMakeFiles\cdec.dir\src\core\schema.cpp.obj
+[16/19] Building CXX object CMakeFiles\cdec_bench.dir\bench\bench_main.cpp.obj
+[17/19] Linking CXX executable cdec_tests.exe
+[18/19] Linking CXX shared library lib\cdec.dll
+[19/19] Linking CXX executable cdec_bench.exe
+==> preparing the Python environment
+==> build complete
+=== verify.ps1: test.ps1 ===
+==> C++ tests
+[  PASS  ] json_accepts_well_formed_documents
+[  PASS  ] json_rejects_malformed_documents
+[  PASS  ] json_round_trips_through_serialisation
+[  PASS  ] json_escapes_are_encoded_correctly
+[  PASS  ] automaton_literal_matches_exactly
+[  PASS  ] automaton_alternation_and_repetition
+[  PASS  ] automaton_bounded_repeat_respects_both_bounds
+[  PASS  ] automaton_minimisation_preserves_language
+[  PASS  ] automaton_minimisation_drops_unproductive_states
+[  PASS  ] regex_literals_classes_and_quantifiers
+[  PASS  ] regex_alternation_and_groups
+[  PASS  ] regex_negated_class_excludes_json_unsafe_bytes
+[  PASS  ] regex_date_shape
+[  PASS  ] regex_rejects_unsupported_syntax
+[  PASS  ] schema_scalar_types
+[  PASS  ] schema_integer_minimum_zero_forbids_sign
+[  PASS  ] schema_number_allows_fraction_and_exponent
+[  PASS  ] schema_string_length_bounds
+[  PASS  ] schema_string_accepts_valid_utf8_and_rejects_invalid
+[  PASS  ] schema_string_requires_surrogate_pairing
+[  PASS  ] schema_string_pattern
+[  PASS  ] schema_enum_and_const
+[  PASS  ] schema_array_item_bounds
+[  PASS  ] schema_object_requires_additional_properties_false
+[  PASS  ] schema_object_rejects_recursive_ref
+[  PASS  ] schema_object_required_and_optional_keys
+[  PASS  ] schema_property_order_mode_shrinks_the_automaton
+[  PASS  ] schema_permutation_cap_falls_back_and_says_so
+[  PASS  ] schema_whitespace_mode
+[  PASS  ] every_accepted_string_is_valid_json
+[  PASS  ] mask_allows_only_tokens_that_keep_the_automaton_alive
+[  PASS  ] mask_matches_brute_force_at_every_reachable_state
+[  PASS  ] mask_cache_is_reused_across_identical_states
+[  PASS  ] eos_is_only_legal_in_an_accepting_state
+[  PASS  ] masked_decoding_always_yields_valid_json
+[  PASS  ] schema_intersects_pattern_with_length_bounds
+[  PASS  ] schema_intersects_pattern_with_minimum_length
+[  PASS  ] schema_rejects_unsatisfiable_pattern_length_combination
+[  PASS  ] intersect_is_language_intersection
+[  PASS  ] embed_round_trips_a_dfa_through_the_builder
+[  PASS  ] apply_mask_sets_illegal_logits_to_negative_infinity
+[  PASS  ] apply_mask_tolerates_logits_longer_than_the_mask
+
+42 passed, 0 failed, 42 total
+
+==> Python tests
+............................................                             [100%]
+44 passed in 2.36s
+
+==> all tests passed

@@ -4,20 +4,5 @@ Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professiona
 A total of 1 test files matched the specified pattern.
 
 Passed!  - Failed:     0, Passed:    68, Skipped:     0, Total:    68, Duration: 2 s - FieldOps.UnitTests.dll (net10.0)
-[xUnit.net 00:00:03.91]     FieldOps.IntegrationTests.CrossTenantIsolationTests.UpdateForeignTenantJob_IsRejectedAs404 [FAIL]
-[xUnit.net 00:00:03.92]     FieldOps.IntegrationTests.CrossTenantIsolationTests.ListJobs_NeverLeaksForeignTenantRows [FAIL]
-[xUnit.net 00:00:03.93]     FieldOps.IntegrationTests.CrossTenantIsolationTests.IgnoreQueryFiltersAdminPath_RegularOwnerGets403 [FAIL]
-[xUnit.net 00:00:03.94]     FieldOps.IntegrationTests.CrossTenantIsolationTests.ReadForeignTenantJobById_Returns404 [FAIL]
-[xUnit.net 00:00:03.95]     FieldOps.IntegrationTests.CrossTenantIsolationTests.IgnoreQueryFiltersAdminPath_PlatformAdminSeesAllTenants [FAIL]
-[xUnit.net 00:00:03.96]     FieldOps.IntegrationTests.ApiBehaviorTests.Jobs_WithJwtTenantOnly_ResolvesTenant [FAIL]
-[xUnit.net 00:00:03.96]     FieldOps.IntegrationTests.ApiBehaviorTests.CreateAsset_AsViewer_Returns403 [FAIL]
-[xUnit.net 00:00:03.97]     FieldOps.IntegrationTests.ApiBehaviorTests.Jobs_Pagination_CapsPageSizeAt100 [FAIL]
-[xUnit.net 00:00:04.00]     FieldOps.IntegrationTests.ApiBehaviorTests.CorrelationId_InboundValue_IsEchoed [FAIL]
-[xUnit.net 00:00:04.01]     FieldOps.IntegrationTests.ApiBehaviorTests.ActiveOrganizationSwitch_IssuesUsableTenantToken [FAIL]
-[xUnit.net 00:00:04.02]     FieldOps.IntegrationTests.ApiBehaviorTests.Invitation_CreateAndAccept_CompletesFlow [FAIL]
-[xUnit.net 00:00:04.02]     FieldOps.IntegrationTests.ApiBehaviorTests.Jobs_WithConflictingHeaderAndJwt_ReturnsTenantProblem [FAIL]
-[xUnit.net 00:00:04.05]     FieldOps.IntegrationTests.ApiBehaviorTests.CreateAsset_AsOwner_Returns201 [FAIL]
-[xUnit.net 00:00:04.06]     FieldOps.IntegrationTests.ApiBehaviorTests.GetJob_UnknownId_Returns404 [FAIL]
-[xUnit.net 00:00:04.06]     FieldOps.IntegrationTests.ApiBehaviorTests.CreateJob_MissingTitle_ReturnsValidationProblem [FAIL]
 
-Failed!  - Failed:    15, Passed:     7, Skipped:     0, Total:    22, Duration: 3 s - FieldOps.IntegrationTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    22, Skipped:     0, Total:    22, Duration: 3 s - FieldOps.IntegrationTests.dll (net10.0)

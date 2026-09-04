@@ -7,23 +7,23 @@ clean
 === vet ===
 
 === tests ===
-ok  	evolve/backfill	0.673s
-ok  	evolve/cmd/evolve	33.087s
-ok  	evolve/ddl	0.729s
-ok  	evolve/lint	0.762s
-ok  	evolve/locks	0.695s
-ok  	evolve/plan	0.731s
-ok  	evolve/report	0.667s
-ok  	evolve/sim	2.072s
+ok  	evolve/backfill	(cached)
+ok  	evolve/cmd/evolve	(cached)
+ok  	evolve/ddl	(cached)
+ok  	evolve/lint	(cached)
+ok  	evolve/locks	(cached)
+ok  	evolve/plan	(cached)
+ok  	evolve/report	(cached)
+ok  	evolve/sim	(cached)
 
 === mutation sanity ===
 mutation detected
 
 === report reproducibility ===
 === RUN   TestResultsAreReproducible
---- PASS: TestResultsAreReproducible (16.26s)
+--- PASS: TestResultsAreReproducible (16.47s)
 PASS
-ok  	evolve/cmd/evolve	16.507s
+ok  	evolve/cmd/evolve	16.739s
 
 === prediction integrity ===
 === RUN   TestEveryPredictionIsAdjudicated
@@ -32,7 +32,7 @@ ok  	evolve/cmd/evolve	16.507s
     results_integrity_test.go:89: 13 held, 1 contradicted
 --- PASS: TestContradictionsSurvive (16.42s)
 PASS
-ok  	evolve/cmd/evolve	33.225s
+ok  	evolve/cmd/evolve	(cached)
 
 === report tally ===
 wrote docs/results.md

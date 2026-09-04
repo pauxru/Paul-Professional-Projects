@@ -18,11 +18,15 @@ Stage 1 "Lint (pyflakes: unused imports, undefined names, dead f-strings)" {
 }
 
 Stage 2 "Tests" {
+    # No -q here: pytest.ini already sets `addopts = -q`, and a second one makes it -qq,
+    # which suppresses the "N passed" summary line entirely. That is why this suite
+    # reported its progress dots but never its total.
+    #
     # Tee the run so the count survives into the summary line at the end. Stage 3 and
     # stage 6 re-run subsets of this same suite, so this is the only stage whose count
     # is the suite total -- summing every "N passed" in the output would report roughly
     # double the tests that actually exist.
-    & $py -m pytest tests -q 2>&1 | Tee-Object -Variable pytestOut | Write-Host
+    & $py -m pytest tests 2>&1 | Tee-Object -Variable pytestOut | Write-Host
     if ($LASTEXITCODE -ne 0) { throw "pytest failed" }
     $m = [regex]::Match(($pytestOut -join "`n"), '(\d+)\s+passed')
     if ($m.Success) { $script:TestTotal = [int]$m.Groups[1].Value }

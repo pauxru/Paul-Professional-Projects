@@ -9,6 +9,7 @@
 ........................................................................ [ 70%]
 ........................................................................ [ 88%]
 ...............................................                          [100%]
+407 passed in 9.04s
       OK
 
 [3/6] Report freshness (docs/results.md matches the code that built it)
@@ -26,4 +27,4 @@
 [6/6] No secrets, no network calls, no model API
       OK
 
-All six stages passed.
+all 6 stages passed -- 407 tests

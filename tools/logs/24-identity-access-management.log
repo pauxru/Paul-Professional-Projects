@@ -1,12 +1,8 @@
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\24-identity-access-management\tests\Northstar.Iga.UnitTests\bin\Release\net10.0\Northstar.Iga.UnitTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:    48, Skipped:     0, Total:    48, Duration: 276 ms - Northstar.Iga.UnitTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    48, Skipped:     0, Total:    48, Duration: 275 ms - Northstar.Iga.UnitTests.dll (net10.0)
 Test run for C:\Users\rukwaropaul\Downloads\DEV\_portfolio-repo\Paul-Professional-Projects\projects\foundation\24-identity-access-management\tests\Northstar.Iga.IntegrationTests\bin\Release\net10.0\Northstar.Iga.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
-[xUnit.net 00:00:06.84]     Northstar.Iga.IntegrationTests.CampaignProvisioningApiIntegrationTests.Api_ReadTokenOnAdminEndpoint_Returns403 [FAIL]
-[xUnit.net 00:00:06.88]     Northstar.Iga.IntegrationTests.CampaignProvisioningApiIntegrationTests.Api_AuthorizationEvaluation_ReturnsDecisionExplanationAndCorrelationId [FAIL]
-[xUnit.net 00:00:07.08]     Northstar.Iga.IntegrationTests.CampaignProvisioningApiIntegrationTests.Api_ApprovalActorDifferentFromJwtSubject_Returns403 [FAIL]
-[xUnit.net 00:00:07.22]     Northstar.Iga.IntegrationTests.CampaignProvisioningApiIntegrationTests.Api_InvalidUserPayload_ReturnsValidationProblemDetails [FAIL]
 
-Failed!  - Failed:     4, Passed:    32, Skipped:     0, Total:    36, Duration: 4 s - Northstar.Iga.IntegrationTests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    36, Skipped:     0, Total:    36, Duration: 4 s - Northstar.Iga.IntegrationTests.dll (net10.0)

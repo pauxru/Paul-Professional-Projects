@@ -33,12 +33,17 @@ if (-not $shell) {
 # process the project's script ran in.
 $goExe = (Get-Command go -ErrorAction SilentlyContinue).Source
 if (-not $goExe) {
-    $goExe = @(
-        (Join-Path $env:GOROOT 'bin\go.exe'),
-        (Join-Path $env:USERPROFILE 'toolchains\go\bin\go.exe'),
-        'C:\Program Files\Go\bin\go.exe',
-        (Join-Path $env:LOCALAPPDATA 'Programs\Go\bin\go.exe')
-    ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+    # Join-Path throws on a null root, so the candidates have to be assembled from the
+    # environment variables that are actually set rather than filtered afterwards.
+    $roots = @()
+    if ($env:GOROOT)      { $roots += $env:GOROOT }
+    if ($env:USERPROFILE) { $roots += (Join-Path $env:USERPROFILE 'toolchains\go') }
+    if ($env:LOCALAPPDATA){ $roots += (Join-Path $env:LOCALAPPDATA 'Programs\Go') }
+    $roots += 'C:\Program Files\Go'
+    $goExe = $roots |
+        ForEach-Object { Join-Path $_ 'bin\go.exe' } |
+        Where-Object { Test-Path $_ } |
+        Select-Object -First 1
 }
 
 # Test frameworks each report their totals differently. Rather than guess which one a

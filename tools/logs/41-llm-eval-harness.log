@@ -7,7 +7,7 @@
 ........................................................................ [ 52%]
 ........................................................................ [ 78%]
 ............................................................             [100%]
-276 passed in 12.71s
+276 passed in 12.17s
     PASS
 
 === 3. mutation ===
@@ -23,11 +23,11 @@ wrote docs\results.md  (37661 bytes, sha256 5cbb6688589b598a)
 
 === 5. integrity ===
 ..................                                                       [100%]
-18 passed, 3 deselected in 274.10s (0:04:34)
+18 passed, 3 deselected in 264.91s (0:04:24)
     PASS
 
 === 6. docs ===
     12 documents present
     PASS
 
-All stages passed.
+all 6 stages passed -- 294 tests
