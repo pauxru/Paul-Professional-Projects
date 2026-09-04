@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Archaeologist.Cli/Archaeologist.Cli.csproj" />
+  <Project Path="Archaeologist.Core/Archaeologist.Core.csproj" />
+  <Project Path="Archaeologist.Tests/Archaeologist.Tests.csproj" />
+</Solution>

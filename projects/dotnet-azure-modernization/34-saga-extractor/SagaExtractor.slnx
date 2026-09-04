@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Sagas.Core/Sagas.Core.csproj" />
+    <Project Path="src/Sagas.Report/Sagas.Report.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sagas.Tests/Sagas.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,17 @@
+[package]
+name = "detsim"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[bin]]
+name = "detsim"
+path = "src/main.rs"
+
+[lib]
+name = "detsim"
+path = "src/lib.rs"
+
+[profile.release]
+debug = true

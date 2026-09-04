@@ -1,0 +1,10 @@
+# Build output
+/evolve
+/evolve.exe
+*.exe
+*.test
+
+# Local scratch
+_*.txt
+_probe/
+/tmp/

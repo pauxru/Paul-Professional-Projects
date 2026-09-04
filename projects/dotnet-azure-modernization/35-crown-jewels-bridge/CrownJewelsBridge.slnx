@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Bridge.Core/Bridge.Core.csproj" />
+  <Project Path="Bridge.Legacy/Bridge.Legacy.csproj" />
+  <Project Path="Bridge.Report/Bridge.Report.csproj" />
+  <Project Path="Bridge.Tests/Bridge.Tests.csproj" />
+</Solution>

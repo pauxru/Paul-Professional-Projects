@@ -1,0 +1,113 @@
+# Crossing the boundary: what interop actually costs, and what it actually risks
+
+A 60,000-line C++ pricing engine, unchanged, exposed through a narrow C ABI and
+called from .NET. Twelve claims about that boundary, each written down before it
+was measured.
+
+Three DLLs are built from **identical** `engine.cpp`:
+
+| DLL | boundary (`abi.cpp`) | floating point |
+|---|---|---|
+| `pricing.dll` | hardened: validates, bounds, catches | `/fp:precise` |
+| `pricing_legacy.dll` | as found in 2009: trusts everything | `/fp:precise` |
+| `pricing_fast.dll` | hardened | `/fp:fast /arch:AVX2` |
+
+Because the engine is byte-identical in all three, every difference measured
+below belongs either to the boundary or to the compiler, and never to someone
+quietly improving the maths.
+
+This is the reproducible subset of `results.md`: every claim here is exact and
+byte-identical across runs. Wall-clock timings live in the full report only.
+
+**P1 -- CONTRADICTED.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+**P2 -- HELD.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+**P3 -- CONTRADICTED.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+**P4 -- CONTRADICTED.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+**P5 -- CONTRADICTED.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+**P12 -- CONTRADICTED.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+**P9 -- CONTRADICTED.** (Evidence is a wall-clock measurement; see `results.md`.)
+
+| 1 | 2 | 0.00% |
+| 100 | 200 | 0.01% |
+| 10,000 | 20,000 | 0.50% |
+| 1,000,000 | 2,000,000 | 50.00% |
+
+**P11 -- expected.** Cancellation of a long native computation is either supported or not. Where it is supported, it is prompt.
+
+**P11 -- CONTRADICTED.** Cancellation is not prompt or slow; it is exactly as prompt as `report_every` makes it. At the finest setting the run stops after 2 paths; at the coarsest it runs 2,000,000 before it notices -- a factor of 1,000,000 between two settings of the same parameter. The engine cannot choose this, because the cost of asking (P9) and the value of stopping are both facts about the caller. A C ABI that hard-codes its polling interval has taken a latency decision on behalf of every application that will ever use it.
+
+- `sizeof(PricingOption)` = 56, `sizeof(TransposedOption)` = 56 -- identical.
+- Correct layout prices this option at **4.759422**.
+- Transposing `Volatility` and `Years` returns status `Ok` and a price of **5.179541**.
+
+**P10 -- expected.** If the managed struct and the C struct are the same size, the layout is right. A mismatch would show up as a wrong size or a crash.
+
+**P10 -- CONTRADICTED.** Both structs are 56 bytes. Transposing two fields produces status `Ok` and a price of 5.179541 against a true value of 4.759422: no error, no crash, a perfectly ordinary number that is wrong. Nothing in the type system, the compiler or the runtime can catch this, because at the ABI both are 56 bytes of the right alignment. The only defence is to assert **every field offset** on both sides -- `static_assert` in `abi.cpp` and `AbiContract.Verify` in the host -- which is why those checks exist and why checking the total size alone would have missed it entirely.
+
+- 4,000 positions priced through both DLLs.
+- **3,134** (78.35%) are bit-identical.
+- **866** differ. Worst: 576 ULP, relative difference 6.40E-014.
+- On a 2,000-step American lattice the same option differs by **3 ULP** (5.33E-015 absolute).
+
+**P8 -- expected.** Recompiling the untouched engine with a newer compiler and faster floating-point settings does not change what it computes. The source is identical, so the prices are identical.
+
+**P8 -- CONTRADICTED.** 866 of 4,000 positions (21.65%) come out differently, by up to 576 ULP (6.40E-014 relative). The engine source is byte-identical; only `/fp:fast /arch:AVX2` changed. That flag licenses the compiler to reassociate floating-point arithmetic, contract multiply-add pairs into FMA, and use vectorised transcendentals with different rounding. On the 3-ULP lattice case the error compounds over 2,000 steps rather than cancelling. The magnitudes are far below anything the desk would notice on a single trade -- and that is the problem, not the reassurance: a modernisation programme that recompiles for speed and reconciles against the old system will find a stream of tiny unexplained breaks, decide they are noise, and lose the ability to tell noise from a real regression. Either pin the flags or agree a tolerance in advance. Discovering this during parallel run is the expensive way.
+
+`pj_price_american` with `steps = -1`. The engine builds a `std::vector` sized
+`steps + 1`, which as a `size_t` is enormous, so the allocation throws.
+
+| boundary | outcome | exit code |
+|---|---|---:|
+| `pricing_legacy.dll` (no exception barrier) | Died | -1073741819 |
+| `pricing.dll` (hardened) | Returned `BadArgument` and kept running | 0 |
+
+**P6 -- expected.** A C++ exception escaping through a C ABI into .NET surfaces as some kind of managed exception -- an SEHException at worst. Unpleasant, but catchable.
+
+**P6 -- CONTRADICTED.** Against the 2009 boundary the child process died (exit code -1073741819). Nothing was catchable, because there was no managed frame left to catch it in: unwinding a C++ exception through a frame compiled as C is undefined behaviour, and on MSVC/x64 it terminates. No stack trace, no `finally`, no flush of anything buffered. Against the hardened boundary the same input returned `badargument` and kept running. The barrier in `abi.cpp` is four lines of `catch` and it is the difference between an error code and losing the process -- which is why the header specifies `noexcept` behaviour as part of the ABI contract rather than leaving it to whoever writes the next entry point.
+
+600 generated inputs, the same corpus (seed `0xC0FFEE`) against both
+boundaries, each run in child processes so that a crash is a data point rather than
+the end of the experiment.
+
+| outcome | `pricing_legacy.dll` | `pricing.dll` |
+|---|---:|---:|
+| accepted, returned a usable price | 151 | 0 |
+| refused with a status code | 0 | 600 |
+| **success, and not a price** (NaN, infinite or negative) | 335 | 0 |
+| **wrote past the caller's buffer** | 17 | 0 |
+| **killed the process** | 97 | 0 |
+| **unsafe outcomes** | **449** | **0** |
+
+First silently-wrong case against the 2009 boundary: index 0.
+First memory corruption: index 50.
+First process death: index 5.
+
+**P7 -- expected.** Making a 2009 C++ library safe to expose means fixing the C++. The dangerous behaviour is in the engine, so the engine has to be audited and changed -- which is exactly the work the business refuses to authorise.
+
+**P7 -- CONTRADICTED.** `engine.cpp` is byte-identical in both DLLs. The 2009 boundary produces 449 unsafe outcomes on this corpus; the hardened boundary produces 0. Not one line of the pricing code was touched -- the entire difference is argument validation, capacity checks and an exception barrier in `abi.cpp`. Note the shape of the failures: 335 silently wrong against 97 crashes. The crashes are the safe failures. A process that dies gets noticed; a negative option price returned with a success code gets booked. This is the answer to "we cannot afford to audit 60,000 lines of C++": you do not have to. You have to own the 300 lines it is reached through.
+
+## Scoreboard
+
+12 predictions written before measuring. 1 held, 11 did not.
+
+| # | verdict | reproducible? | claim |
+|---|---|---|---|
+| P1 | CONTRADICTED | wall-clock | A P/Invoke costs a few tens of nanoseconds. That is a rounding error next to any real comp... |
+| P2 | HELD | wall-clock | Batching a portfolio into one call instead of N saves the per-call overhead, so the win is... |
+| P3 | CONTRADICTED | wall-clock | SafeHandle's reference counting is a pair of interlocked operations. Next to a P/Invoke th... |
+| P4 | CONTRADICTED | wall-clock | SuppressGCTransition removes work from every call and changes nothing else, so it should b... |
+| P5 | CONTRADICTED | wall-clock | The runtime marshaller is the expensive part of interop. Anything that goes through it wil... |
+| P6 | CONTRADICTED | exact | A C++ exception escaping through a C ABI into .NET surfaces as some kind of managed except... |
+| P7 | CONTRADICTED | exact | Making a 2009 C++ library safe to expose means fixing the C++. The dangerous behaviour is ... |
+| P8 | CONTRADICTED | exact | Recompiling the untouched engine with a newer compiler and faster floating-point settings ... |
+| P9 | CONTRADICTED | wall-clock | A callback from native code into managed code is the same transition in the other directio... |
+| P10 | CONTRADICTED | exact | If the managed struct and the C struct are the same size, the layout is right. A mismatch ... |
+| P11 | CONTRADICTED | exact | Cancellation of a long native computation is either supported or not. Where it is supporte... |
+| P12 | CONTRADICTED | wall-clock | The greeks can be obtained by bumping an input and repricing. Adding a dedicated greeks en... |
+
