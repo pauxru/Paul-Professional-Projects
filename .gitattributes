@@ -1,0 +1,26 @@
+# Store and check out every file byte for byte.
+#
+# This is not a style preference. Several projects prove a claim by regenerating a
+# document and comparing its SHA-256 against the copy committed here -- that is what
+# makes "this report was produced by running the code" checkable rather than assertable.
+#
+# With Git's default end-of-line conversion on Windows (core.autocrlf=true), cloning
+# rewrites every LF in those committed reports to CRLF, while the generator that
+# rebuilds them still writes LF. The hashes then differ for a reason that has nothing
+# to do with the code, and the failure lands on whoever cloned the repository rather
+# than on whoever introduced it.
+#
+# `-text` disables the conversion in both directions, for everyone, regardless of the
+# core.autocrlf setting on the machine doing the clone.
+* -text
+
+# The .ps1 scripts are the entry point on Windows and are LF in the repository; both
+# PowerShell 7 and Windows PowerShell read LF-terminated scripts without complaint.
+
+# Generated artwork is text, but nothing should diff it by eye.
+*.svg -text linguist-generated=true
+
+# Keep the language statistics about the code rather than about its dependencies.
+projects/**/wwwroot/lib/** linguist-vendored=true
+docs/catalogue.json linguist-generated=true
+tools/verification.tsv linguist-generated=true
