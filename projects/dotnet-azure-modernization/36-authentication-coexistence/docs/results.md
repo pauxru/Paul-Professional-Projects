@@ -50,17 +50,17 @@ So of the original 592 divergences, 576 were structural -- unreachable by any gr
 
 | stored format | median ms, no padding | median ms, constant work |
 | --- | ---: | ---: |
-| MembershipSha1 | 0.024 | 368.348 |
-| IdentityV2 | 0.617 | 381.052 |
-| IdentityV3 | 1.531 | 371.242 |
-| Argon2id | 373.162 | 377.452 |
+| MembershipSha1 | 0.026 | 369.890 |
+| IdentityV2 | 0.621 | 381.846 |
+| IdentityV3 | 1.525 | 375.555 |
+| Argon2id | 377.941 | 378.574 |
 
-Argon2id costs **605x** a PBKDF2-HMAC-SHA1 verification at 1000 iterations, and that ratio counts only time. The memory term -- 64 MiB per verification against a few hundred bytes -- is the part an attacker with a warehouse of GPUs actually feels, and it does not appear in this column at all.
+Argon2id costs **609x** a PBKDF2-HMAC-SHA1 verification at 1000 iterations, and that ratio counts only time. The memory term -- 64 MiB per verification against a few hundred bytes -- is the part an attacker with a warehouse of GPUs actually feels, and it does not appear in this column at all.
 
 | measurement | no padding | constant work | base rate |
 | --- | ---: | ---: | ---: |
-| four-way format identification | 100.0% | 28.3% | 25.0% |
-| "is this account still unmigrated" | 100.0% | 65.8% | 75.0% |
+| four-way format identification | 98.3% | 27.5% | 25.0% |
+| "is this account still unmigrated" | 100.0% | 69.2% | 75.0% |
 
 The base-rate column is there to stop the middle column being over-read. Three of the four formats are legacy, so a classifier that has learned nothing and guesses uniformly still scores 75% on the binary question. With padding on, the measured figure sits at or below that line: the remaining accuracy is arithmetic, not signal.
 
@@ -70,11 +70,11 @@ The cost of the mitigation depends on how far the migration has got, and it move
 
 | day | migrated | mean verification, no padding | with padding | overhead |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 17.9% | 67.2 ms | 373.2 ms | 5.55x |
-| 30 | 72.5% | 270.5 ms | 373.2 ms | 1.38x |
-| 90 | 85.5% | 319.1 ms | 373.2 ms | 1.17x |
-| 365 | 93.7% | 349.7 ms | 373.2 ms | 1.07x |
-| 1095 | 95.7% | 357.3 ms | 373.2 ms | 1.04x |
+| 1 | 17.9% | 68.1 ms | 377.9 ms | 5.55x |
+| 30 | 72.5% | 274.0 ms | 377.9 ms | 1.38x |
+| 90 | 85.5% | 323.2 ms | 377.9 ms | 1.17x |
+| 365 | 93.7% | 354.2 ms | 377.9 ms | 1.07x |
+| 1095 | 95.7% | 361.8 ms | 377.9 ms | 1.04x |
 
 Padding is most expensive on day one and converges to free. It is a cost that retires itself as the migration proceeds -- which is the opposite of the usual argument for deferring a mitigation until the migration is finished. Deferring it means paying nothing precisely when there is nothing to hide, and leaving the channel open precisely when it discloses the most.
 
@@ -155,9 +155,9 @@ All three stacks produce an identical canonical principal for the same user: **T
 | 2 | The naive role-to-scope transformation will diverge from the legacy policy on fewer than 200 of the 4096 decisions. | contradicted | 592 of 4096 decisions diverge |
 | 3 | Divergences will run in both directions, with lockouts outnumbering escalations. | contradicted | 592 escalations, 0 lockouts |
 | 4 | The deny-aware transformation will reduce divergences substantially but not to zero. | held | 16 divergences remain, all from one wrong grant row |
-| 5 | Argon2id at the deployable RFC 9106 profile will cost between 30x and 100x a PBKDF2-HMAC-SHA1 verification at 1000 iterations. | contradicted | 605x |
-| 6 | Without padding work, a single timing sample from a failed login will identify which hash format an account uses with better than 90% accuracy. | held | 100.0% four-way identification from one sample |
-| 7 | With constant-work padding enabled, that accuracy falls to roughly chance (25% for a four-way choice). | held | 28.3% four-way (chance 25.0%), 65.8% binary (base rate 75.0%) |
+| 5 | Argon2id at the deployable RFC 9106 profile will cost between 30x and 100x a PBKDF2-HMAC-SHA1 verification at 1000 iterations. | contradicted | 609x |
+| 6 | Without padding work, a single timing sample from a failed login will identify which hash format an account uses with better than 90% accuracy. | held | 98.3% four-way identification from one sample |
+| 7 | With constant-work padding enabled, that accuracy falls to roughly chance (25% for a four-way choice). | held | 27.5% four-way (chance 25.0%), 69.2% binary (base rate 75.0%) |
 | 8 | Constant-work padding will roughly double the median verification time across a mixed population. | contradicted | 5.55x on day 1, 1.38x on day 30, 1.07x at one year -- the overhead is time-varying, not a constant |
 | 9 | Rehash-on-login will migrate 95% of a typical population within 90 days. | contradicted | 95% reached on day 657 |
 | 10 | After three years, fewer than 1% of a typical population will remain unmigrated. | contradicted | 4.3% still unmigrated at 3 years |

@@ -1,0 +1,50 @@
+=== verify.ps1: build.ps1 ===
+== 45-durable-agent-runtime :: build ==
+node v24.18.0
+  loaded src/journal.ts
+  loaded src/ledger.ts
+  loaded src/runtime.ts
+  loaded src/workflows.ts
+  loaded src/experiments.ts
+  loaded src/predictions.ts
+  loaded src/report.ts
+7 modules loaded
+build ok -- 7 modules loaded, docs regenerated
+=== verify.ps1: test.ps1 ===
+== 45-durable-agent-runtime :: test ==
+
+-- stage 1 : unit and property tests
+  ℹ tests 143
+  ℹ suites 19
+  ℹ pass 143
+  ℹ fail 0
+  ℹ cancelled 0
+  ℹ skipped 0
+  ℹ todo 0
+  ℹ duration_ms 923.0808
+
+-- stage 2 : report determinism
+  stable report sha256 11FB2908EBAA8CA7...
+
+-- stage 3 : report content checks
+  8 sections, 8 contradicted predictions
+
+-- stage 4 : mutation testing
+  killed    journal accepts a sequence gap
+  killed    parse skips a torn line instead of stopping
+  killed    idempotency key is generated fresh each attempt
+  killed    idempotency key drops the ordinal
+  killed    budget is not re-accumulated from the journal
+  killed    the step-name guard is removed
+  killed    a late signal is ignored on resume
+  killed    suspension is journalled as an event
+
+8/8 mutants killed
+
+-- stage 5 : zero dependencies
+  every import is relative or node: builtin
+
+-- stage 6 : secrets scan
+  clean across 33 files (9 held to the production standard)
+
+all 6 stages passed -- 143 tests, 10s
