@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.log
+
+# scratch report runs; docs/results.md is committed on purpose
+run*.md
+!docs/results.md
+probe*.py

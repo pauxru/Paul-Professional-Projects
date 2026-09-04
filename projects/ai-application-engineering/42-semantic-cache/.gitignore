@@ -1,0 +1,9 @@
+# Go
+*.exe
+*.test
+*.out
+
+# scratch report runs
+run*.md
+*.txt
+!docs/*.txt

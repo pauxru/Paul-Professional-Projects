@@ -1,0 +1,147 @@
+"""The report writer.
+
+Every measurement in docs/results.md is preceded by a written prediction made
+before the number was read. The writer enforces it: ``found`` without a
+pending ``expect`` raises, and closing the report with a prediction still
+outstanding raises.
+
+This is not ceremony. A prediction you cannot justify is a measurement you have
+not designed, and the discipline has repeatedly caught defects here that
+produced plausible numbers -- the kind that get believed. The cases are
+catalogued in docs/portfolio/failure-log.md.
+"""
+
+from __future__ import annotations
+
+import io
+from dataclasses import dataclass, field
+
+
+@dataclass
+class Report:
+    title: str
+    _out: io.StringIO = field(default_factory=io.StringIO, repr=False)
+    _pending: str | None = field(default=None, repr=False)
+    n_predictions: int = 0
+    n_confirmed: int = 0
+    n_contradicted: int = 0
+
+    def __post_init__(self) -> None:
+        self._out.write(f"# {self.title}\n\n")
+
+    # -- structure ---------------------------------------------------------
+
+    def h2(self, text: str) -> None:
+        self._out.write(f"\n## {text}\n\n")
+
+    def h3(self, text: str) -> None:
+        self._out.write(f"\n### {text}\n\n")
+
+    def para(self, text: str) -> None:
+        self._out.write(_wrap(text) + "\n\n")
+
+    def bullets(self, items: list[str]) -> None:
+        for it in items:
+            self._out.write(f"- {_wrap(it, indent=2).lstrip()}\n")
+        self._out.write("\n")
+
+    def note(self, text: str) -> None:
+        self._out.write("> " + _wrap(text, prefix="> ").lstrip("> ") + "\n\n")
+
+    def code(self, text: str, lang: str = "") -> None:
+        self._out.write(f"```{lang}\n{text.rstrip()}\n```\n\n")
+
+    # -- the discipline ----------------------------------------------------
+
+    def expect(self, text: str) -> None:
+        if self._pending is not None:
+            raise AssertionError(
+                f"prediction still open when a new one was made: {self._pending!r}"
+            )
+        self._pending = text
+        self.n_predictions += 1
+        self._out.write(f"**Predicted.** {_wrap(text, prefix='')}\n\n")
+
+    def found(self, text: str, *, contradicted: bool = False) -> None:
+        if self._pending is None:
+            raise AssertionError(f"measurement with no prediction: {text!r}")
+        self._pending = None
+        label = "**Found — prediction wrong.**" if contradicted else "**Found.**"
+        if contradicted:
+            self.n_contradicted += 1
+        else:
+            self.n_confirmed += 1
+        paras = [p for p in text.split("\n\n") if p.strip()]
+        self._out.write(f"{label} {_wrap(paras[0])}\n\n")
+        for p in paras[1:]:
+            self._out.write(_wrap(p) + "\n\n")
+
+    def table(self, headers: list[str], rows: list[list[str]]) -> None:
+        widths = [len(h) for h in headers]
+        for r in rows:
+            for i, c in enumerate(r):
+                widths[i] = max(widths[i], len(c))
+        def line(cells: list[str]) -> str:
+            return "| " + " | ".join(c.ljust(widths[i]) for i, c in enumerate(cells)) + " |"
+        self._out.write(line(headers) + "\n")
+        self._out.write("|" + "|".join("-" * (w + 2) for w in widths) + "|\n")
+        for r in rows:
+            self._out.write(line(r) + "\n")
+        self._out.write("\n")
+
+    # -- output ------------------------------------------------------------
+
+    def render(self) -> str:
+        if self._pending is not None:
+            raise AssertionError(
+                f"report closed with an open prediction: {self._pending!r}"
+            )
+        body = self._out.getvalue()
+        tail = (
+            f"\n---\n\n{self.n_predictions} predictions were written before the "
+            f"corresponding measurement was read. "
+            f"{self.n_confirmed} held; {self.n_contradicted} did not, and each "
+            f"of those is discussed where it appears.\n"
+        )
+        return body + tail
+
+
+def _wrap(text: str, width: int = 78, indent: int = 0, prefix: str = "") -> str:
+    """Deterministic greedy wrap.
+
+    Hand-rolled rather than textwrap because the report is compared byte for
+    byte between runs as a reproducibility check, and pinning the wrapping here
+    means that check cannot be broken by a standard library change.
+    """
+    words = " ".join(text.split()).split(" ")
+    lines: list[str] = []
+    cur = ""
+    for w in words:
+        candidate = w if not cur else f"{cur} {w}"
+        if len(candidate) + indent > width and cur:
+            lines.append(cur)
+            cur = w
+        else:
+            cur = candidate
+    if cur:
+        lines.append(cur)
+    pad = " " * indent
+    joined = ("\n" + pad + prefix).join(lines)
+    return pad + prefix + joined if (indent or prefix) else joined
+
+
+def pct(x: float, places: int = 1) -> str:
+    return f"{100.0 * x:.{places}f}%"
+
+
+def num(x: float, places: int = 3) -> str:
+    s = f"{x:.{places}f}"
+    # Suppress a signed zero, which appears when a difference is exactly zero
+    # but was computed as a subtraction. It renders as "-0.000" and looks like
+    # a real negative effect.
+    return s[1:] if s.startswith("-") and float(s) == 0.0 else s
+
+
+def signed(x: float, places: int = 3) -> str:
+    s = num(x, places)
+    return s if s.startswith("-") else f"+{s}"

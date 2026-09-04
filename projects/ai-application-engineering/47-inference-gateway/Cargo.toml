@@ -1,0 +1,17 @@
+[package]
+name = "gateway"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[bin]]
+name = "run_gateway"
+path = "src/main.rs"
+
+[lib]
+name = "gateway"
+path = "src/lib.rs"
+
+[profile.release]
+debug = true
