@@ -1,0 +1,357 @@
+[
+  {
+    "number": 35,
+    "leading": "Modernize the interface.",
+    "accent": "Preserve the core.",
+    "summary": "A controlled C++/.NET interoperability study examining interface contracts, resource ownership and numerical compatibility. The design separates boundary hardening from changes to the underlying pricing logic.",
+    "setting": "Windows interop experiment",
+    "focus": "Contracts / lifetime / compatibility",
+    "tools": "C++ / C# / .NET / MSVC",
+    "image": "boundary.svg",
+    "imageAlt": "Managed .NET host, explicit C ABI and unchanged C++ core",
+    "imageCaption": "Architecture illustration. Validation and ownership live at the seam; the computational module stays unchanged.",
+    "theme": "bridge",
+    "responsibility": "Define and evaluate the integration contract while preserving the computational core.",
+    "problem": [
+      "Modernization introduces compatibility risks beyond the pricing formula. Input validation, memory ownership, marshalling and compiler settings can each change observable behavior.",
+      "This self-directed study separates those risks. It compares hardened and legacy boundaries around the same computational module, then introduces a fast-floating-point build to isolate compiler effects. It is not a customer migration."
+    ],
+    "architecture": [
+      {
+        "title": "Managed host",
+        "description": "Bridge.Core exposes the managed calling surface and SafeHandle-based resource ownership."
+      },
+      {
+        "title": "Explicit C ABI",
+        "description": "A narrow native contract defines layouts, capacities, input validation and clean failure behavior."
+      },
+      {
+        "title": "Unchanged engine",
+        "description": "The core module is reused across builds; boundary and compiler changes remain separate variables."
+      },
+      {
+        "title": "Comparison harness",
+        "description": "Native checks, managed tests and generated reports compare unsafe outcomes and numerical differences."
+      }
+    ],
+    "architectureNote": "The interface is also a risk-control point: host modernization and pricing-semantics changes are evaluated as separate concerns.",
+    "decisions": [
+      {
+        "title": "Define an explicit interoperability contract",
+        "decision": "Use a narrow C ABI and validate buffers and inputs before entering the engine.",
+        "alternative": "Expose native implementation details directly, coupling the managed host to native ownership and layout assumptions.",
+        "tradeoff": "More explicit marshalling and contract work, in exchange for a smaller, inspectable compatibility surface."
+      },
+      {
+        "title": "Separate incompatible marshalling requirements",
+        "decision": "Keep the safe managed wrapper and the raw comparison layer in separate assemblies.",
+        "alternative": "Combine both paths under one assembly-wide marshalling configuration.",
+        "tradeoff": "Assembly-wide DisableRuntimeMarshalling constraints do not fit both paths; separation makes lifetime semantics explicit."
+      },
+      {
+        "title": "Evaluate compiler settings as behavior changes",
+        "decision": "Compare hardened, legacy and fast-floating-point builds using the same engine module.",
+        "alternative": "Validate source equivalence without separately measuring the effect of compiler settings.",
+        "tradeoff": "Extra build and comparison work is necessary to distinguish seam defects from compiler-induced drift."
+      }
+    ],
+    "ownership": [
+      {
+        "title": "Define the contract",
+        "description": "Make layout, buffer capacity, ownership and error semantics explicit so another engineer can review the boundary without reverse-engineering the host.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/native/include/pricing_abi.h",
+        "label": "Inspect the ABI contract"
+      },
+      {
+        "title": "Make decisions reviewable",
+        "description": "Record the reasons for the wrapper split and boundary strategy rather than leaving them implicit in code.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/tree/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/docs/adr",
+        "label": "Read the decision records"
+      },
+      {
+        "title": "Own the delivery evidence",
+        "description": "Connect the native and managed checks, report generation and deterministic comparison in the repeatable local workflow.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/test.ps1",
+        "label": "Inspect the delivery workflow"
+      }
+    ],
+    "results": [
+      {
+        "value": "328 / 600",
+        "label": "Legacy unsafe outcomes",
+        "description": "Observed in the documented hostile-input experiment, not a rate measured in customer traffic."
+      },
+      {
+        "value": "0 / 600",
+        "label": "Hardened unsafe outcomes",
+        "description": "For that same sampled input set. This is bounded evidence, not proof of safety for every input."
+      }
+    ],
+    "resultNote": "A separate compiler comparison changed 2,818 of 4,000 positions despite the unchanged engine module. The design lesson is to qualify the complete build and calling contract, not just the source diff.",
+    "evidence": [
+      {
+        "title": "Boundary implementation",
+        "description": "Where validation and failure semantics meet the native engine.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/native/src/abi.cpp",
+        "label": "native/src/abi.cpp"
+      },
+      {
+        "title": "Managed behavior & lifetime",
+        "description": "The wrapper contract and lifetime behavior, including ownership-sensitive cases.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/tree/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/Bridge.Tests",
+        "label": "Bridge.Tests"
+      },
+      {
+        "title": "Reproducible findings",
+        "description": "Committed deterministic evidence, with the full experiment explained in the README.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/docs/results-stable.md",
+        "label": "docs/results-stable.md"
+      },
+      {
+        "title": "Scope and constraints",
+        "description": "Environment requirements and limits that matter before any production adaptation.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/dotnet-azure-modernization/35-crown-jewels-bridge/docs/known-limitations.md",
+        "label": "docs/known-limitations.md"
+      }
+    ],
+    "limitations": "This is a controlled Windows/MSVC/.NET experiment around a deliberately constrained core. It does not establish customer cutover success, financial certification, Azure deployment reliability or production-wide safety.",
+    "nextSteps": "Before a real deployment I would require domain-approved pricing fixtures, workload-specific compatibility checks, traffic shadowing and a staged rollback plan. These are proposed production steps, not completed project outcomes."
+  },
+  {
+    "number": 43,
+    "leading": "Diagnose retrieval loss.",
+    "accent": "Preserve context.",
+    "summary": "An offline evaluation framework for attributing evidence loss to chunking, retrieval and ranking. The study combines explicit relevance contracts, controlled comparisons and reproducible reporting.",
+    "setting": "Offline / synthetic corpus",
+    "focus": "Chunking / retrieval / ranking",
+    "tools": "Python / NumPy",
+    "image": "retrieval.svg",
+    "imageAlt": "Controlled synthetic comparison: heading severances fall from 45 to 0 with repeated heading context",
+    "imageCaption": "Measured synthetic result, project 43 results section 1A. Same chunk boundaries; different preservation of heading context.",
+    "theme": "retrieval",
+    "responsibility": "Translate retrieval measurements into a defensible diagnosis and an actionable engineering decision.",
+    "problem": [
+      "An aggregate retrieval score does not identify the intervention required. Chunking can separate a qualifier from its evidence, retrieval can miss a valid candidate, and ranking can place it below the useful results.",
+      "The lab generates documents, queries and exact source spans together. Relevance requires all the necessary evidence to survive in the returned chunk, including the heading or qualifier that changes its meaning."
+    ],
+    "architecture": [
+      {
+        "title": "Generate known facts",
+        "description": "Render facts, headings and qualifiers with exact placement spans in a synthetic corpus."
+      },
+      {
+        "title": "Vary the pipeline",
+        "description": "Compare seven chunkers, five retrievers and four rerankers across the same source material."
+      },
+      {
+        "title": "Attribute the loss",
+        "description": "Assign each query/target pair exclusively to chunker, retriever, ranker or served."
+      },
+      {
+        "title": "Publish the experiment",
+        "description": "Record predictions before measurements and generate a deterministic report with statistical limits."
+      }
+    ],
+    "architectureNote": "Lexical and LSA retrieval keep the experiment offline and reproducible. This lab does not evaluate a neural retriever or an answer generator.",
+    "decisions": [
+      {
+        "title": "Define relevance at the evidence-span level",
+        "decision": "Generate the evidence spans with the corpus, and require every qualifying span for relevance.",
+        "alternative": "Use document-level relevance labels, which do not identify whether required qualifiers survive chunking.",
+        "tradeoff": "Precise attribution becomes possible, but synthetic labels cannot establish quality on a customer's document distribution."
+      },
+      {
+        "title": "Use mutually exclusive failure attribution",
+        "decision": "Make chunker, retriever, ranker and served mutually exclusive outcomes.",
+        "alternative": "Count one missed answer as a failure at several stages, leaving responsibility ambiguous.",
+        "tradeoff": "A stricter contract requires tests for the partition invariant, but creates a clearer basis for choosing the next change."
+      },
+      {
+        "title": "Record expectations before measurement",
+        "decision": "Require expect(...) before found(...) and retain contradictory findings in the generated report.",
+        "alternative": "Select and describe findings after observing the results, leaving the original expectations undocumented.",
+        "tradeoff": "The report retains assumptions, null results and contradictory findings, supporting reproducibility and reducing post-hoc interpretation."
+      }
+    ],
+    "ownership": [
+      {
+        "title": "Frame the question",
+        "description": "Define the corpus, relevance contract and stage attribution so a reviewer can distinguish a data problem from a ranking problem.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/43-retrieval-lab/rqlab/attribution.py",
+        "label": "Inspect the attribution model"
+      },
+      {
+        "title": "Set review discipline",
+        "description": "Specify expectations before measurement so the report preserves the distinction between a prediction and an observed result.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/43-retrieval-lab/rqlab/report.py",
+        "label": "Inspect the report contract"
+      },
+      {
+        "title": "Communicate the decision",
+        "description": "Document assumptions, harm metrics and statistical choices so the next engineer can reproduce or challenge the conclusion.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/tree/main/projects/ai-application-engineering/43-retrieval-lab/docs/adr",
+        "label": "Read the decision records"
+      }
+    ],
+    "results": [
+      {
+        "value": "45 to 0",
+        "label": "Heading severances",
+        "description": "Repeating heading context eliminated severances in a controlled pair without changing chunk boundaries."
+      },
+      {
+        "value": "7 / 5",
+        "label": "Predictions held / failed",
+        "description": "Twelve stated predictions remained in the report, including five that did not hold."
+      }
+    ],
+    "resultNote": "The experiment also exposed a statistical-resolution limit: the permutation budget could not clear the strictest multiple-comparison threshold. That caveat changes what can responsibly be called a meaningful improvement.",
+    "evidence": [
+      {
+        "title": "The complete experiment",
+        "description": "Controlled comparisons, failure attribution, predictions and statistical interpretation.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/43-retrieval-lab/docs/results.md",
+        "label": "docs/results.md"
+      },
+      {
+        "title": "Executable contracts",
+        "description": "Tests for relevance, attribution, report behavior and reproducibility.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/tree/main/projects/ai-application-engineering/43-retrieval-lab/tests",
+        "label": "tests"
+      },
+      {
+        "title": "Experiment orchestration",
+        "description": "The pipeline grid and the mechanism connecting configurations to evidence.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/43-retrieval-lab/rqlab/experiment.py",
+        "label": "rqlab/experiment.py"
+      },
+      {
+        "title": "Where inference stops",
+        "description": "Synthetic-data, retrieval-method and performance-measurement constraints.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/43-retrieval-lab/docs/known-limitations.md",
+        "label": "docs/known-limitations.md"
+      }
+    ],
+    "limitations": "The corpus is synthetic; retrieval is lexical/LSA, not neural. No answer generator is evaluated. Absolute scores do not generalize to production answer quality, and operation counts are not real latency measurements.",
+    "nextSteps": "For a product rollout I would add an approved representative corpus, human-reviewed labels, a held-out evaluation set, privacy controls and acceptance gates tied to the actual task. Those are proposed next steps, not evidence of a deployed RAG service.",
+    "mobileImage": "retrieval-mobile.svg"
+  },
+  {
+    "number": 50,
+    "leading": "Detect quality regressions.",
+    "accent": "Evaluate the trade-offs.",
+    "summary": "A simulation-based evaluation of answer-quality detectors for regressions that transport metrics do not capture. The comparison considers detection coverage, false positives, delay and modeled operating cost.",
+    "setting": "Simulated assistant traffic",
+    "focus": "Detection / calibration / cost",
+    "tools": "Python / TypeScript",
+    "image": "signal.svg",
+    "imageAlt": "Conceptual illustration of normal transport metrics alongside a degrading answer-quality signal, not live data",
+    "imageCaption": "Conceptual illustration, not measured telemetry. Numerical claims below refer only to the documented simulation.",
+    "theme": "observability",
+    "responsibility": "Establish a consistent basis for detector selection across failure coverage, false positives, detection delay and modeled cost.",
+    "problem": [
+      "Request success and normal latency do not establish answer quality. Content can degrade without producing a transport error or a corresponding change in operational latency.",
+      "The experiment introduces text-level regressions into simulated traffic and compares detector behavior against non-regression controls. The evaluation examines whether detector combinations cover the intended failures without reacting to ordinary population changes."
+    ],
+    "architecture": [
+      {
+        "title": "Simulate answer changes",
+        "description": "Inject degradation into text rather than directly perturbing feature vectors."
+      },
+      {
+        "title": "Extract fixed features",
+        "description": "Use deterministic character 4-gram hashing into 256 dimensions; no external embedding service."
+      },
+      {
+        "title": "Calibrate consistently",
+        "description": "Use each detector's 30-day reference window and a three-consecutive-day alert rule."
+      },
+      {
+        "title": "Compare operating choices",
+        "description": "Evaluate detection, control behavior, delay and coverage cost; publish reports and a static dashboard."
+      }
+    ],
+    "architectureNote": "The deterministic text transform makes the experiment repeatable, but has no semantic understanding. The dashboard is generated output, not an operational service.",
+    "decisions": [
+      {
+        "title": "Introduce regressions at the content layer",
+        "decision": "Inject regressions into answer content before extracting features.",
+        "alternative": "Perturb vectors directly and risk building an experiment that only detects its own artificial signal.",
+        "tradeoff": "The scenario is closer to the intended failure mechanism, while still limited by synthetic traffic and a non-semantic transform."
+      },
+      {
+        "title": "Apply a consistent calibration policy",
+        "decision": "Calibrate detectors from their own reference windows at the 99th percentile, with the same persistence rule.",
+        "alternative": "Use detector-specific, manually chosen thresholds that make scenario comparisons difficult to interpret.",
+        "tradeoff": "A comparable policy exposes sensitivity and delay trade-offs; it does not eliminate the need to recalibrate for real traffic."
+      },
+      {
+        "title": "Evaluate detector sets by coverage and cost",
+        "decision": "Compare detector sets, including low-cost controls, rather than automatically choosing the model-based canary.",
+        "alternative": "Select a detector in isolation without accounting for overlapping coverage, false positives or operating cost.",
+        "tradeoff": "The cheapest covering set depends on the observed scenarios; its apparent advantage cannot be assumed on a new workload."
+      }
+    ],
+    "ownership": [
+      {
+        "title": "Define failure and control",
+        "description": "Make both regressions and non-regressions part of the experiment so detection success cannot hide false alarms.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/src/stream.py",
+        "label": "Inspect the traffic scenarios"
+      },
+      {
+        "title": "Make calibration reviewable",
+        "description": "Keep the detection and evaluation assumptions explicit enough to challenge false-positive and delay behavior.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/src/evaluate.py",
+        "label": "Inspect the evaluation logic"
+      },
+      {
+        "title": "Evaluate test sensitivity",
+        "description": "Use mutation testing to identify tests that do not detect altered behavior, then document and correct the inadequate assertions.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/tools/mutate.py",
+        "label": "Inspect the mutation harness"
+      }
+    ],
+    "results": [
+      {
+        "value": "8%",
+        "label": "Minority-traffic regression",
+        "description": "Topic-sliced PSI detected the localized regression while staying quiet on the population-shift control."
+      },
+      {
+        "value": "+12 days",
+        "label": "The slicing trade-off",
+        "description": "Slicing detected a diffuse regression later than aggregate detection in the documented simulation."
+      }
+    ],
+    "resultNote": "The modeled 24-call/day quality canary was not in the cheapest covering set: two free detectors covered everything it covered and more. Those are simulated budget assumptions, not a claim of production savings or real model calls.",
+    "evidence": [
+      {
+        "title": "Deterministic results",
+        "description": "Committed detector comparisons and findings from the simulated scenarios.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/docs/results-stable.md",
+        "label": "docs/results-stable.md"
+      },
+      {
+        "title": "Detector implementation",
+        "description": "The logic behind the alerts, not just a chart of the outcomes.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/src/detectors.py",
+        "label": "src/detectors.py"
+      },
+      {
+        "title": "Reproducible presentation",
+        "description": "TypeScript generation of the static report dashboard.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/dashboard/build.ts",
+        "label": "dashboard/build.ts"
+      },
+      {
+        "title": "Deployment boundary",
+        "description": "Why hashed features and simulated traffic are not production observability evidence.",
+        "url": "https://github.com/pauxru/Paul-Professional-Projects/blob/main/projects/ai-application-engineering/50-silent-failure-observability/docs/known-limitations.md",
+        "label": "docs/known-limitations.md"
+      }
+    ],
+    "limitations": "There is no live model provider, semantic embedding service, OpenTelemetry integration or customer traffic in this study. It does not establish production alert accuracy, real hallucination detection or customer incident outcomes.",
+    "nextSteps": "Before production I would need privacy-preserving telemetry, real quality labels, provider/version correlation, alert routing and on-call runbooks. These are proposed integration requirements, not features delivered by this simulation."
+  }
+]

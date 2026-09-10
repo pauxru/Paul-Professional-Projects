@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import profile from "../data/profile.json";
+import { pathTo } from "../lib/urls";
+import { formatDate } from "../lib/format";
+
+const reviewedDate = formatDate(profile.reviewed);
+---
+<BaseLayout
+  title="Privacy"
+  description="How this portfolio handles data: no analytics or ad tracking, no data-collection forms, browser-only project filters, and separate policies for hosting and linked professional platforms."
+  breadcrumbs={[{ name: "Home", path: "/" }, { name: "Privacy", path: "/privacy/" }]}
+>
+  <section class="wrap page-hero">
+    <p class="eyebrow">How this site handles data</p>
+    <h1>Privacy on this portfolio.</h1>
+    <p class="lead">This is a static portfolio without analytics, advertising trackers or a sign-in system. It does not load third-party fonts or scripts. This page explains the site's behavior and the role of its hosting provider.</p>
+  </section>
+
+  <section class="wrap section section-tight prose privacy-body">
+    <h2>What this site is</h2>
+    <p>Pages and the RSS feed are generated at build time and served as static files. There are no visitor accounts, registration service or application database.</p>
+
+    <h2>Analytics &amp; tracking</h2>
+    <p>The site does not add analytics tools, tracking pixels, session-replay scripts or advertising cookies. It does not include visitor-profiling or advertising-network integrations.</p>
+
+    <h2>Fonts &amp; third-party resources</h2>
+    <p>Typography uses the operating system's own fonts (Segoe UI and related system defaults, with Georgia as a serif accent) rather than a font loaded from Google Fonts or a similar third-party service. No third-party stylesheet, script or embed is loaded from this site's pages.</p>
+
+    <h2>Forms</h2>
+    <p>The site has no contact or registration forms. The <a href={pathTo("/contact/")}>Contact</a> page links to independent professional platforms, which handle any information you submit through their own services.</p>
+
+    <h2>The project library's filters</h2>
+    <p>The search box and track/language filters on the <a href={pathTo("/projects/")}>project library</a> run in your browser without a search request. Filter selections are written to the page's URL so a view can be bookmarked or shared.</p>
+    <p>Opening or refreshing a filtered URL sends those query parameters to the hosting provider as part of a normal page request. The URL can also appear in browser history and shared links. Avoid entering confidential information in the search box.</p>
+
+    <h2>Hosting &amp; standard server logs</h2>
+    <p>This site is static and served through third-party hosting infrastructure. Like most web hosting, the hosting provider ordinarily keeps standard server logs as part of normal operation &mdash; things like IP address, requested URL, timestamp and user agent &mdash; independent of anything this site adds. That logging is outside this site's control and isn't covered by this page; see the hosting provider's own policy, for example <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's Privacy Statement</a> if the site is served from GitHub Pages.</p>
+
+    <h2>Links to external professional platforms</h2>
+    <p>Links to <a href={profile.linkedin} rel="me">LinkedIn</a> and <a href={profile.github} rel="me">GitHub</a> lead to separate platforms with their own accounts, cookies and privacy practices, which this site doesn't control or make claims about. Review <a href="https://www.linkedin.com/legal/privacy-policy">LinkedIn's Privacy Policy</a> and <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's Privacy Statement</a> directly.</p>
+
+    <h2>Changes to this page</h2>
+    <p>This page was last reviewed on {reviewedDate}, alongside the rest of the site's public content. If the site's data practices change &mdash; for example if analytics were ever added &mdash; this page would be updated to reflect that.</p>
+
+    <h2>Questions</h2>
+    <p>For questions about this page, reach out through the channel described on <a href={pathTo("/contact/")}>Contact</a>.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .privacy-body { max-width: 780px; }
+  .privacy-body h2:first-child { margin-top: 0; }
+</style>

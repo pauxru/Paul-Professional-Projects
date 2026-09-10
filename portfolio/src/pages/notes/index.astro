@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { notes } from "../../data/notes";
+import { projects } from "../../data/projects";
+import { pathTo } from "../../lib/urls";
+import { formatDate, readingMinutes } from "../../lib/format";
+
+const sorted = [...notes].sort((a, b) => new Date(b.published).getTime() - new Date(a.published).getTime());
+---
+<BaseLayout
+  title="Engineering notes"
+  description="Notes on distributed systems, retrieval evaluation and reliability engineering, written from self-directed technical study alongside the project library."
+  breadcrumbs={[{ name: "Home", path: "/" }, { name: "Notes", path: "/notes/" }]}
+>
+  <section class="wrap page-hero">
+    <p class="eyebrow">Engineering notes</p>
+    <h1>Engineering decisions,<br /><span class="blue">examined.</span></h1>
+    <p class="lead">Short analyses of design alternatives, evaluation findings and operational trade-offs from my independent engineering work. Each note links to the underlying implementation and its stated limits.</p>
+  </section>
+
+  <section class="wrap section section-tight" aria-label="All engineering notes">
+    {sorted.length > 0 ? (
+      <div class="note-list">
+        {sorted.map((note) => {
+          const project = projects.find((item) => item.number === note.projectNumber);
+          if (!project) throw new Error(`Note ${note.slug} references an unknown project.`);
+          return (
+            <article class="note-card">
+              <p class="small-label note-meta">
+                <time datetime={note.published}>{formatDate(note.published)}</time>
+                <span aria-hidden="true"> &middot; </span>{readingMinutes(note)} min read
+                <span aria-hidden="true"> &middot; </span>{note.topic}
+              </p>
+              <h2><a href={pathTo(`/notes/${note.slug}/`)}>{note.title}</a></h2>
+              <p>{note.summary}</p>
+              <div class="note-card-links">
+                <a class="text-link" href={pathTo(`/notes/${note.slug}/`)}>Read the note <Icon name="arrow-up-right" size={16} /><span class="sr-only">: {note.title}</span></a>
+                <a class="text-link" href={pathTo(`/projects/${project.slug}/`)}>From project {String(project.number).padStart(2, "0")}: {project.title} <Icon name="arrow-right" size={16} /></a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <p class="callout">No standalone notes are published in this list right now. The decision-by-decision reasoning behind each independent study is documented directly on its project page in the <a href={pathTo("/projects/")}>project library</a>.</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .note-meta { display: flex; flex-wrap: wrap; gap: 0 4px; margin-bottom: 10px; }
+  .note-card h2 { font-size: 28px; margin-bottom: 12px; }
+  .note-card-links { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 16px; }
+  @media (max-width: 700px) {
+    .note-card h2 { font-size: 25px; }
+  }
+</style>

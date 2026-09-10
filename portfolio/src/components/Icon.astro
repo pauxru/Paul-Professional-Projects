@@ -1,0 +1,21 @@
+---
+interface Props {
+  name: "arrow-right" | "arrow-up-right" | "arrow-down" | "download" | "search" | "menu" | "close" | "check";
+  size?: number;
+  class?: string;
+}
+const { name, size = 20, class: className } = Astro.props;
+const paths = {
+  "arrow-right": ["M4 12h16", "m13 5 7 7-7 7"],
+  "arrow-up-right": ["M6 18 18 6", "M6 6h12v12"],
+  "arrow-down": ["M12 4v16", "m5 13 7 7 7-7"],
+  download: ["M12 3v12", "m7 10 5 5 5-5", "M4 16v5h16v-5"],
+  search: ["M21 21l-5-5", "M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0"],
+  menu: ["M3 6h18", "M3 12h18", "M3 18h18"],
+  close: ["m5 5 14 14", "M19 5 5 19"],
+  check: ["m4 12 5 5L20 6"],
+};
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class={className}>
+  {paths[name].map((d) => <path d={d} />)}
+</svg>

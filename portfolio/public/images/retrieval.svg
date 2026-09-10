@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="290" viewBox="0 0 600 290">
+ <g font-family="Consolas,monospace" font-size="10" fill="#495b8a"><text x="26" y="31">CONTEXT PRESERVATION / CONTROLLED COMPARISON</text><text x="26" y="262">SYNTHETIC CORPUS</text></g>
+ <path d="M188 66V210H552" fill="none" stroke="#a8b8e3"/>
+ <path d="M260 66V210M332 66V210M404 66V210M476 66V210M548 66V210" stroke="#c8d3f5" stroke-dasharray="3 4"/>
+ <rect x="188" y="92" width="319" height="35" rx="2" fill="#2452e8"/>
+ <rect x="188" y="163" width="3" height="35" fill="#2452e8"/>
+ <g font-family="Segoe UI,Arial,sans-serif" font-size="14" fill="#233560">
+  <text x="26" y="108">Heading separated</text>
+  <text x="26" y="180">Heading repeated</text>
+  <text x="519" y="115" font-size="23" font-weight="600">45</text>
+  <text x="203" y="188" font-size="23" font-weight="600">0</text>
+ </g>
+ <g font-family="Consolas,monospace" font-size="10" fill="#495b8a">
+  <text x="186" y="230">0</text><text x="536" y="230">50</text><text x="361" y="262">HEADING SEVERANCES</text>
+ </g>
+</svg>

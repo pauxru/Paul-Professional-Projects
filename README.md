@@ -13,6 +13,16 @@ Every one of them ships the evidence that it works, not a screenshot of it worki
 
 This repository is a portfolio of self-directed engineering work: fifty complete systems, each one chosen because it contains a problem that is genuinely hard and commonly got wrong.
 
+## Portfolio website
+
+The production portfolio website lives in [`portfolio/`](portfolio/). It is an Astro 7 + TypeScript static site for presenting the repository as a career-focused portfolio: 50 project detail pages, 3 curated case studies, public resume artifacts, and deployment-ready static output. Start in [`portfolio/README.md`](portfolio/README.md) for local development, content syncing, resume generation, and GitHub Pages setup.
+
+```bash
+cd portfolio
+npm ci
+npm run build
+```
+
 They are not tutorials, and they are not demos. A demo is a thing that works when you drive it the way the author drove it. Each project here is built to the opposite standard — it has to keep working when somebody hostile, or merely careless, drives it instead.
 
 ### The rule

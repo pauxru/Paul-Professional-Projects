@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="205" viewBox="0 0 340 205">
+ <g font-family="Segoe UI,Arial,sans-serif" fill="#233560">
+  <text x="10" y="25" font-size="12">Heading severances</text>
+  <text x="10" y="62" font-size="12">Separated</text>
+  <text x="10" y="127" font-size="12">Repeated</text>
+  <text x="295" y="85" font-size="22" font-weight="600">45</text>
+  <text x="23" y="151" font-size="22" font-weight="600">0</text>
+ </g>
+ <rect x="10" y="72" width="270" height="20" rx="2" fill="#2452e8"/>
+ <rect x="10" y="136" width="3" height="20" fill="#2452e8"/>
+ <path d="M10 167H330" stroke="#a8b8e3"/>
+ <text x="10" y="191" font-family="Consolas,monospace" font-size="9" fill="#495b8a">SYNTHETIC CORPUS / SAME CHUNK BOUNDARIES</text>
+</svg>

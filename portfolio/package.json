@@ -1,0 +1,33 @@
+{
+  "name": "paul-rukwaro-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "sync": "node scripts/sync-projects.mjs",
+    "predev": "npm run sync",
+    "dev": "astro dev",
+    "check": "npm run sync && astro check",
+    "build": "npm run sync && astro check && astro build",
+    "preview": "astro preview",
+    "test": "node --experimental-strip-types --test tests/unit/*.test.mjs",
+    "assets": "node scripts/render-brand-assets.mjs",
+    "screenshots": "node scripts/capture-preview.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "astro": "7.3.1",
+    "github-slugger": "2.0.0",
+    "marked": "18.0.11",
+    "sanitize-html": "2.17.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.13.3",
+    "typescript": "5.9.3"
+  }
+}

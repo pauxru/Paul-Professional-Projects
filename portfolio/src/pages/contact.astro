@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import PathwayCard from "../components/career/PathwayCard.astro";
+import profile from "../data/profile.json";
+import { pathTo } from "../lib/urls";
+---
+<BaseLayout
+  title="Contact"
+  description="Ways to reach Paul Rukwaro for recruiting, technical interviews, engineering collaboration or professional networking, with LinkedIn as the primary channel."
+  breadcrumbs={[{ name: "Home", path: "/" }, { name: "Contact", path: "/contact/" }]}
+>
+  <section class="wrap page-hero contact-hero">
+    <p class="eyebrow">Get in touch</p>
+    <h1>Let's start a conversation.</h1>
+    <p class="lead">For conversations about engineering roles, technical collaboration, shared interests or consulting, connect through LinkedIn. My GitHub profile provides a closer view of the implementation work.</p>
+    <div class="button-row">
+      <a class="button" href={profile.linkedin} rel="me">Connect on LinkedIn <Icon name="arrow-up-right" /></a>
+      <a class="button secondary" href={profile.github} rel="me">View my GitHub <Icon name="arrow-right" /></a>
+    </div>
+    <p class="contact-note muted">Include the relevant context so the conversation can focus on the role, system or technical question you have in mind.</p>
+  </section>
+
+  <section class="wrap section section-tight" aria-labelledby="pathways-heading">
+    <div class="section-head">
+      <div><p class="eyebrow">Choose the conversation that fits</p><h2 id="pathways-heading">A useful message is a specific one.</h2></div>
+      <p>Whatever the reason for reaching out, these details help me respond usefully on the first message.</p>
+    </div>
+    <div class="card-grid contact-grid">
+      <PathwayCard
+        label="Hiring &amp; recruiting"
+        title="Considering me for a role"
+        description="For recruiters and hiring managers evaluating fit, seniority or team placement."
+        points={["Role title, seniority and reporting line", "Core tech stack and problem domain", "Location, remote policy and time zone"]}
+      >
+        <a class="text-link" href={profile.linkedin} rel="me">Message on LinkedIn <Icon name="arrow-up-right" size={15} /></a>
+        <a class="text-link" href={pathTo("/resume/")}>Review my resume <Icon name="arrow-right" size={15} /></a>
+      </PathwayCard>
+      <PathwayCard
+        label="Interviews &amp; engineering discussions"
+        title="Examining the technical work"
+        description="For technical interviews, design reviews or engineering discussions grounded in real systems."
+        points={["The system, problem or code you'd like to walk through", "Preferred format: system design, code review or pairing", "Time zone and scheduling constraints"]}
+      >
+        <a class="text-link" href={pathTo("/projects/")}>Explore the project library <Icon name="arrow-up-right" size={15} /></a>
+        <a class="text-link" href={pathTo("/notes/")}>Read the engineering notes <Icon name="arrow-right" size={15} /></a>
+      </PathwayCard>
+      <PathwayCard
+        label="Networking &amp; professional exchange"
+        title="Sharing a technical interest"
+        description="For engineers and peers looking to connect around shared technical ground."
+        points={["Where we met or how you found the work", "The topic or system you'd like to discuss", "What a useful next step looks like for you"]}
+      >
+        <a class="text-link" href={profile.linkedin} rel="me">Connect on LinkedIn <Icon name="arrow-up-right" size={15} /></a>
+        <a class="text-link" href={profile.github} rel="me">Follow on GitHub <Icon name="arrow-right" size={15} /></a>
+      </PathwayCard>
+      <PathwayCard
+        label="Consulting &amp; technical collaboration"
+        title="Cross-team or advisory work"
+        description="For technical collaboration or advisory conversations outside a standard hiring process."
+        points={["The problem or system involved", "Constraints: timeline, decision-makers, current stack", "The kind of involvement you have in mind"]}
+      >
+        <a class="text-link" href={profile.linkedin} rel="me">Start on LinkedIn <Icon name="arrow-up-right" size={15} /></a>
+      </PathwayCard>
+    </div>
+  </section>
+
+  <section class="wrap section-tight" style="padding-bottom: 70px;">
+    <p class="callout contact-scope">For a technical inquiry, start with the system, its constraints and the outcome you are working toward. Please leave confidential documents, credentials and customer data out of an initial message.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero { padding-bottom: 30px; }
+  .contact-hero .lead { max-width: 760px; }
+  .contact-note { max-width: 700px; font-size: 13px; line-height: 1.85; margin-top: 22px; }
+  .contact-grid { align-items: stretch; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .contact-grid > :global(.pathway-card) { height: 100%; }
+  .contact-scope { max-width: 900px; }
+  @media (max-width: 700px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,9 @@
+.astro/
+node_modules/
+dist/
+.root-build/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example

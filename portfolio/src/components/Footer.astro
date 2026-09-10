@@ -1,0 +1,28 @@
+---
+import profile from "../data/profile.json";
+import { pathTo } from "../lib/urls";
+---
+<footer class="site-footer">
+  <div class="wrap footer-top">
+    <div>
+      <a href={pathTo("/")} class="footer-name">Paul Rukwaro<span class="blue">.</span></a>
+      <p>Technical depth. Thoughtful engineering.</p>
+      <span class="small-label">{profile.location}</span>
+    </div>
+    <nav aria-label="Professional profiles">
+      <a href={profile.linkedin} rel="me">LinkedIn</a>
+      <a href={profile.github} rel="me">GitHub</a>
+      <a href={pathTo("/resume/")}>Resume</a>
+    </nav>
+    <nav aria-label="Resources">
+      <a href={pathTo("/projects/")}>Project library</a>
+      <a href={pathTo("/notes/")}>Engineering notes</a>
+      <a href={profile.repository}>Portfolio source</a>
+    </nav>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>&copy; {new Date().getUTCFullYear()} Paul Rukwaro</span>
+    <div><a href={pathTo("/privacy/")}>Privacy</a><a href={pathTo("/rss.xml")}>RSS</a><a href="#top">Back to top &uarr;</a></div>
+    <span class="small-label">Built with care. Grounded in evidence.</span>
+  </div>
+</footer>
