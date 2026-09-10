@@ -1,8 +1,9 @@
-# Model Router & Cascade — what actually moves the cost/quality frontier
+# Model Router & Cascade — Cost-Quality Trade-offs in Routing Policies
 
 A measurement harness for LLM routing policies: cheap-model-first cascades,
-learned difficulty classifiers, three-stage chains, and a cost-aware value rule
-— all scored against a baseline that most published routing results get wrong.
+learned difficulty classifiers, three-stage chains, and a cost-aware value rule.
+Policies are compared with the convex hull of fixed-policy baselines to distinguish
+routing gains from improvements achievable through model selection alone.
 
 Written in Go 1.23, standard library only. 120 tests. `go vet` clean.
 
@@ -15,21 +16,21 @@ Full measured output: **[docs/results.md](docs/results.md)**.
 
 ---
 
-## The honest disclaimer, up front
+## Scope and assumptions
 
 **No language model is called.** `internal/models` is a deterministic simulator.
 
-That is a real limitation and the README is not going to bury it. What it means
-in practice:
+The simulator defines the scope of the reported measurements:
 
 - Every *absolute* number here — 86.2% accuracy, 3732¢ — is a property of the
-  simulator, not of GPT-4 or Llama. Do not quote them.
+  simulator, not a measurement of GPT-4 or Llama.
 - Every *structural* result — that temperature scaling cannot move a threshold
   cascade's frontier, that the convex hull is the correct baseline, that
   dividing by marginal cost beats a fixed threshold — is a property of the
-  **algorithms**, and holds for any fleet with the same qualitative shape:
-  bigger models cost more and are more likely to be right, confidence ranks
-  better than it calibrates, and prompt size varies far more than difficulty does.
+  **algorithms and assumptions under evaluation**. The simulator assumes that
+  larger models cost more and are more likely to be correct, confidence ranks
+  better than it calibrates, and prompt size varies more than difficulty.
+  Performance or cost advantages require validation on the target model fleet.
 
 The simulator is built so those three properties hold and nothing else is
 assumed. [docs/known-limitations.md](docs/known-limitations.md) goes through

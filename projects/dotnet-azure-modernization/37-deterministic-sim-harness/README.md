@@ -1,12 +1,11 @@
 # Deterministic Simulation Harness
 
-A FoundationDB-style deterministic simulator, and a quorum-replicated register
-to point it at.
+A FoundationDB-style deterministic simulator for evaluating a quorum-replicated
+register under controlled network faults.
 
-The new services pass every test and fail in production every third Tuesday.
-The bug is a timing interleaving, so it is not in the code you are reading, it
-is in the order two messages happened to arrive in. You cannot fix what you
-cannot reproduce.
+Failures caused by specific message interleavings can remain undetected in
+healthy-network tests. Deterministic simulation makes those distributed executions
+reproducible, allowing the failure conditions and protocol behavior to be examined.
 
 This repository makes that class of bug reproducible. A whole distributed
 execution — message latencies, losses, duplications, reorderings, network
@@ -28,9 +27,9 @@ like a free optimisation and is not linearizable.
 | faulty | on | 2000 | 0 |
 | **faulty** | **off** | **2000** | **46 (2.30%)** |
 
-The row that matters is `perfect / off`. **The broken protocol is invisible on a
-healthy network.** That is why this class of bug ships, survives code review,
-passes staging, and then costs someone a weekend.
+The `perfect / off` row is significant: **the sampled healthy-network runs did not
+expose the broken protocol.** Fault injection produced counterexamples that the
+healthy-network test configuration did not reveal.
 
 Every one of those 46 failures replays byte-identically from its seed:
 
@@ -67,7 +66,7 @@ timeouts that leave a pending entry in the history rather than a lie.
 **Shrinking** (`src/runner.rs`). Reduces replica count, client count and
 operations-per-client while the seed keeps failing.
 
-## Findings that were not what I expected
+## Findings and implications
 
 **Bigger clusters hide the bug.** My prior was that larger quorums mean more
 room to disagree. The sweep says the opposite: at 3 replicas the violation rate

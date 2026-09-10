@@ -46,8 +46,8 @@ Latency numbers (total wall time, p50/p95/p99) are host-load dependent and there
 committed. The same tests write them to `artifacts/latency/*.latency.json` on every run, and that
 folder is gitignored. The latency numbers reported below are from the most recent real run on the
 authoring host — reproduce them locally to see your own machine's numbers. Latency-sensitive test
-assertions (see `LatencyBudgetTests` and `ScoringRequestQueueTests`) use generous upper bounds so
-they cannot flake under host load.
+assertions (see `LatencyBudgetTests` and `ScoringRequestQueueTests`) use generous upper bounds to
+reduce sensitivity to host load.
 
 ## Setup
 
@@ -278,8 +278,9 @@ strong-signal rules have precision 80–100 %, which is what a fraud analyst wou
 ## Rationale — what changed and why
 
 `v1.1.0` was derived by inspecting the baseline's failure modes with the tuning recommender
-(`DetectionEvaluator.RecommendAsync`) and the per-rule fire counts above. Every change is
-defensible independently of the specific synthetic dataset; nothing here is dataset-overfit.
+(`DetectionEvaluator.RecommendAsync`) and the per-rule fire counts above. The rationale for
+each change is documented below. Generalization beyond this synthetic dataset has not been
+established; a production evaluation would require representative held-out data.
 
 The full change list is documented on `DefaultRulesets.BuildV1Challenger()` — summary:
 
@@ -346,7 +347,7 @@ The recommendation was not a black-box output — I walked through the sweep int
 
 ## Related documents
 
-- [`docs/decisions/0004-latency-budget.md`](decisions/0004-latency-budget.md) — why a 50 ms
+- [`docs/decisions/0004-latency-budget-degradation.md`](decisions/0004-latency-budget-degradation.md) — why a 50 ms
   latency budget with graceful degradation, and what the observed p99 means for the headroom.
 - [`docs/decisions/0005-explainability-first.md`](decisions/0005-explainability-first.md) — why
   we chose the explainability-first path (rules over ML) even at the cost of recall.

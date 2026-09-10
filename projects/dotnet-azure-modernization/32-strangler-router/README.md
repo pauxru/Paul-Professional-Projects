@@ -1,18 +1,18 @@
 # Strangler Router
 
-A shadow-traffic proxy and semantic response differ for incremental migrations,
-built around one argument:
+A shadow-traffic proxy and semantic response differ for incremental migrations.
+The project evaluates how comparison rules distinguish expected response variation
+from migration defects using a labeled synthetic corpus.
 
-> **Most shadow-traffic programmes fail at the diff, not at the proxy.**
-> Comparing two JSON responses byte-for-byte produces so much noise that the
-> report becomes unreadable, and the ignore rules people write to fix that are
-> the thing that lets real defects through.
+The central trade-off is between suppressing expected variation and retaining
+sensitivity to defects. Broad ignore rules can improve apparent agreement while
+reducing defect recall.
 
 Go 1.23, standard library only. `go test ./...` — 67 tests.
 
 ---
 
-## The problem, in one screenshot
+## Problem and response comparison
 
 Two implementations of the same endpoint, both behaving **perfectly correctly**.
 A byte comparison, or any structural JSON diff without configuration, reports:
@@ -32,10 +32,10 @@ Twelve differences. Zero bugs. A duration, a clock tick, a request ID, a
 different `ORDER BY` on the line items, and one float that took a different
 addition order.
 
-Run this across a real endpoint and every single response "fails". Nobody reads
-the report after week one. That is where these programmes die.
+An unconfigured comparison can classify expected variation as a defect and obscure
+the differences that require investigation.
 
-## The fix everyone reaches for, and why it is worse
+## Trade-offs in comparison rules
 
 The obvious response is to add ignore rules until the report goes quiet. It
 works immediately, and each rule is individually reasonable:
@@ -49,8 +49,8 @@ works immediately, and each rule is individually reasonable:
 | `tolerant` | "a penny is just floating point" — blanket 0.01 numeric tolerance |
 | `resigned` | plus the field that "kept flapping" and the one that "is just casing" |
 
-Nobody writes `resigned` on purpose. They arrive there one defensible commit at
-a time, over about six weeks.
+The `resigned` ruleset models accumulated broad exceptions. The experiment measures
+the resulting trade-off between noise suppression and missed defects.
 
 So this project treats a ruleset as **a binary classifier** and scores it
 against a corpus with known ground truth — 4,000 response pairs, 812 of which

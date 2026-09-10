@@ -1,7 +1,7 @@
 # Assembly Archaeologist
 
-**Reading a .NET Framework estate you have no source for, and turning "what does this
-depend on?" into "what do I do on Monday?"**
+**Metadata-driven migration analysis for .NET Framework estates without source code:
+portability constraints, dependency structure and migration sequencing.**
 
 C# / .NET 10 / Mono.Cecil. 206 tests. No source code, no reference assemblies, no
 resolver: 24 compiled assemblies and the metadata inside them.
@@ -10,18 +10,13 @@ resolver: 24 compiled assemblies and the metadata inside them.
 
 ## The problem
 
-Every modernisation engagement starts the same way. Someone runs a dependency scanner
-over a Windows estate, produces a graph with 400 nodes and 3,000 edges, and puts it on
-a slide. Everyone agrees it looks bad. Nobody knows what to do next.
+Assembly-reference graphs describe packaging dependencies, but migration planning also
+requires call-site portability constraints, type-level coupling and an explicit model
+of migration units. Assembly-level counts alone do not resolve those questions.
 
-The graph is not wrong. It is just answering a question nobody asked. "Which assemblies
-reference which" is a fact about how the code was packaged in 2007. The question that
-matters is "what has to move, in what order, and what will hurt", and the assembly-level
-graph is systematically the wrong instrument for it.
-
-This project is the instrument I wanted instead. It reads compiled IL -- which is all
-you get when the build server died in 2014 and the source repository is a ZIP file
-somebody renamed -- and answers, with evidence:
+This project analyzes compiled IL from a generated .NET Framework corpus without
+requiring application source or reference assemblies. It evaluates the following
+migration questions and records the supporting evidence:
 
 - Which API calls actually block the move, at the call site, not the reference.
 - Which dependency cycles are real entanglement and which are packaging accidents.
@@ -32,7 +27,8 @@ somebody renamed -- and answers, with evidence:
 
 ## The one-sentence finding
 
-**The assembly is the wrong unit for every question you actually want to ask.**
+**Assembly-level dependency counts are insufficient for the migration decisions
+evaluated in this corpus.**
 
 Portability is a property of a *member*. Entanglement is a property of a *type*.
 Difficulty is a property of a *migration unit*. Deletability is a property of a type
@@ -44,7 +40,7 @@ predictions before it measures anything, and nine of them turned out to be wrong
 
 ---
 
-## Three findings worth the click
+## Selected findings
 
 **A manifest scanner cannot see the estate's worst problem.** Correlating assembly
 reference counts against actual blocker severity gives Kendall tau 0.567 -- the sort of

@@ -1,33 +1,30 @@
-# 45 — A durable agent runtime, and the one crash point that matters
+# 45 — Durable Agent Runtime: Crash Recovery and External Effects
 
-An AI agent that spends money needs to survive a deploy in the middle of a refund. This
-project builds the smallest runtime that can make that claim, then tries to break it at
-every single point where it could break, and reports what it found.
+This project evaluates journal-based workflow recovery and external-effect idempotency
+using a controlled refund workflow. It injects failures at defined crash points and
+measures recovery, duplicate effects and replay behavior.
 
-The headline is not "durable execution works". It is **where** the risk actually lives:
+The principal result concerns the boundary between the runtime and the payment gateway:
 
-> A 40-step workflow has **42 crash points**. Forty-one of them are trivial — the journal
-> either records the outcome or records nothing, and replay is obvious either way.
-> **One** of them, 2.4% of the failure surface, is the window between telling the payment
-> gateway to refund and writing down that it did. Every retry policy, every idempotency
-> key, every operational runbook exists for that single point. A mitigation aimed anywhere
-> else is aimed at a problem that solves itself.
+> The evaluated 40-step workflow has **42 crash points**. At 41 points, the recorded
+> journal state determines the replay action. At the remaining point, the gateway may
+> have applied the refund before its outcome is recorded locally. Recovery at that
+> boundary depends on the retry policy and the gateway's deduplication contract.
 
 Everything below is measured by `src/experiments.ts` and regenerated into
 [`docs/results.md`](docs/results.md) on every build.
 
 ---
 
-## The story
+## Problem and scope
 
-I have twice watched an "agent" — one a payments retry job, one an LLM tool-calling loop
-— get redeployed mid-run and do the thing it had already done. Both times the postmortem
-landed on "we should add idempotency keys". Both times the fix was applied, and neither
-postmortem established *where* the duplicate came from, which meant nobody could say
-whether the fix covered it.
+A restart can leave a workflow uncertain whether an external effect completed.
+Idempotency keys address this only when the runtime's retry behavior and the remote
+system's deduplication behavior form a compatible contract.
 
-So this is that question, answered exhaustively rather than argued. Crash the process
-before every journal write in turn. Recover. Count the refunds.
+This self-directed experiment evaluates that contract by crashing before each journal
+write, recovering the workflow and counting refunds under different gateway and retry
+policies. The results describe this controlled workflow and its explicit assumptions.
 
 ---
 
