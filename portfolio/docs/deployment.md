@@ -12,13 +12,14 @@ This site is built as static output from `portfolio/dist/`. CI should always be 
 
 ## Verified action versions used here
 
-Checked against the official GitHub release APIs on 2026-09-10:
+Checked against the official repositories and release metadata on 2026-09-10:
 
 - `actions/checkout@v7`
 - `actions/setup-node@v6`
 - `actions/configure-pages@v6`
 - `actions/upload-pages-artifact@v5`
 - `actions/deploy-pages@v5`
+- `actions/upload-artifact@v7`
 
 Astro's official guide also continues to recommend Node 24 for Pages builds.
 
@@ -57,6 +58,10 @@ The validation job runs, in order:
 Only `portfolio/dist` is eligible to become a Pages artifact. The root-test output is never deployed and does not overwrite the configured production build.
 
 CI intentionally does **not** run `npm run assets`; committed social/share/favicon assets are treated as source-controlled delivery artifacts, not a deployment-time build requirement.
+
+### Failure diagnostics
+
+Browser failures produce GitHub annotations. When either browser step fails, the workflow also retains the Playwright HTML report, screenshots and traces in a `portfolio-browser-failure-<attempt>` artifact for seven days. Download it from the workflow run to investigate the failure. A failure before Playwright can generate diagnostics is reported as a missing-artifact warning; the original failing step still fails CI.
 
 ## Repository variables
 

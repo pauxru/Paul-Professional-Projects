@@ -18,7 +18,7 @@ export default defineConfig({
   workers: 1,
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
-  reporter: process.env.CI ? [["line"], ["html", { open: "never" }]] : "list",
+  reporter: process.env.CI ? [["line"], ["github"], ["html", { open: "never" }]] : "list",
   use: {
     ...devices["Desktop Chrome"],
     baseURL,

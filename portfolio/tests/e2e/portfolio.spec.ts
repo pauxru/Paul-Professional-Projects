@@ -88,6 +88,7 @@ test("the skip link reaches the main content", async ({ page }) => {
 });
 
 test("tabbing out of the mobile menu leaves the focused content visible", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   for (const viewport of [{ width: 390, height: 600 }, { width: 667, height: 375 }]) {
     await page.setViewportSize(viewport);
     await page.goto("./");
@@ -99,12 +100,12 @@ test("tabbing out of the mobile menu leaves the focused content visible", async 
     const contentLink = page.getByRole("link", { name: "Explore my work", exact: true });
     await expect(contentLink).toBeFocused();
     await expect(toggle).toHaveAttribute("aria-expanded", "false");
-    const unobscured = await contentLink.evaluate((element) => {
+    // Keyboard focus can start a smooth scroll before the target reaches the viewport.
+    await expect.poll(() => contentLink.evaluate((element) => {
       const bounds = element.getBoundingClientRect();
       const top = document.elementFromPoint(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
       return top === element || (top !== null && element.contains(top));
-    });
-    expect(unobscured, `Focused content is obscured at ${viewport.width}x${viewport.height}`).toBe(true);
+    }), { message: `Focused content is obscured at ${viewport.width}x${viewport.height}` }).toBe(true);
   }
 });
 

@@ -71,6 +71,7 @@ jobs:
         run: npm run build
 
       - name: Run end-to-end tests
+        id: browser
         run: npm run test:e2e
 
       - name: Build isolated custom-domain root variant
@@ -80,11 +81,23 @@ jobs:
         run: npm run build -- --outDir .root-build
 
       - name: Check custom-domain root routing and metadata
+        id: root_browser
         env:
           SITE_URL: https://example.test
           SITE_BASE_PATH: /
           PORTFOLIO_TEST_OUT_DIR: .root-build
         run: npm run test:e2e -- --grep "every public page|resume download"
+
+      - name: Upload browser failure diagnostics
+        if: ${{ failure() && (steps.browser.outcome == 'failure' || steps.root_browser.outcome == 'failure') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: portfolio-browser-failure-${{ github.run_attempt }}
+          path: |
+            portfolio/playwright-report
+            portfolio/test-results
+          retention-days: 7
+          if-no-files-found: warn
 
       - name: Upload GitHub Pages artifact
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
