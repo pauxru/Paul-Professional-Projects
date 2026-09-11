@@ -2,11 +2,14 @@
 
 This site is built as static output from `portfolio/dist/`. CI should always be safe to run without Pages enabled; deployment is a separate, manual action.
 
+The selected production address is **https://paulrukwaro.com/**. The code and workflow default to that origin at `/`. Local development remains at **http://127.0.0.1:4321/**; selecting a domain in code does not configure DNS or publish the site.
+
 ## Official references
 
 - Astro GitHub Pages guide: <https://docs.astro.build/en/guides/deploy/github/>
 - GitHub Pages publishing source: <https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site>
 - GitHub Pages custom domains: <https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site>
+- GitHub Pages domain setup and current DNS records: <https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site>
 - GitHub Pages domain verification: <https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages>
 - GitHub Pages HTTPS: <https://docs.github.com/en/pages/getting-started-with-github-pages/securing-your-github-pages-site-with-https>
 
@@ -52,10 +55,10 @@ The validation job runs, in order:
 4. `npm test`
 5. `npm run build`
 6. `npm run test:e2e`
-7. Build a separate `.root-build/` variant with a reserved test origin and `SITE_BASE_PATH=/`.
-8. Exercise all public routes, metadata, source links, feeds and downloads against that isolated root build.
+7. Build a separate `.repo-build/` variant with a reserved test origin and `SITE_BASE_PATH=/Paul-Professional-Projects`.
+8. Exercise all public routes, metadata, source links, feeds and downloads against that isolated repository-path build.
 
-Only `portfolio/dist` is eligible to become a Pages artifact. The root-test output is never deployed and does not overwrite the configured production build.
+Only `portfolio/dist` is eligible to become a Pages artifact. The alternate-base output is never deployed and does not overwrite the configured production build.
 
 CI intentionally does **not** run `npm run assets`; committed social/share/favicon assets are treated as source-controlled delivery artifacts, not a deployment-time build requirement.
 
@@ -69,19 +72,21 @@ Configure these in **Settings -> Secrets and variables -> Actions -> Variables**
 
 | Variable | Default | Rule |
 | --- | --- | --- |
-| `SITE_URL` | `https://pauxru.github.io` | Must be an HTTPS origin only; no path, query, fragment, or credentials. |
-| `SITE_BASE_PATH` | `/Paul-Professional-Projects` | Use `/` for a custom-domain root deployment. |
+| `SITE_URL` | `https://paulrukwaro.com` | Must be an HTTPS origin only; no path, query, fragment, or credentials. |
+| `SITE_BASE_PATH` | `/` | Use `/` for the selected custom-domain root deployment. |
 
 Examples:
 
 - Repository Pages URL:
   - `SITE_URL=https://pauxru.github.io`
   - `SITE_BASE_PATH=/Paul-Professional-Projects`
-- Future custom domain:
-  - `SITE_URL=https://your-real-domain.example`
+- Selected custom domain (default):
+  - `SITE_URL=https://paulrukwaro.com`
   - `SITE_BASE_PATH=/`
 
 Do **not** put the repo path into `SITE_URL`. The path belongs in `SITE_BASE_PATH`.
+
+If repository variables still contain the old GitHub Pages origin or repository path, update them to the selected domain/root values or remove them to use the defaults.
 
 ## Enabling GitHub Pages
 
@@ -127,29 +132,41 @@ Two supported deployment shapes exist:
 - `SITE_URL=https://pauxru.github.io`
 - `SITE_BASE_PATH=/Paul-Professional-Projects`
 
-### 2. Future custom domain
+### 2. Selected custom domain (default)
 
-- URL pattern: `https://your-real-domain.example/`
-- `SITE_URL=https://your-real-domain.example`
+- URL: `https://paulrukwaro.com/`
+- `SITE_URL=https://paulrukwaro.com`
 - `SITE_BASE_PATH=/`
 
-Do not invent or commit a placeholder domain. A real domain, CNAME value, and DNS records should only be added once the domain is actually owned and ready.
+The apex domain is canonical. After both DNS names are configured, GitHub Pages can redirect `www.paulrukwaro.com` to `paulrukwaro.com`.
 
-## Custom-domain checklist
+## paulrukwaro.com connection checklist
 
-When the real domain is ready:
+These are deployment steps, not actions performed by the local build. Follow the linked official instructions; DNS guidance below was checked on 2026-09-11.
 
-1. Follow GitHub's **Managing a custom domain for your GitHub Pages site** instructions from the docs above.
-2. Configure the required DNS records with the actual domain provider.
-3. Verify the domain ownership in GitHub to reduce takeover risk.
-4. Set repository Actions variables:
-   - `SITE_URL=https://your-real-domain.example`
-   - `SITE_BASE_PATH=/`
-5. Add `portfolio/public/CNAME` with the real domain only after the domain and DNS are final.
-6. Re-run the workflow with `deploy=true`.
-7. After the certificate is issued, enforce HTTPS in **Settings -> Pages**.
+1. Confirm ownership and access to the DNS account for `paulrukwaro.com`. Verify the domain in your GitHub account's **Settings -> Pages**, using the exact TXT record GitHub supplies. Keep that verification record.
+2. In this repository's **Settings -> Pages**, set **Source** to **GitHub Actions**, then set **Custom domain** to `paulrukwaro.com` and save. Do this before pointing DNS at GitHub.
+3. At the DNS provider, configure the apex and `www` records below. Preserve unrelated records, particularly mail `MX` and verification `TXT` records. Do not add wildcard records or change nameservers just for this setup.
+4. Ensure repository Actions variables are absent (using defaults), or explicitly set `SITE_URL=https://paulrukwaro.com` and `SITE_BASE_PATH=/`.
+5. Run **Actions -> Portfolio -> Run workflow**, choose `main`, and set `deploy=true`.
+6. After GitHub's DNS check and certificate provisioning complete, enable **Enforce HTTPS** in repository Pages settings.
+7. Open `https://paulrukwaro.com/`, a project detail page and the resume download. Confirm `https://www.paulrukwaro.com/` redirects to the apex and that sitemap/canonical URLs use the same domain.
 
-Do not publish guessed IP addresses or placeholder DNS values in repo documentation; use the current official GitHub Pages docs for those details at the time of setup.
+### DNS records for GitHub Pages
+
+Use these records when this repository is the intended website host. Resolve any existing conflicting web records deliberately; do not delete unrelated DNS records.
+
+| Type | Host | Value |
+| --- | --- | --- |
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `pauxru.github.io` |
+
+The `www` CNAME target has no scheme or repository path. GitHub also documents apex ALIAS/ANAME and optional IPv6 alternatives; use one appropriate apex setup rather than conflicting record types. DNS propagation and HTTPS availability can take up to 24 hours.
+
+**No repository `CNAME` file is required for this GitHub Actions deployment.** GitHub ignores that file for custom workflow publishing; configure the domain in repository Pages settings instead.
 
 ## Canonicals, sitemap, robots, and social metadata
 

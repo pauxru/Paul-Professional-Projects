@@ -32,8 +32,8 @@ permissions:
 env:
   ASTRO_TELEMETRY_DISABLED: "1"
   NODE_VERSION: "24"
-  SITE_URL: ${{ vars.SITE_URL || 'https://pauxru.github.io' }}
-  SITE_BASE_PATH: ${{ vars.SITE_BASE_PATH || '/Paul-Professional-Projects' }}
+  SITE_URL: ${{ vars.SITE_URL || 'https://paulrukwaro.com' }}
+  SITE_BASE_PATH: ${{ vars.SITE_BASE_PATH || '/' }}
 
 jobs:
   validate:
@@ -74,22 +74,22 @@ jobs:
         id: browser
         run: npm run test:e2e
 
-      - name: Build isolated custom-domain root variant
+      - name: Build isolated repository-path variant
         env:
           SITE_URL: https://example.test
-          SITE_BASE_PATH: /
-        run: npm run build -- --outDir .root-build
+          SITE_BASE_PATH: /Paul-Professional-Projects
+        run: npm run build -- --outDir .repo-build
 
-      - name: Check custom-domain root routing and metadata
-        id: root_browser
+      - name: Check repository-path routing and metadata
+        id: repo_browser
         env:
           SITE_URL: https://example.test
-          SITE_BASE_PATH: /
-          PORTFOLIO_TEST_OUT_DIR: .root-build
+          SITE_BASE_PATH: /Paul-Professional-Projects
+          PORTFOLIO_TEST_OUT_DIR: .repo-build
         run: npm run test:e2e -- --grep "every public page|resume download"
 
       - name: Upload browser failure diagnostics
-        if: ${{ failure() && (steps.browser.outcome == 'failure' || steps.root_browser.outcome == 'failure') }}
+        if: ${{ failure() && (steps.browser.outcome == 'failure' || steps.repo_browser.outcome == 'failure') }}
         uses: actions/upload-artifact@v7
         with:
           name: portfolio-browser-failure-${{ github.run_attempt }}

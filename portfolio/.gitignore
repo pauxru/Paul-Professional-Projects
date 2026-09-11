@@ -2,6 +2,7 @@
 node_modules/
 dist/
 .root-build/
+.repo-build/
 playwright-report/
 test-results/
 .env

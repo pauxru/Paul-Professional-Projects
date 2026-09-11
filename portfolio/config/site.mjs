@@ -1,4 +1,4 @@
-export function normalizeBase(value = "/Paul-Professional-Projects") {
+export function normalizeBase(value = "/") {
   if (!/^\/[a-zA-Z0-9/_-]*$/.test(value) || value.includes("//")) {
     throw new Error("SITE_BASE_PATH must be an absolute path containing only letters, numbers, /, _ or -.");
   }
@@ -6,11 +6,11 @@ export function normalizeBase(value = "/Paul-Professional-Projects") {
 }
 
 export function resolveSite(environment = process.env) {
-  const url = new URL(environment.SITE_URL || "https://pauxru.github.io");
+  const url = new URL(environment.SITE_URL || "https://paulrukwaro.com");
   if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash || url.pathname !== "/") {
     throw new Error("SITE_URL must be an HTTPS origin, without a path, credentials, query or fragment.");
   }
-  const base = normalizeBase(environment.SITE_BASE_PATH ?? "/Paul-Professional-Projects");
+  const base = normalizeBase(environment.SITE_BASE_PATH ?? "/");
   return { site: url.origin, base, home: new URL(`${base === "/" ? "" : base}/`, url.origin).href };
 }
 

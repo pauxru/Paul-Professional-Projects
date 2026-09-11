@@ -8,12 +8,12 @@ Career-focused Astro site for **Paul Rukwaro**, Senior Software Engineer. It com
 - TypeScript 5.9
 - Node 24 preferred, Node >= 22.12 supported
 - Static output only; no server runtime
-- Default local URL: `http://127.0.0.1:4321/Paul-Professional-Projects/`
+- Default local URL: `http://127.0.0.1:4321/`
 - Default production origin/base:
-  - `SITE_URL=https://pauxru.github.io`
-  - `SITE_BASE_PATH=/Paul-Professional-Projects`
+  - `SITE_URL=https://paulrukwaro.com`
+  - `SITE_BASE_PATH=/`
 
-`SITE_URL` must always be an HTTPS origin with **no path**. For a future custom domain, keep `SITE_URL=https://your-domain.example` and set `SITE_BASE_PATH=/`.
+`SITE_URL` must always be an HTTPS origin with **no path**. The selected domain is `paulrukwaro.com`; metadata and public URLs use it, while local browsing uses localhost. These defaults do not change DNS, register the domain or activate public hosting.
 
 ## Quick start
 
@@ -27,18 +27,32 @@ npm run sync
 npm run dev
 ```
 
-Then open `http://127.0.0.1:4321/Paul-Professional-Projects/`.
+Then open `http://127.0.0.1:4321/`.
+
+### Windows launcher
+
+With dependencies installed, run this from the `portfolio` directory:
+
+```powershell
+.\Start-Portfolio.ps1
+```
+
+The launcher starts the development server with live updates and uses the repository's actual location. If Git is installed in the standard `Program Files\Git` location but missing from the current shell's PATH, it makes Git available only while the launcher is running. It does not change your system settings or install packages.
+
+Keep that terminal open; press **Ctrl+C** to stop. Use `.\Start-Portfolio.ps1 -Mode preview` to serve an existing `npm run build` output instead. A preview started by a terminal assistant may stop when its session ends; this launcher lets you run the site independently in your own terminal.
 
 ### Optional local `.env`
 
 `config/environment.mjs` loads `portfolio/.env` when present for Astro and Playwright. Use it only for public-site configuration overrides, for example:
 
 ```env
-SITE_URL=https://pauxru.github.io
-SITE_BASE_PATH=/Paul-Professional-Projects
+SITE_URL=https://paulrukwaro.com
+SITE_BASE_PATH=/
 PORTFOLIO_TEST_PORT=4377
 PLAYWRIGHT_CHANNEL=msedge
 ```
+
+Remove or update old `SITE_URL` / `SITE_BASE_PATH` overrides in `.env` or your shell if they still select the repository subpath. Existing environment values take precedence over defaults.
 
 ## Commands
 
@@ -84,6 +98,7 @@ portfolio/
 |   |-- e2e/
 |   `-- unit/
 |-- astro.config.mjs
+|-- Start-Portfolio.ps1       # Windows local launcher
 |-- package.json
 `-- playwright.config.ts
 ```
@@ -110,7 +125,7 @@ portfolio/
 ### Architecture and UX characteristics
 
 - Static Astro output with no trackers, ads, cookies, or runtime API dependency
-- Base-path aware for both repo Pages (`/Paul-Professional-Projects`) and future custom-domain root (`/`)
+- Base-path aware for both repo Pages (`/Paul-Professional-Projects`) and the selected custom-domain root (`/`)
 - Canonicals, Open Graph/Twitter metadata, JSON-LD, sitemap, RSS, and robots generated from the configured public origin
 - Accessible keyboard navigation: skip link, focusable main region, mobile menu dismissal behavior, no-JavaScript fallbacks
 - Local-only assets: images, icons, resume PDF, and internal links stay within the build output
@@ -126,7 +141,7 @@ These are **not extra routes**. They are richer editorial treatments layered ont
 
 ## Project detail route index
 
-All project pages are served under the local base `http://127.0.0.1:4321/Paul-Professional-Projects`.
+All project pages are served under the local base `http://127.0.0.1:4321/`.
 
 ### Track 1 - Foundation
 
@@ -217,7 +232,7 @@ npm run preview
 - `dist/` is the only deployment artifact.
 - The site is expected to work for both:
   - GitHub Pages repository base path: `SITE_BASE_PATH=/Paul-Professional-Projects`
-  - Future custom-domain root deployment: `SITE_BASE_PATH=/`
+  - `paulrukwaro.com` custom-domain root deployment (default): `SITE_BASE_PATH=/`
 
 ## Browser test tooling
 
@@ -227,7 +242,7 @@ npm run preview
 - Local Windows runs can optionally set `PLAYWRIGHT_CHANNEL=msedge`
 - Keep `PORTFOLIO_TEST_PORT` free if overriding the default preview port used by Playwright
 - CI does **not** regenerate visual assets; `npm run assets` is only needed when source artwork changes
-- CI also builds an isolated `.root-build/` with `SITE_BASE_PATH=/` and exercises its public routes and metadata. `PORTFOLIO_TEST_OUT_DIR=.root-build` selects that artifact for the browser runner; the normal `dist/` output is left intact.
+- CI also builds an isolated `.repo-build/` with `SITE_BASE_PATH=/Paul-Professional-Projects` and exercises its public routes and metadata. `PORTFOLIO_TEST_OUT_DIR=.repo-build` selects that artifact for the browser runner; the normal custom-domain `dist/` output is left intact. `.root-build` remains supported for explicit alternate-root checks.
 
 ## Preview screenshots
 
@@ -250,5 +265,6 @@ The public resume must stay safe to publish:
 ## Deployment and hosting notes
 
 - GitHub Actions + Pages guidance: [`docs/deployment.md`](docs/deployment.md)
+- Domain connection steps: [`paulrukwaro.com checklist`](docs/deployment.md#paulrukwarocom-connection-checklist)
 - Resume generation guidance: [`docs/resume.md`](docs/resume.md)
 - The same static `dist/` output can also be uploaded to Netlify, Cloudflare Pages, or Azure Static Web Apps if `SITE_URL` and `SITE_BASE_PATH` match the target host

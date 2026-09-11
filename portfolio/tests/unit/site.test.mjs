@@ -1,16 +1,30 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { normalizeBase, resolveSite, withBase } from "../../config/site.mjs";
+import { testOutputDirectory } from "../../config/testing.mjs";
 import { matchesFilters, projectSearchText, readFilters, updateFilterUrl } from "../../src/lib/filters.ts";
 import { formatDate, readingMinutes } from "../../src/lib/format.ts";
 import profile from "../../src/data/profile.json" with { type: "json" };
 
 test("deployment supports repository and custom-domain roots without doubled prefixes", () => {
-  assert.deepEqual(resolveSite({}), { site: "https://pauxru.github.io", base: "/Paul-Professional-Projects", home: "https://pauxru.github.io/Paul-Professional-Projects/" });
+  assert.deepEqual(resolveSite({}), { site: "https://paulrukwaro.com", base: "/", home: "https://paulrukwaro.com/" });
+  assert.equal(normalizeBase(), "/");
+  assert.equal(resolveSite({ SITE_URL: "https://paulrukwaro.com" }).home, "https://paulrukwaro.com/");
+  assert.equal(resolveSite({ SITE_URL: "https://pauxru.github.io", SITE_BASE_PATH: "/Paul-Professional-Projects" }).home, "https://pauxru.github.io/Paul-Professional-Projects/");
   assert.equal(resolveSite({ SITE_URL: "https://example.test", SITE_BASE_PATH: "/" }).home, "https://example.test/");
   assert.equal(withBase("/projects/", "/Paul-Professional-Projects/"), "/Paul-Professional-Projects/projects/");
   assert.equal(withBase("/resume/Paul-Rukwaro-Resume.pdf", "/"), "/resume/Paul-Rukwaro-Resume.pdf");
   assert.equal(normalizeBase("/portfolio/"), "/portfolio");
+});
+
+test("browser output selection permits only known isolated build directories", () => {
+  assert.equal(testOutputDirectory({}), "dist");
+  for (const directory of ["dist", ".root-build", ".repo-build"]) {
+    assert.equal(testOutputDirectory({ PORTFOLIO_TEST_OUT_DIR: directory }), directory);
+  }
+  for (const directory of ["", "../", "public", "/tmp/site", "dist; echo unsafe"]) {
+    assert.throws(() => testOutputDirectory({ PORTFOLIO_TEST_OUT_DIR: directory }));
+  }
 });
 
 test("invalid public site settings fail rather than emitting incorrect or private canonical URLs", () => {
