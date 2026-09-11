@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="290" viewBox="0 0 600 290">
- <g fill="none" stroke="#355347" stroke-width=".8"><path d="M25 70H575M25 115H575M25 160H575M25 205H575M80 52V218M180 52V218M280 52V218M380 52V218M480 52V218"/></g>
- <g font-family="Consolas,monospace" font-size="10" fill="#b1cdb9"><text x="25" y="29">200 OK IS NOT A QUALITY METRIC.</text><text x="25" y="262">CONCEPTUAL SIGNAL / NOT LIVE TELEMETRY</text></g>
- <path d="M25 122L62 124L95 120L138 123L174 119L205 122L242 120L279 122L322 120L361 123L398 120L431 121L463 120L510 122L548 122L575 122" fill="none" stroke="#89a191" stroke-width="2"/>
- <path d="M25 124L62 121L95 124L138 120L174 126L205 128L242 119L279 117L306 100L334 98L361 87L398 64L431 70L463 54L510 41L548 48L575 32" fill="none" stroke="#c9ee94" stroke-width="2.5"/>
- <path d="M295 50V223" stroke="#71947e" stroke-dasharray="4 5"/>
- <circle cx="398" cy="64" r="5" fill="#c9ee94"/>
- <g font-family="Consolas,monospace" font-size="10"><text x="422" y="91" fill="#d1efa7">QUALITY SIGNAL</text><text x="422" y="144" fill="#adc5b5">TRANSPORT METRICS</text><text x="242" y="240" fill="#adc5b5">SILENT CHANGE</text></g>
-</svg>

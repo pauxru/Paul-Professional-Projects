@@ -15,13 +15,7 @@ This repository is a portfolio of self-directed engineering work: fifty complete
 
 ## Portfolio website
 
-The production portfolio website lives in [`portfolio/`](portfolio/). It is an Astro 7 + TypeScript static site for presenting the repository as a career-focused portfolio: 50 project detail pages, 3 curated case studies, public resume artifacts, and deployment-ready static output. Start in [`portfolio/README.md`](portfolio/README.md) for local development, content syncing, resume generation, and GitHub Pages setup.
-
-```bash
-cd portfolio
-npm ci
-npm run build
-```
+The career website is maintained separately in **[pauxru/paulrukwaro-portfolio](https://github.com/pauxru/paulrukwaro-portfolio)**. Its source, local launcher, resume, images and deployment workflow live in that repository. This repository remains the source of truth for the fifty engineering implementations and their documentation.
 
 They are not tutorials, and they are not demos. A demo is a thing that works when you drive it the way the author drove it. Each project here is built to the opposite standard — it has to keep working when somebody hostile, or merely careless, drives it instead.
 
